@@ -21,16 +21,19 @@ export default function ScrollImageSequence({
 }: Props) {
   const sectionRef = useRef<HTMLDivElement | null>(null);
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
+  const stickyRef = useRef<HTMLDivElement | null>(null);
   const imagesRef = useRef<HTMLImageElement[]>([]);
   const loadedRef = useRef<boolean[]>([]);
   const frameRef = useRef({ current: 0 });
   const tweenRef = useRef<gsap.core.Tween | null>(null);
+  const revealTweenRef = useRef<gsap.core.Tween | null>(null);
   const hasInitializedRef = useRef(false);
 
   useEffect(() => {
     const section = sectionRef.current;
     const canvas = canvasRef.current;
-    if (!section || !canvas) return;
+    const sticky = stickyRef.current;
+    if (!section || !canvas || !sticky) return;
 
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
@@ -114,6 +117,35 @@ export default function ScrollImageSequence({
       if (hasInitializedRef.current) return;
       hasInitializedRef.current = true;
 
+      gsap.set(sticky, { yPercent: 10, opacity: 0, scale: 0.96 });
+
+      const tl = gsap.timeline({
+        scrollTrigger: {
+          trigger: section,
+          start: "top 70%",
+          toggleActions: "play none none none",
+        },
+      });
+
+      tl.to(sticky, {
+        yPercent: 0,
+        scale: 1,
+        duration: 1.4,
+        ease: "sine.inOut",
+      });
+
+      tl.to(
+        sticky,
+        {
+          opacity: 1,
+          duration: 0.6,
+          ease: "sine.inOut",
+        },
+        "<",
+      );
+
+      revealTweenRef.current = tl.getChildren()[0] as gsap.core.Tween;
+
       loadImage(0).then(() => {
         render(0);
       });
@@ -182,13 +214,17 @@ export default function ScrollImageSequence({
       observer.disconnect();
       resizeObserver.disconnect();
       tweenRef.current?.kill();
+      ScrollTrigger.getAll().forEach((st) => st.kill());
       hasInitializedRef.current = false;
     };
   }, [folder, totalFrames]);
 
   return (
     <section ref={sectionRef} className={`relative h-[400vh] ${className}`}>
-      <div className="sticky top-0 h-screen w-full overflow-hidden bg-black">
+      <div
+        ref={stickyRef}
+        className="sticky top-0 h-screen w-full overflow-hidden bg-black"
+      >
         <canvas
           ref={canvasRef}
           className="absolute inset-0 block h-full w-full"
