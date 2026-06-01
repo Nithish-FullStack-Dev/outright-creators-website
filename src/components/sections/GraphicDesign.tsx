@@ -1,0 +1,106 @@
+"use client";
+
+import { motion } from "framer-motion";
+import TextReveal from "../motion/TextReveal";
+import PremiumServiceSections from "./ServicesSections";
+import { services } from "../data/service";
+
+export default function GraphicDesign() {
+  return (
+    <section className="relative py-10" style={{ background: "#f5f3ef" }}>
+      <div
+        className="pointer-events-none absolute inset-0 opacity-[0.025]"
+        style={{
+          backgroundImage: `repeating-linear-gradient(0deg, #000 0px, #000 1px, transparent 1px, transparent 72px),
+            repeating-linear-gradient(90deg, #000 0px, #000 1px, transparent 1px, transparent 72px)`,
+        }}
+      />
+
+      <div className="flex flex-col gap-5">
+        <div key={services[0].id}>
+          <div className="relative z-10 container">
+            <div className="my-10 grid gap-10 lg:grid-cols-[1.1fr_0.9fr]">
+              <div>
+                <motion.div
+                  initial={{ opacity: 0, y: 30 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  transition={{
+                    duration: 0.8,
+                    ease: [0.16, 1, 0.3, 1],
+                  }}
+                  viewport={{ once: true }}
+                  className="mb-6 flex items-center gap-4"
+                >
+                  <div className="h-px w-10 bg-black/20" />
+
+                  <img src="/assets/bulb.svg" alt="Bulb" className="h-6 w-6" />
+
+                  <span className="text-[10px] font-semibold tracking-[0.3em] text-black/40 uppercase">
+                    Graphic Design
+                  </span>
+                </motion.div>
+
+                <div
+                  className="leading-[0.92] font-black tracking-tighter text-[#0a0a0a]"
+                  style={{
+                    fontSize: "clamp(3rem, 7vw, 6rem)",
+                  }}
+                >
+                  <TextReveal
+                    lines={["Designing Visuals", "That Connect"]}
+                    className="uppercase"
+                    highlightWords={["Visuals"]}
+                    highlightClassName="italic font-medium"
+                  />
+                </div>
+              </div>
+
+              <motion.div
+                initial={{ opacity: 0, y: 40 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{
+                  duration: 0.8,
+                  delay: 0.2,
+                  ease: [0.16, 1, 0.3, 1],
+                }}
+                viewport={{ once: true }}
+                className="flex flex-col justify-end"
+              >
+                <p className="max-w-md text-sm leading-relaxed text-black/45">
+                  We create high-quality static creatives including feed posts,
+                  carousel designs, ad creatives, product promotions, and
+                  festival campaigns — crafted to maintain brand consistency,
+                  improve engagement, and deliver platform-ready content for
+                  modern digital marketing.
+                </p>
+
+                <div className="mt-8 flex flex-wrap gap-3">
+                  {[
+                    "Feed Posts",
+                    "Carousel Creatives",
+                    "Story Designs",
+                    "Ad Creatives",
+                    "Festival Campaigns",
+                    "Product Promotions",
+                  ].map((item) => (
+                    <div
+                      key={item}
+                      className="rounded-full border border-black/10 bg-white/60 px-4 py-2 text-xs font-medium text-black/60 backdrop-blur"
+                    >
+                      {item}
+                    </div>
+                  ))}
+                </div>
+              </motion.div>
+            </div>
+
+            <PremiumServiceSections
+              index={services[1].index}
+              section={services[1]}
+            />
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
