@@ -46,7 +46,7 @@ export default function RootLayout({
 
               {children}
 
-              {/* <Footer /> */}
+              <Footer />  
             </TransitionProvider>
           </IntroProvider>
         </LenisProvider>
