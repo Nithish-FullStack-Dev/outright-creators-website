@@ -7,6 +7,7 @@ export type ShowcaseItem = {
   thumbnail: string;
   caption: string;
   description: string;
+  videoSrc?: string;
   youtubeId?: string;
   fileLabel?: string;
 };
@@ -55,7 +56,7 @@ export const services: ServiceSection[] = [
         thumbnail: "/header-image-1.webp",
         caption: "Video case study",
         description: "A cinematic reveal for a high-end brand launch.",
-        youtubeId: "dQw4w9WgXcQ",
+        videoSrc: "/videos/AI-VIDEOS/gd1.mp4",
       },
       {
         id: "graphic-image-1",
@@ -113,32 +114,123 @@ export const services: ServiceSection[] = [
         thumbnail: "/header-image-3.webp",
         caption: "Dynamic product film",
         description: "A launch sequence with premium motion detail.",
-        youtubeId: "dQw4w9WgXcQ",
+        videoSrc: "/videos/MOTION-GRAPHICS/mg1.mp4",
       },
       {
         id: "motion-image-1",
         title: "Motion storyboard",
-        type: "image",
+        type: "video",
         thumbnail: "/header-image-1.webp",
         caption: "Animation concept frames",
         description: "Storyboard visuals for a campaign narrative.",
+        videoSrc: "/videos/MOTION-GRAPHICS/mg2.mp4",
+
       },
       {
         id: "motion-pdf-1",
         title: "Presentation deck",
-        type: "pdf",
+        type: "video",
         thumbnail: "/header-image-2.webp",
         caption: "Campaign overview",
         description: "Strategy and motion direction in a branded deck.",
-        fileLabel: "Deck PDF",
+        fileLabel: "Video",
+        videoSrc: "/videos/MOTION-GRAPHICS/mg3.mp4",
+
       },
       {
         id: "motion-logo-1",
         title: "Motion identity",
-        type: "logo",
+        type: "video",
         thumbnail: "/header-image-4.webp",
         caption: "Animated mark set",
         description: "A motion-ready identity system for screen.",
+        videoSrc: "/videos/MOTION-GRAPHICS/mg4.mp4",
+
+      },
+      {
+        id: "motion-video-2",
+        title: "Explainer animation",
+        type: "video",
+        thumbnail: "/header-image-1.webp",
+        caption: "Product explainer",
+        description: "A concise animation breaking down product features.",
+        videoSrc: "/videos/MOTION-GRAPHICS/mg5.mp4",
+      },
+      {
+        id: "motion-video-3",
+        title: "UI motion concept",
+        type: "video",
+        thumbnail: "/header-image-2.webp",
+        caption: "Interface animation",
+        description: "Motion design concepts for a digital product.",
+        videoSrc: "/videos/MOTION-GRAPHICS/mg6.mp4",
+      },
+      {
+        id: "motion-video-1",
+        title: "Launch animation",
+        type: "video",
+        thumbnail: "/header-image-3.webp",
+        caption: "Dynamic product film",
+        description: "A launch sequence with premium motion detail.",
+        videoSrc: "/videos/MOTION-GRAPHICS/mg7.mp4",
+      },
+      {
+        id: "motion-image-1",
+        title: "Motion storyboard",
+        type: "video",
+        thumbnail: "/header-image-1.webp",
+        caption: "Animation concept frames",
+        description: "Storyboard visuals for a campaign narrative.",
+        videoSrc: "/videos/MOTION-GRAPHICS/mg8.mp4",
+
+      },
+      {
+        id: "motion-pdf-1",
+        title: "Presentation deck",
+        type: "video",
+        thumbnail: "/header-image-2.webp",
+        caption: "Campaign overview",
+        description: "Strategy and motion direction in a branded deck.",
+        fileLabel: "Video",
+        videoSrc: "/videos/MOTION-GRAPHICS/mg9.mp4",
+
+      },
+      {
+        id: "motion-logo-1",
+        title: "Motion identity",
+        type: "video",
+        thumbnail: "/header-image-4.webp",
+        caption: "Animated mark set",
+        description: "A motion-ready identity system for screen.",
+        videoSrc: "/videos/MOTION-GRAPHICS/mg10.mp4",
+
+      },
+      {
+        id: "motion-video-2",
+        title: "Explainer animation",
+        type: "video",
+        thumbnail: "/header-image-1.webp",
+        caption: "Product explainer",
+        description: "A concise animation breaking down product features.",
+        videoSrc: "/videos/MOTION-GRAPHICS/mg11.mp4",
+      },
+      {
+        id: "motion-video-3",
+        title: "UI motion concept",
+        type: "video",
+        thumbnail: "/header-image-2.webp",
+        caption: "Interface animation",
+        description: "Motion design concepts for a digital product.",
+        videoSrc: "/videos/MOTION-GRAPHICS/mg12.mp4",
+      },
+      {
+        id: "motion-video-1",
+        title: "Launch animation",
+        type: "video",
+        thumbnail: "/header-image-3.webp",
+        caption: "Dynamic product film",
+        description: "A launch sequence with premium motion detail.",
+        videoSrc: "/videos/MOTION-GRAPHICS/mg13.mp4",
       },
     ],
   },

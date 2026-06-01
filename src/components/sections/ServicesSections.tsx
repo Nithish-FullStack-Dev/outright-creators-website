@@ -4,7 +4,15 @@ import { AnimatePresence, motion } from "framer-motion";
 import { useMemo, useState } from "react";
 import Image from "next/image";
 import TextReveal from "../motion/TextReveal";
-import { Sparkles, X } from "lucide-react";
+import {
+  ArrowBigDown,
+  ArrowUp,
+  ArrowUpRight,
+  ClipboardCheck,
+  LucideMousePointerClick,
+  Sparkles,
+  X,
+} from "lucide-react";
 import { ServiceSection, ShowcaseItem } from "../data/service";
 
 const typeLabel = {
@@ -13,13 +21,14 @@ const typeLabel = {
   pdf: "PDF",
   logo: "Brand Asset",
 };
-
 function InfiniteSlider({
   items,
   direction = "left",
+  onAssetClick,
 }: {
   items: ShowcaseItem[];
   direction?: "left" | "right";
+  onAssetClick: (asset: ShowcaseItem) => void;
 }) {
   const duplicated = useMemo(() => [...items, ...items], [items]);
 
@@ -37,9 +46,11 @@ function InfiniteSlider({
         }}
       >
         {duplicated.map((asset, index) => (
-          <div
+          <button
             key={`${asset.id}-${index}`}
-            className="group relative h-[270px] w-[260px] flex-shrink-0 overflow-hidden rounded-[2rem] border border-white/10 bg-white/[0.03] backdrop-blur-xl"
+            type="button"
+            onClick={() => onAssetClick(asset)}
+            className="group/card relative h-[270px] w-[260px] flex-shrink-0 overflow-hidden rounded-[2rem] border border-white/10 bg-white/[0.03] text-left backdrop-blur-xl"
           >
             <div className="absolute inset-0 z-10 bg-gradient-to-b from-transparent via-black/10 to-black/70" />
 
@@ -48,27 +59,23 @@ function InfiniteSlider({
               alt={asset.title}
               width={700}
               height={700}
-              className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-110"
+              className="h-full w-full object-cover transition-transform duration-700 group-hover/card:scale-110"
             />
-
+            <div className="absolute top-3 right-3 z-30">
+              <div className="flex h-10 w-10 scale-75 items-center justify-center rounded-full bg-transparent text-white opacity-0 shadow-lg backdrop-blur-xl transition-all duration-300 group-hover/card:scale-100 group-hover/card:opacity-100">
+                <ArrowUpRight className="h-5 w-5" />
+              </div>
+            </div>
             <div className="absolute inset-0 z-20 bg-gradient-to-t from-black/90 via-black/20 to-transparent" />
 
             <div className="absolute bottom-0 z-30 p-5">
               <div className="mb-3 inline-flex rounded-full border border-white/10 bg-white/10 px-3 py-1 text-[10px] tracking-[0.3em] text-white uppercase backdrop-blur-md">
                 {typeLabel[asset.type]}
               </div>
-
-              <h3 className="text-lg font-semibold text-white">
-                {asset.title}
-              </h3>
-
-              <p className="mt-1 text-sm leading-6 text-white/70">
-                {asset.caption}
-              </p>
             </div>
 
-            <div className="absolute inset-0 z-20 rounded-[2rem] ring-1 ring-white/10 transition-all duration-500 group-hover:ring-white/30" />
-          </div>
+            <div className="absolute inset-0 z-20 rounded-[2rem] ring-1 ring-white/10 transition-all duration-500 group-hover/card:ring-white/30" />
+          </button>
         ))}
       </motion.div>
     </div>
@@ -196,15 +203,23 @@ export default function PremiumServiceSections({
               {/* RIGHT */}
               <div className="relative flex flex-col justify-center gap-6 overflow-hidden rounded-2xl">
                 <div className="px-6">
-                  <InfiniteSlider items={topRow} direction="left" />
+                  <InfiniteSlider
+                    items={topRow}
+                    direction="left"
+                    onAssetClick={setActiveAsset}
+                  />
                 </div>
 
                 <div className="px-6">
-                  <InfiniteSlider items={bottomRow} direction="right" />
+                  <InfiniteSlider
+                    items={bottomRow}
+                    direction="right"
+                    onAssetClick={setActiveAsset}
+                  />
                 </div>
 
                 {/* CLICK LAYER */}
-                <div className="absolute inset-0 z-40 grid grid-cols-2 gap-5 px-6 py-10">
+                {/* <div className="absolute inset-0 z-40 grid grid-cols-2 gap-5 px-6 py-10">
                   {[...topRow, ...bottomRow].map((asset) => (
                     <button
                       key={asset.id}
@@ -213,7 +228,7 @@ export default function PremiumServiceSections({
                       className="rounded-[2rem]"
                     />
                   ))}
-                </div>
+                </div> */}
               </div>
             </div>
           </motion.div>
@@ -259,12 +274,24 @@ export default function PremiumServiceSections({
               {/* CONTENT */}
               <div className="relative h-[50vh] bg-black sm:h-[60vh] md:h-[70vh]">
                 {activeAsset.type === "video" ? (
-                  <iframe
-                    src={`https://www.youtube.com/embed/${activeAsset.youtubeId}?autoplay=1&mute=1&rel=0&modestbranding=1`}
-                    title={activeAsset.title}
-                    className="h-full w-full"
-                    allow="autoplay; encrypted-media; picture-in-picture"
-                    allowFullScreen
+                  // <iframe
+                  //   src={`https://www.youtube.com/embed/${activeAsset.youtubeId}?autoplay=1&mute=1&rel=0&modestbranding=1`}
+                  //   title={activeAsset.title}
+                  //   className="h-full w-full"
+                  //   allow="autoplay; encrypted-media; picture-in-picture"
+                  //   allowFullScreen
+                  // />
+                  <video
+                    key={activeAsset.videoSrc}
+                    className="h-full w-full object-contain"
+                    src={activeAsset.videoSrc}
+                    autoPlay
+                    muted
+                    loop
+                    playsInline
+                    controls
+                    preload="metadata"
+                    poster={activeAsset.thumbnail}
                   />
                 ) : activeAsset.type === "image" ? (
                   <Image
