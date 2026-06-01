@@ -33,9 +33,13 @@ export default function GraphicDesign() {
                 >
                   <div className="h-px w-10 bg-black/20" />
 
-                  <img src="/assets/bulb.svg" alt="Bulb" className="h-6 w-6" />
+                  <img
+                    src="/assets/bulb.svg"
+                    alt="Bulb"
+                    className="h-6 w-6 md:h-9 md:w-9"
+                  />
 
-                  <span className="text-[10px] font-semibold tracking-[0.3em] text-black/40 uppercase">
+                  <span className="text-[14px] font-semibold tracking-[0.3em] text-black/40 uppercase">
                     Graphic Design
                   </span>
                 </motion.div>
@@ -66,7 +70,7 @@ export default function GraphicDesign() {
                 viewport={{ once: true }}
                 className="flex flex-col justify-end"
               >
-                <p className="max-w-md text-sm leading-relaxed text-black/45">
+                <p className="max-w-xl text-xs leading-relaxed text-black/45 md:text-xl">
                   We create high-quality static creatives including feed posts,
                   carousel designs, ad creatives, product promotions, and
                   festival campaigns — crafted to maintain brand consistency,
@@ -85,7 +89,7 @@ export default function GraphicDesign() {
                   ].map((item) => (
                     <div
                       key={item}
-                      className="rounded-full border border-black/10 bg-white/60 px-4 py-2 text-xs font-medium text-black/60 backdrop-blur"
+                      className="rounded-full border border-black/10 bg-white/60 px-4 py-2 text-xs font-medium text-black/60 backdrop-blur md:text-xl"
                     >
                       {item}
                     </div>

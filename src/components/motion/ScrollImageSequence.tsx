@@ -1,7 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
-
+import { useEffect, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 
@@ -21,237 +20,184 @@ export default function ScrollImageSequence({
   className = "",
 }: Props) {
   const sectionRef = useRef<HTMLDivElement | null>(null);
-
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
-
   const imagesRef = useRef<HTMLImageElement[]>([]);
-
-  const currentFrameRef = useRef(1);
-
-  const [isActive, setIsActive] = useState(false);
-
-  // =========================================
-  // INTERSECTION OBSERVER
-  // =========================================
+  const loadedRef = useRef<boolean[]>([]);
+  const frameRef = useRef({ current: 0 });
+  const tweenRef = useRef<gsap.core.Tween | null>(null);
+  const hasInitializedRef = useRef(false);
 
   useEffect(() => {
     const section = sectionRef.current;
+    const canvas = canvasRef.current;
+    if (!section || !canvas) return;
 
-    if (!section) return;
+    const ctx = canvas.getContext("2d");
+    if (!ctx) return;
+
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+
+    const setCanvasSize = () => {
+      const w = window.innerWidth;
+      const h = window.innerHeight;
+      canvas.width = w * dpr;
+      canvas.height = h * dpr;
+      canvas.style.width = `${w}px`;
+      canvas.style.height = `${h}px`;
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    };
+
+    setCanvasSize();
+
+    const currentFrame = (index: number) =>
+      `${folder}/frame_${String(index).padStart(4, "0")}.webp`;
+
+    const images: HTMLImageElement[] = new Array(totalFrames);
+    const loaded: boolean[] = new Array(totalFrames).fill(false);
+    imagesRef.current = images;
+    loadedRef.current = loaded;
+
+    const drawImage = (img: HTMLImageElement) => {
+      const w = window.innerWidth;
+      const h = window.innerHeight;
+      ctx.clearRect(0, 0, w, h);
+      const scale = Math.max(w / img.naturalWidth, h / img.naturalHeight);
+      const sw = img.naturalWidth * scale;
+      const sh = img.naturalHeight * scale;
+      const sx = (w - sw) / 2;
+      const sy = (h - sh) / 2;
+      ctx.drawImage(img, sx, sy, sw, sh);
+    };
+
+    const render = (index: number) => {
+      const i = Math.max(0, Math.min(Math.round(index), totalFrames - 1));
+      if (images[i] && loaded[i]) {
+        drawImage(images[i]);
+        return;
+      }
+      for (let fallback = i - 1; fallback >= 0; fallback--) {
+        if (images[fallback] && loaded[fallback]) {
+          drawImage(images[fallback]);
+          return;
+        }
+      }
+    };
+
+    const loadImage = (index: number): Promise<void> => {
+      return new Promise((resolve) => {
+        if (loaded[index]) {
+          resolve();
+          return;
+        }
+        const img = new Image();
+        img.decoding = "async";
+        img.onload = () => {
+          loaded[index] = true;
+          resolve();
+        };
+        img.onerror = () => resolve();
+        img.src = currentFrame(index + 1);
+        images[index] = img;
+      });
+    };
+
+    const loadBatch = (start: number, end: number) => {
+      const clampedEnd = Math.min(end, totalFrames - 1);
+      for (let i = start; i <= clampedEnd; i++) {
+        if (!images[i]) {
+          loadImage(i);
+        }
+      }
+    };
+
+    const initSequence = () => {
+      if (hasInitializedRef.current) return;
+      hasInitializedRef.current = true;
+
+      loadImage(0).then(() => {
+        render(0);
+      });
+
+      loadBatch(1, 29);
+      setTimeout(() => loadBatch(30, 59), 300);
+      setTimeout(() => loadBatch(60, 89), 700);
+      setTimeout(() => loadBatch(90, totalFrames - 1), 1200);
+
+      const frame = frameRef.current;
+
+      const tween = gsap.to(frame, {
+        current: totalFrames - 1,
+        snap: "current",
+        ease: "none",
+        scrollTrigger: {
+          trigger: section,
+          start: "top top",
+          end: "bottom bottom",
+          scrub: 0.5,
+          onUpdate: (self) => {
+            const activeIndex = Math.round(self.progress * (totalFrames - 1));
+            const bufferStart = Math.max(0, activeIndex - 5);
+            const bufferEnd = Math.min(totalFrames - 1, activeIndex + 20);
+            loadBatch(bufferStart, bufferEnd);
+          },
+        },
+        onUpdate: () => {
+          render(Math.round(frame.current));
+        },
+      });
+
+      tweenRef.current = tween;
+    };
 
     const observer = new IntersectionObserver(
-      ([entry]) => {
-        setIsActive(entry.isIntersecting);
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            initSequence();
+          }
+        });
       },
-
       {
-        rootMargin: "1500px",
+        rootMargin: "1000px 0px",
+        threshold: 0,
       },
     );
 
     observer.observe(section);
 
-    return () => observer.disconnect();
-  }, []);
-
-  // =========================================
-  // MAIN ENGINE
-  // =========================================
-
-  useEffect(() => {
-    if (!isActive) return;
-
-    const section = sectionRef.current;
-
-    const canvas = canvasRef.current;
-
-    if (!section || !canvas) return;
-
-    const ctx = canvas.getContext("2d", {
-      alpha: false,
-    });
-
-    if (!ctx) return;
-
-    // =========================================
-    // RETINA CANVAS
-    // =========================================
-
-    const setCanvasSize = () => {
-      const dpr = window.devicePixelRatio || 1;
-
-      // RESET TRANSFORM FIRST
-      ctx.setTransform(1, 0, 0, 1, 0, 0);
-
-      // INTERNAL RESOLUTION
-      canvas.width = window.innerWidth * dpr;
-
-      canvas.height = window.innerHeight * dpr;
-
-      // VISUAL SIZE
-      canvas.style.width = `${window.innerWidth}px`;
-
-      canvas.style.height = `${window.innerHeight}px`;
-
-      // SCALE DRAWING OPERATIONS
-      ctx.scale(dpr, dpr);
-    };
-
-    setCanvasSize();
-
-    // =========================================
-    // FRAME PATH
-    // =========================================
-
-    const getFramePath = (index: number) => {
-      return `${folder}/frame_${String(index).padStart(4, "0")}.webp`;
-    };
-
-    // =========================================
-    // LOAD IMAGES
-    // =========================================
-
-    const images: HTMLImageElement[] = [];
-
-    for (let i = 1; i <= totalFrames; i++) {
-      const img = new Image();
-
-      img.src = getFramePath(i);
-
-      images.push(img);
-    }
-
-    imagesRef.current = images;
-
-    // =========================================
-    // DRAW
-    // =========================================
-
-    const drawImageCover = (img: HTMLImageElement) => {
-      if (!img.complete) return;
-
-      const canvasWidth = window.innerWidth;
-
-      const canvasHeight = window.innerHeight;
-
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-      // IMAGE SIZE
-      const imageWidth = img.width;
-
-      const imageHeight = img.height;
-
-      // SCALE TO COVER
-      const scale = Math.max(
-        canvasWidth / imageWidth,
-        canvasHeight / imageHeight,
-      );
-
-      // FINAL SIZE
-      const scaledWidth = imageWidth * scale;
-
-      const scaledHeight = imageHeight * scale;
-
-      // CENTER POSITION
-      const x = (canvasWidth - scaledWidth) / 2;
-
-      const y = (canvasHeight - scaledHeight) / 2;
-
-      ctx.drawImage(img, x, y, scaledWidth, scaledHeight);
-    };
-
-    // =========================================
-    // INITIAL FRAME
-    // =========================================
-
-    images[0].onload = () => {
-      drawImageCover(images[0]);
-    };
-
-    // =========================================
-    // GSAP SCRUB
-    // =========================================
-
-    const frameState = {
-      frame: 1,
-    };
-
-    const animation = gsap.to(frameState, {
-      frame: totalFrames,
-
-      snap: "frame",
-
-      ease: "none",
-
-      scrollTrigger: {
-        trigger: section,
-
-        start: "top top",
-
-        end: "bottom bottom",
-
-        scrub: 0.15,
-      },
-
-      onUpdate: () => {
-        const frameIndex = Math.round(frameState.frame);
-
-        if (frameIndex === currentFrameRef.current) return;
-
-        currentFrameRef.current = frameIndex;
-
-        const img = imagesRef.current[frameIndex - 1];
-
-        if (!img) return;
-
-        drawImageCover(img);
-      },
-    });
-
-    // =========================================
-    // RESIZE
-    // =========================================
-
     const handleResize = () => {
+      ctx.setTransform(1, 0, 0, 1, 0, 0);
       setCanvasSize();
-
-      const currentImage = imagesRef.current[currentFrameRef.current - 1];
-
-      if (currentImage) {
-        drawImageCover(currentImage);
-      }
-
+      render(Math.round(frameRef.current.current));
       ScrollTrigger.refresh();
     };
 
-    window.addEventListener("resize", handleResize);
+    const resizeObserver = new ResizeObserver(() => {
+      handleResize();
+    });
 
-    // =========================================
-    // CLEANUP
-    // =========================================
+    resizeObserver.observe(document.documentElement);
 
     return () => {
-      animation.kill();
-
-      window.removeEventListener("resize", handleResize);
-
-      // DESTROY IMAGES
-      imagesRef.current = [];
+      observer.disconnect();
+      resizeObserver.disconnect();
+      tweenRef.current?.kill();
+      hasInitializedRef.current = false;
     };
-  }, [isActive, folder, totalFrames]);
+  }, [folder, totalFrames]);
 
   return (
-    <section
-      ref={sectionRef}
-      className={`relative h-[400vh] overflow-hidden ${className}`}
-    >
-      <div className="sticky top-0 h-screen overflow-hidden bg-black">
-        <canvas ref={canvasRef} className="absolute inset-0 h-full w-full" />
-
+    <section ref={sectionRef} className={`relative h-[400vh] ${className}`}>
+      <div className="sticky top-0 h-screen w-full overflow-hidden bg-black">
+        <canvas
+          ref={canvasRef}
+          className="absolute inset-0 block h-full w-full"
+          style={{ display: "block" }}
+        />
         {title && (
           <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
             <h2
-              className="text-center font-black tracking-tighter text-white uppercase"
+              className="text-center font-black tracking-[-0.05em] text-white uppercase"
               style={{
                 fontSize: "clamp(4rem, 10vw, 10rem)",
                 lineHeight: 0.9,

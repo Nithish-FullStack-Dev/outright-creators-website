@@ -35,8 +35,12 @@ export default function MotionGraphic() {
                   className="mb-6 flex items-center gap-4"
                 >
                   <div className="h-px w-10 bg-black/20" />
-                  <img src="/assets/bulb.svg" alt="Bulb" className="h-6 w-6" />
-                  <span className="text-[10px] font-semibold tracking-[0.3em] text-black/40 uppercase">
+                  <img
+                    src="/assets/bulb.svg"
+                    alt="Bulb"
+                    className="h-6 w-6 md:h-9 md:w-9"
+                  />
+                  <span className="text-[11px] font-semibold tracking-[0.3em] text-black/40 uppercase md:text-[14px]">
                     Motion Graphics
                   </span>
                 </motion.div>
@@ -67,7 +71,7 @@ export default function MotionGraphic() {
                 viewport={{ once: true }}
                 className="flex flex-col justify-end"
               >
-                <p className="max-w-md text-sm leading-relaxed text-black/45">
+                <p className="max-w-full text-sm leading-relaxed text-black/45 md:max-w-md md:text-xl">
                   We create cinematic motion systems that transform static
                   brands into immersive visual experiences — combining
                   animation, storytelling, sound, and interaction into one
@@ -85,7 +89,7 @@ export default function MotionGraphic() {
                   ].map((item) => (
                     <div
                       key={item}
-                      className="rounded-full border border-black/10 bg-white/60 px-4 py-2 text-xs font-medium text-black/60 backdrop-blur"
+                      className="rounded-full border border-black/10 bg-white/60 px-4 py-2 text-xs font-medium text-black/60 backdrop-blur md:text-xl"
                     >
                       {item}
                     </div>

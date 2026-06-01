@@ -11,25 +11,27 @@ interface Stat {
 
 const stats: Stat[] = [
   {
-    number: "300+",
-    raw: 300,
+    number: "60+",
+    raw: 60,
     suffix: "+",
     description:
-      "successful brand campaigns designed and launched for modern businesses worldwide",
+      "creative professionals delivering scalable graphic design, branding, motion graphics, and digital content solutions",
   },
+
   {
-    number: "10",
-    raw: 10,
+    number: "1000+",
+    raw: 1000,
+    suffix: "+",
+    description:
+      "projects successfully delivered across social media, branding, motion graphics, AI videos, and digital campaigns",
+  },
+
+  {
+    number: "2020",
+    raw: 2020,
     suffix: "",
     description:
-      "years crafting premium graphic marketing experiences for ambitious brands",
-  },
-  {
-    number: "99%",
-    raw: 99,
-    suffix: "%",
-    description:
-      "client satisfaction through strategy-driven creative and visual storytelling",
+      "established in Hyderabad with a vision to help brands grow through strategic and high-quality creative production",
   },
 ];
 

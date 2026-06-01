@@ -1,10 +1,8 @@
-// components/layout/Header.tsx
-
 "use client";
 
 import Link from "next/link";
 import Image from "next/image";
-import { ArrowUpRight, Menu, X } from "lucide-react";
+import { ArrowUpRight, X } from "lucide-react";
 import {
   motion,
   AnimatePresence,
@@ -13,52 +11,70 @@ import {
 } from "framer-motion";
 import { useState } from "react";
 import { usePageTransition } from "../transitions/TransitionProvider";
+
 const navItems = [
-  { label: "Home", href: "/" },
-  { label: "About", href: "/about" },
-  { label: "Services", href: "/services" },
-  { label: "Collections", href: "/collections" },
+  { label: "Home", href: "/", num: "01" },
+  { label: "About", href: "/about", num: "02" },
+  { label: "Services", href: "/services", num: "03" },
+  { label: "Collections", href: "/collections", num: "04" },
 ];
+
+const menuVariants = {
+  closed: {
+    clipPath: "inset(0% 0% 0% 100%)",
+    transition: {
+      duration: 0.7,
+      ease: [0.76, 0, 0.24, 1],
+      when: "afterChildren",
+    },
+  },
+  open: {
+    clipPath: "inset(0% 0% 0% 0%)",
+    transition: {
+      duration: 0.7,
+      ease: [0.76, 0, 0.24, 1],
+      when: "beforeChildren",
+      staggerChildren: 0.07,
+    },
+  },
+};
+
+const itemVariants = {
+  closed: { opacity: 0, x: 40 },
+  open: {
+    opacity: 1,
+    x: 0,
+    transition: { duration: 0.5, ease: [0.22, 1, 0.36, 1] },
+  },
+};
+
+const overlayVariants = {
+  closed: { opacity: 0, transition: { duration: 0.5, delay: 0.2 } },
+  open: { opacity: 1, transition: { duration: 0.4 } },
+};
 
 export default function Header() {
   const { scrollY } = useScroll();
-
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const { navigate } = usePageTransition();
+
   useMotionValueEvent(scrollY, "change", (latest) => {
     setScrolled(latest > 30);
   });
 
   return (
     <>
-      {/* HEADER */}
       <motion.header
         initial={false}
-        animate={{
-          backgroundColor: scrolled
-            ? "rgba(255,255,255,0.55)"
-            : "rgba(255,255,255,1)",
-
-          backdropFilter: scrolled ? "blur(16px)" : "blur(0px)",
-
-          boxShadow: scrolled
-            ? "0 10px 40px rgba(0,0,0,0.08)"
-            : "0 0px 0px rgba(0,0,0,0)",
-
-          borderColor: scrolled ? "rgba(255,255,255,0.2)" : "rgba(0,0,0,0.05)",
-        }}
-        transition={{
-          duration: 0.35,
-          ease: [0.22, 1, 0.36, 1],
-        }}
-        className="fixed top-0 left-0 z-50 w-full border-b"
+        animate={{ y: scrolled ? 12 : 0 }}
+        transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
+        className="pointer-events-none fixed top-0 left-0 z-50 w-full"
       >
-        <div className="mx-auto flex h-[78px] max-w-[1400px] items-center justify-between px-5 md:h-[84px] md:px-10">
-          {/* LOGO */}
+        <div className="mx-auto flex h-[72px] max-w-[1400px] items-center justify-between px-5 md:px-10">
           <Link
             href="/"
-            className="relative block h-[38px] w-[110px] sm:h-[44px] sm:w-[130px] md:h-[48px] md:w-[140px]"
+            className="pointer-events-auto relative block h-[38px] w-[110px] sm:h-[42px] sm:w-[124px] md:h-[46px] md:w-[136px]"
           >
             <Image
               src="/logo.svg"
@@ -69,95 +85,147 @@ export default function Header() {
             />
           </Link>
 
-          {/* DESKTOP NAV */}
-          <nav className="hidden items-center gap-10 lg:flex">
-            {navItems.map((item, idx) => (
-              <button
-                key={idx}
-                onClick={() => navigate(item.href)}
-                className="group relative block overflow-hidden text-[16px] font-semibold text-black xl:text-[18px]"
-              >
-                <div className="relative h-[24px] overflow-hidden">
-                  <span className="block transition-transform duration-300 ease-[cubic-bezier(0.76,0,0.24,1)] group-hover:-translate-y-full">
-                    {item.label}
-                  </span>
-
-                  <span className="absolute top-0 left-0 block translate-y-full text-black/60 transition-transform duration-300 ease-[cubic-bezier(0.76,0,0.24,1)] group-hover:translate-y-0">
-                    {item.label}
-                  </span>
-                </div>
-              </button>
-            ))}
-          </nav>
-
-          {/* RIGHT SIDE */}
-          <div className="flex items-center gap-4">
-            {/* CTA */}
-            <button className="group hidden items-center gap-3 md:flex">
-              <span className="text-[15px] font-semibold text-black/60">
-                Talk to us
-              </span>
-
-              <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-black text-white transition-transform duration-300 group-hover:rotate-45">
-                <ArrowUpRight size={18} />
-              </div>
-            </button>
-
-            {/* MOBILE MENU BUTTON */}
-            <button
-              onClick={() => setMenuOpen(!menuOpen)}
-              className="flex h-11 w-11 items-center justify-center rounded-xl border border-black/10 lg:hidden"
-            >
-              {menuOpen ? <X size={22} /> : <Menu size={22} />}
-            </button>
-          </div>
+          <motion.button
+            onClick={() => setMenuOpen(!menuOpen)}
+            className="pointer-events-auto flex h-12 w-12 items-center justify-center rounded-full bg-black shadow-lg shadow-black/20"
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            transition={{ duration: 0.2 }}
+            aria-label="Toggle menu"
+          >
+            <div className="flex w-[20px] flex-col items-center justify-center gap-[5px]">
+              <motion.span
+                animate={
+                  menuOpen
+                    ? { rotate: 45, y: 7.5, width: "20px" }
+                    : { rotate: 0, y: 0, width: "20px" }
+                }
+                transition={{ duration: 0.4, ease: [0.76, 0, 0.24, 1] }}
+                className="block h-[1.5px] origin-center rounded-full bg-white"
+                style={{ width: "20px" }}
+              />
+              <motion.span
+                animate={
+                  menuOpen
+                    ? { opacity: 0, x: 8 }
+                    : { opacity: 1, x: 0, width: "14px" }
+                }
+                transition={{ duration: 0.3, ease: [0.76, 0, 0.24, 1] }}
+                className="block h-[1.5px] self-start rounded-full bg-white"
+                style={{ width: "14px" }}
+              />
+              <motion.span
+                animate={
+                  menuOpen
+                    ? { rotate: -45, y: -7.5, width: "20px" }
+                    : { rotate: 0, y: 0, width: "20px" }
+                }
+                transition={{ duration: 0.4, ease: [0.76, 0, 0.24, 1] }}
+                className="block h-[1.5px] origin-center rounded-full bg-white"
+                style={{ width: "20px" }}
+              />
+            </div>
+          </motion.button>
         </div>
       </motion.header>
 
-      {/* MOBILE MENU */}
       <AnimatePresence>
         {menuOpen && (
-          <motion.div
-            initial={{ opacity: 0, y: -30 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -30 }}
-            transition={{
-              duration: 0.35,
-              ease: [0.22, 1, 0.36, 1],
-            }}
-            className="fixed top-[78px] left-0 z-40 w-full border-b border-black/5 bg-white/90 backdrop-blur-xl lg:hidden"
-          >
-            <div className="flex flex-col px-5 py-6">
-              {navItems.map((item, i) => (
-                <motion.div
-                  key={i}
-                  initial={{ opacity: 0, y: 15 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{
-                    delay: i * 0.05,
-                  }}
+          <>
+            <motion.div
+              key="overlay"
+              variants={overlayVariants}
+              initial="closed"
+              animate="open"
+              exit="closed"
+              onClick={() => setMenuOpen(false)}
+              className="fixed inset-0 z-40 bg-black/20 backdrop-blur-sm"
+            />
+
+            <motion.div
+              key="panel"
+              variants={menuVariants}
+              initial="closed"
+              animate="open"
+              exit="closed"
+              className="fixed top-0 right-0 z-50 flex h-full w-full flex-col overflow-hidden bg-white md:w-[40%]"
+            >
+              <div className="flex h-[72px] items-center justify-between border-b border-black/5 px-8">
+                <span className="text-[11px] font-semibold tracking-[0.18em] text-black/30 uppercase">
+                  Navigation
+                </span>
+                <motion.button
+                  onClick={() => setMenuOpen(false)}
+                  className="flex h-10 w-10 items-center justify-center rounded-full bg-black text-white"
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  transition={{ duration: 0.2 }}
+                  aria-label="Close menu"
                 >
-                  <button
-                    onClick={() => {
-                      setMenuOpen(false);
-                      navigate(item.href);
-                    }}
-                    className="flex items-center justify-between border-b border-black/5 py-5 text-[24px] font-semibold text-black"
+                  <X size={16} strokeWidth={2} />
+                </motion.button>
+              </div>
+
+              <nav className="flex flex-1 flex-col px-8 pt-10">
+                {navItems.map((item, i) => (
+                  <motion.div
+                    key={i}
+                    variants={itemVariants}
+                    className="group border-b border-black/8 last:border-b-0"
                   >
-                    {item.label}
+                    <button
+                      onClick={() => {
+                        setMenuOpen(false);
+                        navigate(item.href);
+                      }}
+                      className="flex w-full items-center justify-between py-7"
+                    >
+                      <div className="flex items-baseline gap-4">
+                        <span className="text-[11px] font-medium text-black/25 tabular-nums">
+                          {item.num}
+                        </span>
+                        <span className="text-[36px] font-bold tracking-tight text-black transition-colors duration-300 group-hover:text-black/40 md:text-[42px]">
+                          {item.label}
+                        </span>
+                      </div>
+                      <motion.div
+                        className="flex h-10 w-10 items-center justify-center rounded-full border border-black/10 text-black/30"
+                        whileHover={{ rotate: 45, scale: 1.1 }}
+                        transition={{ duration: 0.3 }}
+                      >
+                        <ArrowUpRight size={16} />
+                      </motion.div>
+                    </button>
+                  </motion.div>
+                ))}
+              </nav>
 
-                    <ArrowUpRight size={18} className="text-black/40" />
+              <motion.div
+                variants={itemVariants}
+                className="border-t border-black/5 px-8 pt-6 pb-10"
+              >
+                <div className="flex items-center justify-between">
+                  <div className="flex flex-col gap-1">
+                    <span className="text-[11px] font-semibold tracking-[0.15em] text-black/30 uppercase">
+                      Get in touch
+                    </span>
+                    <span className="text-[15px] font-semibold text-black">
+                      hello@studio.com
+                    </span>
+                  </div>
+                  <button className="group flex items-center gap-2 rounded-full bg-black px-6 py-3 text-white transition-all duration-300 hover:bg-black/80">
+                    <span className="text-[13px] font-semibold">
+                      Talk to us
+                    </span>
+                    <ArrowUpRight
+                      size={14}
+                      className="transition-transform duration-300 group-hover:rotate-45"
+                    />
                   </button>
-                </motion.div>
-              ))}
-
-              {/* MOBILE CTA */}
-              <button className="mt-6 flex items-center justify-center gap-3 rounded-2xl bg-black px-5 py-4 text-white">
-                Talk to us
-                <ArrowUpRight size={18} />
-              </button>
-            </div>
-          </motion.div>
+                </div>
+              </motion.div>
+            </motion.div>
+          </>
         )}
       </AnimatePresence>
     </>

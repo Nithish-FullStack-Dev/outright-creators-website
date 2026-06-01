@@ -158,23 +158,6 @@ const SocialMedia = () => {
         }}
       />
 
-      <motion.div
-        style={{ y: bgY }}
-        className="pointer-events-none absolute inset-0 opacity-[0.04]"
-        aria-hidden
-      >
-        {Array.from({ length: 14 }).map((_, i) => (
-          <div
-            key={i}
-            className="absolute h-px w-full bg-black/10"
-            style={{ top: `${i * 7.5}%` }}
-          />
-        ))}
-      </motion.div>
-
-      <div className="pointer-events-none absolute top-0 right-0 h-[600px] w-[600px] translate-x-1/3 -translate-y-1/4 rounded-full bg-[#7c3aed] opacity-[0.05] blur-[120px]" />
-      <div className="pointer-events-none absolute bottom-0 left-0 h-[400px] w-[400px] -translate-x-1/3 translate-y-1/4 rounded-full bg-[#06b6d4] opacity-[0.05] blur-[100px]" />
-
       <div className="container">
         {/* HERO */}
         <div className="mb-24 grid gap-12 lg:grid-cols-[1fr_auto]">
@@ -183,23 +166,24 @@ const SocialMedia = () => {
               <div className="mb-6 flex items-center gap-3">
                 <div className="h-px w-8 bg-black/20" />
                 <img src="/assets/bulb.svg" alt="Bulb" className="h-6 w-6" />
-                <span className="text-[10px] font-semibold tracking-[0.35em] text-black/50 uppercase">
-                  Social Media Management
+
+                <span className="text-[10px] font-semibold tracking-[0.35em] text-black/50 uppercase md:text-[14px]">
+                  Social Media Marketing
                 </span>
               </div>
             </SlideIn>
 
             <div style={{ fontSize: "clamp(2.8rem, 6.5vw, 5.5rem)" }}>
               <span className="block leading-[0.9] font-black tracking-[-0.05em] text-black uppercase">
-                Build
+                Create
               </span>
 
               <span className="block leading-[0.9] font-black tracking-[-0.05em] text-black/30 uppercase">
-                Audiences
+                Content
               </span>
 
               <span className="block leading-[0.9] font-black tracking-[-0.05em] text-black uppercase">
-                That Buy.
+                That Connects.
               </span>
             </div>
           </div>
@@ -209,29 +193,30 @@ const SocialMedia = () => {
             delay={0.3}
             className="flex flex-col justify-end pb-2"
           >
-            <p className="max-w-xs text-sm leading-relaxed text-black/60">
-              We turn social channels into revenue machines — through obsessive
-              creative, platform-native strategy, and community that converts.
+            <p className="max-w-full text-sm leading-relaxed text-black/60 md:max-w-xl md:text-xl">
+              We create platform-ready social media content including feed
+              posts, stories, reels, carousel creatives, and ad campaigns
+              designed to boost engagement, maintain brand consistency, and
+              scale digital presence across every major platform.
             </p>
 
-            <motion.a
-              href="#"
-              whileHover={{ x: 5 }}
-              transition={{ type: "spring", stiffness: 300 }}
-              className="mt-7 inline-flex items-center gap-3 text-[10px] font-bold tracking-[0.3em] text-black/60 uppercase transition-colors hover:text-black"
-            >
-              <span>Start Growing</span>
-
-              <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
-                <path
-                  d="M3 8h10M9 4l4 4-4 4"
-                  stroke="currentColor"
-                  strokeWidth="1.5"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-              </svg>
-            </motion.a>
+            <div className="mt-7 flex flex-wrap gap-3">
+              {[
+                "Feed Posts",
+                "Carousel Creatives",
+                "Story Designs",
+                "Ad Campaigns",
+                "Festival Creatives",
+                "Reels Content",
+              ].map((item) => (
+                <div
+                  key={item}
+                  className="rounded-full border border-black/10 bg-white/60 px-4 py-2 text-xs font-medium text-black/60 backdrop-blur md:text-xl"
+                >
+                  {item}
+                </div>
+              ))}
+            </div>
           </SlideIn>
         </div>
       </div>
