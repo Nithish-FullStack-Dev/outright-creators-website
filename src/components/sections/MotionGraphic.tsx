@@ -1,7 +1,10 @@
 "use client";
 
+import { useRef } from "react";
 import { motion } from "framer-motion";
+import ScrollVideoSection from "../motion/ScrollVideoSection";
 import TextReveal from "../motion/TextReveal";
+import ScrollImageSequence from "../motion/ScrollImageSequence";
 import PremiumServiceSections from "./ServicesSections";
 import { services } from "../data/service";
 
@@ -17,7 +20,7 @@ export default function MotionGraphic() {
       />
 
       <div className="flex flex-col gap-5">
-        <div key={services[1].id}>
+        <div key={services[0].id}>
           <div className="relative z-10 container">
             <div className="my-10 grid gap-10 lg:grid-cols-[1.1fr_0.9fr]">
               <div>
@@ -32,24 +35,22 @@ export default function MotionGraphic() {
                   className="mb-6 flex items-center gap-4"
                 >
                   <div className="h-px w-10 bg-black/20" />
-
                   <img src="/assets/bulb.svg" alt="Bulb" className="h-6 w-6" />
-
                   <span className="text-[10px] font-semibold tracking-[0.3em] text-black/40 uppercase">
-                    Motion Graphics + AI
+                    Motion Graphics
                   </span>
                 </motion.div>
 
                 <div
-                  className="leading-[0.92] font-black tracking-tighter text-[#0a0a0a]"
+                  className="leading-[0.92] font-black tracking-[-0.05em] text-[#0a0a0a]"
                   style={{
                     fontSize: "clamp(3rem, 7vw, 6rem)",
                   }}
                 >
                   <TextReveal
-                    lines={["Stories Powered", "By Motion & AI"]}
+                    lines={["Crafting Stories", "In Motion"]}
                     className="uppercase"
-                    highlightWords={["Motion", "AI"]}
+                    highlightWords={["Motion"]}
                     highlightClassName="italic font-medium"
                   />
                 </div>
@@ -67,21 +68,20 @@ export default function MotionGraphic() {
                 className="flex flex-col justify-end"
               >
                 <p className="max-w-md text-sm leading-relaxed text-black/45">
-                  We create visually compelling motion graphics, AI-powered
-                  videos, reels, explainers, launch teasers, and promotional
-                  campaigns designed for modern digital platforms — helping
-                  brands scale content production with speed, consistency, and
-                  high-impact storytelling.
+                  We create cinematic motion systems that transform static
+                  brands into immersive visual experiences — combining
+                  animation, storytelling, sound, and interaction into one
+                  seamless language.
                 </p>
 
                 <div className="mt-8 flex flex-wrap gap-3">
                   {[
-                    "2D/3D Motion Graphics",
-                    "AI Videos + Voiceovers",
-                    "Product Promo Videos",
-                    "Explainer Videos",
-                    "Reels & Ads",
-                    "Launch Campaigns",
+                    "3D Animation",
+                    "Visual FX",
+                    "Brand Films",
+                    "Product Reveals",
+                    "AI Concept Design",
+                    "Generative Art",
                   ].map((item) => (
                     <div
                       key={item}
@@ -95,8 +95,8 @@ export default function MotionGraphic() {
             </div>
 
             <PremiumServiceSections
-              index={services[1].index}
-              section={services[1]}
+              index={services[0].index}
+              section={services[0]}
             />
           </div>
         </div>

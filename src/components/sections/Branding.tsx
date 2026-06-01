@@ -116,9 +116,8 @@ const Branding = () => {
                 >
                   <div className="h-px w-10 bg-black/20" />
                   <img src="/assets/bulb.svg" alt="Bulb" className="h-6 w-6" />
-
                   <span className="text-[10px] font-semibold tracking-[0.3em] text-black/40 uppercase">
-                    Branding & Print
+                    Branding
                   </span>
                 </motion.div>
 
@@ -127,9 +126,9 @@ const Branding = () => {
                   style={{ fontSize: "clamp(3rem, 7vw, 6rem)" }}
                 >
                   <TextReveal
-                    lines={["Building Strong", "Brand Identities"]}
+                    lines={["Building Bold", "Branding Systems"]}
                     className="uppercase"
-                    highlightWords={["Brand"]}
+                    highlightWords={["Branding"]}
                     highlightClassName="italic font-medium"
                   />
                 </div>
@@ -147,20 +146,18 @@ const Branding = () => {
                 className="flex flex-col justify-end"
               >
                 <p className="max-w-md text-sm leading-relaxed text-black/45">
-                  We create cohesive branding systems that bring consistency
-                  across digital and offline touchpoints — from logo creation
-                  and identity kits to brochures, packaging, stationery, menu
-                  cards, posters, and print-ready brand assets.
+                  We create cinematic motion systems that transform static
+                  brands into immersive visual experiences — combining
+                  animation, storytelling, sound, and interaction into one
+                  seamless language.
                 </p>
 
                 <div className="mt-8 flex flex-wrap gap-3">
                   {[
-                    "Logo Design",
-                    "Identity Kits",
-                    "Packaging Design",
-                    "Brochures & Posters",
-                    "Stationery Design",
-                    "Print Collateral",
+                    "3D Animation",
+                    "Visual FX",
+                    "Brand Films",
+                    "Product Reveals",
                   ].map((item) => (
                     <div
                       key={item}

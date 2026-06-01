@@ -74,30 +74,28 @@ const FestivalCreatives = () => {
                 <SlideIn delay={0}>
                   <div className="mb-6 flex items-center gap-3">
                     <div className="h-px w-8 bg-black/20" />
-
                     <img
                       src="/assets/bulb.svg"
                       alt="Bulb"
                       className="h-6 w-6"
                     />
-
                     <span className="text-[10px] font-semibold tracking-[0.35em] text-black/50 uppercase">
-                      Festival Creatives
+                      Social Media Management
                     </span>
                   </div>
                 </SlideIn>
 
                 <div style={{ fontSize: "clamp(2.8rem, 6.5vw, 5.5rem)" }}>
                   <span className="block leading-[0.9] font-black tracking-[-0.05em] text-black uppercase">
-                    Festival
+                    Build
                   </span>
 
                   <span className="block leading-[0.9] font-black tracking-[-0.05em] text-black/30 uppercase">
-                    Campaigns
+                    Audiences
                   </span>
 
                   <span className="block leading-[0.9] font-black tracking-[-0.05em] text-black uppercase">
-                    That Stand Out.
+                    That Buy.
                   </span>
                 </div>
               </div>
@@ -108,29 +106,29 @@ const FestivalCreatives = () => {
                 className="flex flex-col justify-end pb-2"
               >
                 <p className="max-w-xs text-sm leading-relaxed text-black/60">
-                  We design high-impact festival creatives, seasonal campaigns,
-                  offer promotions, and branded social media visuals crafted to
-                  capture audience attention while maintaining strong brand
-                  consistency across every platform.
+                  We turn social channels into revenue machines — through
+                  obsessive creative, platform-native strategy, and community
+                  that converts.
                 </p>
 
-                <div className="mt-7 flex flex-wrap gap-3">
-                  {[
-                    "Festival Creatives",
-                    "Seasonal Campaigns",
-                    "Offer Promotions",
-                    "Story Creatives",
-                    "Social Media Ads",
-                    "Brand Templates",
-                  ].map((item) => (
-                    <div
-                      key={item}
-                      className="rounded-full border border-black/10 bg-white/60 px-4 py-2 text-xs font-medium text-black/60 backdrop-blur"
-                    >
-                      {item}
-                    </div>
-                  ))}
-                </div>
+                <motion.a
+                  href="#"
+                  whileHover={{ x: 5 }}
+                  transition={{ type: "spring", stiffness: 300 }}
+                  className="mt-7 inline-flex items-center gap-3 text-[10px] font-bold tracking-[0.3em] text-black/60 uppercase transition-colors hover:text-black"
+                >
+                  <span>Start Growing</span>
+
+                  <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
+                    <path
+                      d="M3 8h10M9 4l4 4-4 4"
+                      stroke="currentColor"
+                      strokeWidth="1.5"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
+                  </svg>
+                </motion.a>
               </SlideIn>
             </div>
 
