@@ -241,10 +241,7 @@ export default function ScrollImageSequence({
   }, [isActive, folder, totalFrames]);
 
   return (
-    <section
-      ref={sectionRef}
-      className={`relative h-[400vh] overflow-hidden ${className}`}
-    >
+    <section ref={sectionRef} className={`relative h-[400vh] ${className}`}>
       <div className="sticky top-0 h-screen overflow-hidden bg-black">
         <canvas ref={canvasRef} className="absolute inset-0 h-full w-full" />
 

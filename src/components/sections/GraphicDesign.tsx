@@ -5,7 +5,7 @@ import TextReveal from "../motion/TextReveal";
 import PremiumServiceSections from "./ServicesSections";
 import { services } from "../data/service";
 
-export default function MotionGraphic() {
+export default function GraphicDesign() {
   return (
     <section className="relative py-10" style={{ background: "#f5f3ef" }}>
       <div
@@ -17,7 +17,7 @@ export default function MotionGraphic() {
       />
 
       <div className="flex flex-col gap-5">
-        <div key={services[1].id}>
+        <div key={services[0].id}>
           <div className="relative z-10 container">
             <div className="my-10 grid gap-10 lg:grid-cols-[1.1fr_0.9fr]">
               <div>
@@ -36,7 +36,7 @@ export default function MotionGraphic() {
                   <img src="/assets/bulb.svg" alt="Bulb" className="h-6 w-6" />
 
                   <span className="text-[10px] font-semibold tracking-[0.3em] text-black/40 uppercase">
-                    Motion Graphics + AI
+                    Graphic Design
                   </span>
                 </motion.div>
 
@@ -47,9 +47,9 @@ export default function MotionGraphic() {
                   }}
                 >
                   <TextReveal
-                    lines={["Stories Powered", "By Motion & AI"]}
+                    lines={["Designing Visuals", "That Connect"]}
                     className="uppercase"
-                    highlightWords={["Motion", "AI"]}
+                    highlightWords={["Visuals"]}
                     highlightClassName="italic font-medium"
                   />
                 </div>
@@ -67,21 +67,21 @@ export default function MotionGraphic() {
                 className="flex flex-col justify-end"
               >
                 <p className="max-w-md text-sm leading-relaxed text-black/45">
-                  We create visually compelling motion graphics, AI-powered
-                  videos, reels, explainers, launch teasers, and promotional
-                  campaigns designed for modern digital platforms — helping
-                  brands scale content production with speed, consistency, and
-                  high-impact storytelling.
+                  We create high-quality static creatives including feed posts,
+                  carousel designs, ad creatives, product promotions, and
+                  festival campaigns — crafted to maintain brand consistency,
+                  improve engagement, and deliver platform-ready content for
+                  modern digital marketing.
                 </p>
 
                 <div className="mt-8 flex flex-wrap gap-3">
                   {[
-                    "2D/3D Motion Graphics",
-                    "AI Videos + Voiceovers",
-                    "Product Promo Videos",
-                    "Explainer Videos",
-                    "Reels & Ads",
-                    "Launch Campaigns",
+                    "Feed Posts",
+                    "Carousel Creatives",
+                    "Story Designs",
+                    "Ad Creatives",
+                    "Festival Campaigns",
+                    "Product Promotions",
                   ].map((item) => (
                     <div
                       key={item}
@@ -95,8 +95,8 @@ export default function MotionGraphic() {
             </div>
 
             <PremiumServiceSections
-              index={services[1].index}
-              section={services[1]}
+              index={services[0].index}
+              section={services[0]}
             />
           </div>
         </div>
