@@ -7,6 +7,7 @@ import FestivalCreatives from "../components/sections/FestivalCreatives";
 import PremiumServiceSections from "../components/sections/ServicesSections";
 import ScrollImageSequence from "../components/motion/ScrollImageSequence";
 import TestimonialsSection from "../components/sections/TestimonialsSection";
+import GraphicDesign from "../components/sections/GraphicDesign";
 
 export default function Home() {
   return (
@@ -14,15 +15,12 @@ export default function Home() {
       <ScrollImageSequence folder="/sequences/motion" totalFrames={114} />
       <MotionGraphic />
       <ScrollImageSequence folder="/sequences/graphic" totalFrames={114} />
-      <Branding />
+      <GraphicDesign />
       <ScrollImageSequence folder="/sequences/branding" totalFrames={114} />
-      <SocialMedia />
+      <Branding />
       <ScrollImageSequence folder="/sequences/social" totalFrames={114} />
-      <FestivalCreatives />
+      <SocialMedia />
       <Stats />
-      {/* <ServicesSection /> */}
-      {/* <PortfolioSection /> */}
-      {/* <ImageSection /> */}
       <TestimonialsSection />
       <div className="relative h-60" style={{ background: "#f5f3ef" }}>
         <div
