@@ -11,11 +11,13 @@ import TestimonialsSection from "../components/sections/TestimonialsSection";
 export default function Home() {
   return (
     <div className="bg-zinc-50 font-sans">
-      <ScrollImageSequence folder="/videos/frames" totalFrames={236} />
+      <ScrollImageSequence folder="/sequences/motion" totalFrames={114} />
       <MotionGraphic />
-      <ScrollImageSequence folder="/videos/frames" totalFrames={236} />
+      <ScrollImageSequence folder="/sequences/graphic" totalFrames={114} />
       <Branding />
+      <ScrollImageSequence folder="/sequences/branding" totalFrames={114} />
       <SocialMedia />
+      <ScrollImageSequence folder="/sequences/social" totalFrames={114} />
       <FestivalCreatives />
       <Stats />
       {/* <ServicesSection /> */}
