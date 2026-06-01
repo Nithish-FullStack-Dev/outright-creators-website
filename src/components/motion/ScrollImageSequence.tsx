@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
@@ -28,9 +28,39 @@ export default function ScrollImageSequence({
 
   const currentFrameRef = useRef(1);
 
-  const loadedRef = useRef(false);
+  const [isActive, setIsActive] = useState(false);
+
+  // =========================================
+  // INTERSECTION OBSERVER
+  // =========================================
 
   useEffect(() => {
+    const section = sectionRef.current;
+
+    if (!section) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        setIsActive(entry.isIntersecting);
+      },
+
+      {
+        rootMargin: "1500px",
+      },
+    );
+
+    observer.observe(section);
+
+    return () => observer.disconnect();
+  }, []);
+
+  // =========================================
+  // MAIN ENGINE
+  // =========================================
+
+  useEffect(() => {
+    if (!isActive) return;
+
     const section = sectionRef.current;
 
     const canvas = canvasRef.current;
@@ -58,7 +88,7 @@ export default function ScrollImageSequence({
 
       canvas.style.height = `${window.innerHeight}px`;
 
-      ctx.scale(dpr, dpr);
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
     };
 
     setCanvasSize();
@@ -72,7 +102,7 @@ export default function ScrollImageSequence({
     };
 
     // =========================================
-    // PRELOAD IMAGES
+    // LOAD IMAGES
     // =========================================
 
     const images: HTMLImageElement[] = [];
@@ -88,7 +118,7 @@ export default function ScrollImageSequence({
     imagesRef.current = images;
 
     // =========================================
-    // DRAW IMAGE
+    // DRAW
     // =========================================
 
     const drawImageCover = (img: HTMLImageElement) => {
@@ -98,35 +128,30 @@ export default function ScrollImageSequence({
 
       const canvasHeight = window.innerHeight;
 
-      ctx.clearRect(0, 0, canvasWidth, canvasHeight);
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-      const imageAspect = img.width / img.height;
+      // IMAGE SIZE
+      const imageWidth = img.width;
 
-      const canvasAspect = canvasWidth / canvasHeight;
+      const imageHeight = img.height;
 
-      let renderWidth = canvasWidth;
+      // SCALE TO COVER
+      const scale = Math.max(
+        canvasWidth / imageWidth,
+        canvasHeight / imageHeight,
+      );
 
-      let renderHeight = canvasHeight;
+      // FINAL SIZE
+      const scaledWidth = imageWidth * scale;
 
-      let offsetX = 0;
+      const scaledHeight = imageHeight * scale;
 
-      let offsetY = 0;
+      // CENTER POSITION
+      const x = (canvasWidth - scaledWidth) / 2;
 
-      if (imageAspect > canvasAspect) {
-        renderHeight = canvasHeight;
+      const y = (canvasHeight - scaledHeight) / 2;
 
-        renderWidth = canvasHeight * imageAspect;
-
-        offsetX = (canvasWidth - renderWidth) / 2;
-      } else {
-        renderWidth = canvasWidth;
-
-        renderHeight = canvasWidth / imageAspect;
-
-        offsetY = (canvasHeight - renderHeight) / 2;
-      }
-
-      ctx.drawImage(img, offsetX, offsetY, renderWidth, renderHeight);
+      ctx.drawImage(img, x, y, scaledWidth, scaledHeight);
     };
 
     // =========================================
@@ -134,8 +159,6 @@ export default function ScrollImageSequence({
     // =========================================
 
     images[0].onload = () => {
-      loadedRef.current = true;
-
       drawImageCover(images[0]);
     };
 
@@ -162,15 +185,10 @@ export default function ScrollImageSequence({
         end: "bottom bottom",
 
         scrub: 0.15,
-
-        invalidateOnRefresh: true,
       },
 
       onUpdate: () => {
-        const frameIndex = Math.min(
-          totalFrames,
-          Math.max(1, Math.round(frameState.frame)),
-        );
+        const frameIndex = Math.round(frameState.frame);
 
         if (frameIndex === currentFrameRef.current) return;
 
@@ -210,16 +228,17 @@ export default function ScrollImageSequence({
       animation.kill();
 
       window.removeEventListener("resize", handleResize);
+
+      // DESTROY IMAGES
+      imagesRef.current = [];
     };
-  }, [folder, totalFrames]);
+  }, [isActive, folder, totalFrames]);
 
   return (
-    <section ref={sectionRef} className={`relative h-[500vh] ${className}`}>
-      {/* STICKY CANVAS */}
+    <section ref={sectionRef} className={`relative h-[400vh] ${className}`}>
       <div className="sticky top-0 h-screen overflow-hidden bg-black">
         <canvas ref={canvasRef} className="block h-full w-full" />
 
-        {/* TITLE */}
         {title && (
           <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
             <h2

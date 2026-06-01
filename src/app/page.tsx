@@ -10,16 +10,15 @@ import ScrollImageSequence from "../components/motion/ScrollImageSequence";
 export default function Home() {
   return (
     <div className="bg-zinc-50 font-sans">
-      <ScrollImageSequence folder="/videos/frames" totalFrames={236} />
+      <ScrollImageSequence folder="/sequences/motion" totalFrames={114} />
       <MotionGraphic />
-      <ScrollImageSequence folder="/videos/frames" totalFrames={236} />
+      <ScrollImageSequence folder="/sequences/graphic" totalFrames={114} />
       <Branding />
+      <ScrollImageSequence folder="/sequences/branding" totalFrames={114} />
       <SocialMedia />
+      <ScrollImageSequence folder="/sequences/social" totalFrames={114} />
       <FestivalCreatives />
       <Stats />
-      {/* <ServicesSection /> */}
-      {/* <PortfolioSection /> */}
-      {/* <ImageSection /> */}
       <div className="relative h-60" style={{ background: "#f5f3ef" }}>
         <div
           className="pointer-events-none absolute inset-0 opacity-[0.025]"
