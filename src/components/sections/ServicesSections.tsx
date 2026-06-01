@@ -137,7 +137,7 @@ export default function PremiumServiceSections({
                   </div>
                 </div>
 
-                <h2 className="text-2xl leading-tight font-semibold tracking-tight text-black md:text-5xl">
+                <h2 className="text-2xl leading-tight font-semibold tracking-tight text-black md:text-4xl">
                   {section.title}
                 </h2>
 

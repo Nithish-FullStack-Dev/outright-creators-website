@@ -22,15 +22,6 @@ export default function Home() {
       <SocialMedia />
       <Stats />
       <TestimonialsSection />
-      <div className="relative h-60" style={{ background: "#f5f3ef" }}>
-        <div
-          className="pointer-events-none absolute inset-0 opacity-[0.025]"
-          style={{
-            backgroundImage: `repeating-linear-gradient(0deg, #000 0px, #000 1px, transparent 1px, transparent 72px),
-            repeating-linear-gradient(90deg, #000 0px, #000 1px, transparent 1px, transparent 72px)`,
-          }}
-        />
-      </div>
     </div>
   );
 }

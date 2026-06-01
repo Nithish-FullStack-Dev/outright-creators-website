@@ -210,7 +210,7 @@ export default function Header() {
                       Get in touch
                     </span>
                     <span className="text-[15px] font-semibold text-black">
-                      hello@studio.com
+                      info@outrightcreators.com
                     </span>
                   </div>
                   <button className="group flex items-center gap-2 rounded-full bg-black px-6 py-3 text-white transition-all duration-300 hover:bg-black/80">

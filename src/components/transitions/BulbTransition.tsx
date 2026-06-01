@@ -17,21 +17,18 @@ export default function BulbTransition({ active }: { active: boolean }) {
           initial={{ opacity: 1 }}
           exit={{ opacity: 1 }}
         >
-          {/* THE SOLID CURTAIN PANEL: 
-            This moves the entire BG, glow, bulb, and lines together as one piece!
-          */}
+          {/* THE SOLID CURTAIN PANEL */}
           <motion.div
             initial={{ y: "-100%" }}
             animate={{ y: "0%" }}
             exit={{ y: "-100%" }}
             transition={{
-              duration: 0.65,
-              // Custom cubic-bezier for a sharp, premium solid-panel pull
-              ease: [0.85, 0, 0.15, 1],
+              duration: 0.6, // Slightly punchier drop
+              ease: [0.76, 0, 0.24, 1], // Ultra-premium, Apple-style smooth ease
             }}
             className="absolute inset-0 flex items-center justify-center bg-[#050505] backdrop-blur-md"
           >
-            {/* VIGNETTE BORDER (Inside the moving panel so it slides up too) */}
+            {/* VIGNETTE BORDER */}
             <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_20%,rgba(0,0,0,0.95)_100%)]" />
 
             {/* AMBIENT GLOW */}
@@ -50,15 +47,14 @@ export default function BulbTransition({ active }: { active: boolean }) {
                     <motion.div
                       initial={{ y: -75, opacity: 0, scaleY: 0.5 }}
                       animate={{
-                        y: [-75, -220],
+                        y: [-75, -240], // Shoots slightly further out
                         opacity: [0, 1, 0],
-                        scaleY: [0.5, 1.5, 0.5],
+                        scaleY: [0.5, 2, 0.5], // More dynamic stretch
                       }}
                       transition={{
-                        duration: 0.7,
-                        // Shoots precisely as the panel finish dropping down (0.65s)
-                        delay: 0.45 + i * 0.04,
-                        ease: "easeOut",
+                        duration: 0.9, // Slightly slower shooting lines as you requested
+                        delay: 0.45 + i * 0.06, // Cascades smoothly just as the panel settles
+                        ease: [0.21, 0.47, 0.32, 0.98], // Premium custom ease-out
                       }}
                     >
                       <div className="-ml-[3px] h-[45px] w-[6px] rounded-full bg-[#FFD54F] shadow-[0_0_20px_#FFD54F]" />

@@ -29,7 +29,7 @@ export const services: ServiceSection[] = [
     index: 0,
     id: "motion-ai",
     label: "Motion + AI",
-    labelImage: "/assets/MotionDesign.jpg",
+    labelImage: "/assets/MotionDesign.png",
 
     title:
       "Motion graphics and AI-powered videos built for digital storytelling",
@@ -259,7 +259,7 @@ export const services: ServiceSection[] = [
     index: 2,
     id: "social-media",
     label: "Social Media",
-    labelImage: "/assets/Sociaal.jpg",
+    labelImage: "/assets/Sociaal.png",
 
     title: "Platform-ready social media creatives designed for engagement",
 
@@ -328,7 +328,7 @@ export const services: ServiceSection[] = [
     index: 3,
     id: "branding",
     label: "Branding",
-    labelImage: "/assets/Branding.jpg",
+    labelImage: "/assets/branding.png",
 
     title: "Brand identity and print design systems built for consistency",
 
