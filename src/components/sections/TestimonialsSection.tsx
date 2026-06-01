@@ -108,13 +108,18 @@ export default function TestimonialsSection() {
   });
 
   return (
-    <section className="relative overflow-hidden py-10">
+    <section
+      className="relative overflow-hidden py-10"
+      style={{ background: "#f5f3ef" }}
+    >
       {/* BACKGROUND */}
-      <div className="absolute inset-0 overflow-hidden">
-        <div className="absolute top-0 left-1/2 h-[550px] w-[550px] -translate-x-1/2 rounded-full bg-yellow-400/10 blur-[150px]" />
-
-        <div className="absolute right-0 bottom-0 h-[350px] w-[350px] rounded-full bg-yellow-400/10 blur-[120px]" />
-      </div>
+      <div
+        className="pointer-events-none absolute inset-0 opacity-[0.025]"
+        style={{
+          backgroundImage: `repeating-linear-gradient(0deg, #000 0px, #000 1px, transparent 1px, transparent 72px),
+            repeating-linear-gradient(90deg, #000 0px, #000 1px, transparent 1px, transparent 72px)`,
+        }}
+      />
 
       <div className="relative z-10 mx-auto max-w-7xl">
         {/* HEADER */}
@@ -172,13 +177,10 @@ export default function TestimonialsSection() {
                 key={`${item.id}-${index}`}
                 onMouseEnter={() => setIsPaused(true)}
                 onMouseLeave={() => setIsPaused(false)}
-                whileHover={{
-                  y: -10,
-                }}
+                whileHover={{}}
                 className="group relative flex h-[420px] w-[320px] flex-shrink-0 flex-col overflow-hidden rounded-[36px] border border-black/10 bg-white/70 p-6 backdrop-blur-2xl transition-all duration-500 md:w-[360px]"
               >
                 {/* PREMIUM GLOW */}
-                <div className="absolute top-0 left-1/2 h-52 w-52 -translate-x-1/2 rounded-full bg-yellow-400 opacity-0 blur-3xl transition-opacity duration-500 group-hover:opacity-100" />
 
                 {/* TOP */}
                 <div className="relative z-10 flex items-start justify-between gap-4">

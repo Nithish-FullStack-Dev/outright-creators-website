@@ -4,7 +4,8 @@ import { motion } from "framer-motion";
 import { useEffect } from "react";
 import Image from "next/image";
 
-const words = ["Strategic", "Innovative", "Excellence"];
+// Updated to reflect your actual in-house services
+const words = ["Motion", "Graphics", "Branding", "Social Media"];
 
 const IntroScreen = ({ onComplete }: { onComplete: () => void }) => {
   useEffect(() => {
@@ -29,7 +30,7 @@ const IntroScreen = ({ onComplete }: { onComplete: () => void }) => {
       }}
       className="fixed inset-0 z-[99999] overflow-hidden bg-[#14050f]"
     >
-      {/* background glow */}
+      {/* BACKGROUND GLOW */}
       <div className="absolute inset-0">
         <motion.div
           animate={{
@@ -69,7 +70,7 @@ const IntroScreen = ({ onComplete }: { onComplete: () => void }) => {
         />
       </div>
 
-      {/* particles */}
+      {/* PARTICLES */}
       <div className="absolute inset-0 overflow-hidden">
         {Array.from({ length: 24 }).map((_, i) => (
           <motion.span
@@ -95,7 +96,7 @@ const IntroScreen = ({ onComplete }: { onComplete: () => void }) => {
 
       <div className="relative flex h-full w-full items-center justify-center px-6">
         <div className="flex flex-col items-center text-center">
-          {/* bulb glow */}
+          {/* BULB GLOW & LOGO */}
           <motion.div
             initial={{ scale: 0.8, opacity: 0 }}
             animate={{
@@ -158,53 +159,39 @@ const IntroScreen = ({ onComplete }: { onComplete: () => void }) => {
             </motion.div>
           </motion.div>
 
-          {/* line */}
+          {/* DIVIDER LINE */}
           <motion.div
             initial={{ scaleX: 0 }}
             animate={{ scaleX: 1 }}
             transition={{
               duration: 1.4,
-              delay: 0.6,
+              delay: 0.3, // Sped up the delay slightly since the H1 is gone
               ease: [0.76, 0, 0.24, 1],
             }}
-            className="mt-10 h-px w-[220px] origin-left bg-gradient-to-r from-transparent via-yellow-300 to-transparent"
+            className="mt-12 h-px w-[220px] origin-center bg-gradient-to-r from-transparent via-yellow-300 to-transparent"
           />
 
-          {/* heading */}
-          <motion.h1
-            initial={{ y: 100, opacity: 0 }}
-            animate={{ y: 0, opacity: 1 }}
-            transition={{
-              duration: 1.2,
-              delay: 0.3,
-              ease: [0.76, 0, 0.24, 1],
-            }}
-            className="mt-8 bg-gradient-to-b from-yellow-100 via-yellow-300 to-yellow-500 bg-clip-text text-[2.8rem] font-semibold tracking-[-0.08em] text-transparent sm:text-[4rem] md:text-[6rem]"
-          >
-            Outright Creators
-          </motion.h1>
-
-          {/* subtitle */}
+          {/* SUBTITLE */}
           <motion.p
-            initial={{ opacity: 0, y: 30 }}
+            initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{
               duration: 1,
-              delay: 1,
+              delay: 0.6, // Adjusted timing for better flow
             }}
-            className="mt-4 max-w-[700px] text-sm tracking-[0.35em] text-yellow-100/60 uppercase md:text-base"
+            className="mt-8 max-w-[700px] text-sm tracking-[0.35em] text-yellow-100/60 uppercase md:text-base"
           >
             Creative • Digital • Innovation
           </motion.p>
 
-          {/* animated words */}
-          <div className="mt-10 flex flex-wrap items-center justify-center gap-4 md:gap-8">
+          {/* ANIMATED SERVICE WORDS */}
+          <div className="mt-8 flex flex-wrap items-center justify-center gap-3 md:gap-6">
             {words.map((word, i) => (
               <motion.div
                 key={word}
                 initial={{
                   opacity: 0,
-                  y: 40,
+                  y: 30,
                 }}
                 animate={{
                   opacity: 1,
@@ -212,10 +199,10 @@ const IntroScreen = ({ onComplete }: { onComplete: () => void }) => {
                 }}
                 transition={{
                   duration: 0.8,
-                  delay: 1.3 + i * 0.2,
+                  delay: 0.8 + i * 0.15, // Smooth cascade reveal
                   ease: [0.76, 0, 0.24, 1],
                 }}
-                className="relative overflow-hidden rounded-full border border-yellow-300/20 bg-white/5 px-5 py-2 backdrop-blur-xl"
+                className="relative overflow-hidden rounded-full border border-yellow-300/20 bg-white/5 px-6 py-2.5 backdrop-blur-xl"
               >
                 <motion.div
                   animate={{
@@ -230,14 +217,14 @@ const IntroScreen = ({ onComplete }: { onComplete: () => void }) => {
                   className="absolute inset-0 w-[40%] skew-x-12 bg-gradient-to-r from-transparent via-white/30 to-transparent"
                 />
 
-                <span className="relative text-sm font-medium tracking-[0.2em] text-yellow-100 md:text-base">
+                <span className="relative text-sm font-medium tracking-[0.15em] text-yellow-100 uppercase md:text-base">
                   {word}
                 </span>
               </motion.div>
             ))}
           </div>
 
-          {/* loading bar */}
+          {/* LOADING BAR */}
           <div className="mt-14 h-[4px] w-[260px] overflow-hidden rounded-full bg-white/10">
             <motion.div
               initial={{ x: "-100%" }}

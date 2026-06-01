@@ -196,15 +196,19 @@ export default function Footer() {
   };
 
   return (
-    <footer ref={footerRef} className="relative overflow-hidden">
+    <footer
+      ref={footerRef}
+      className="relative overflow-hidden"
+      style={{ background: "#f5f3ef" }}
+    >
       {/* BACKGROUND */}
-      <div className="absolute inset-0">
-        <div className="absolute top-0 left-1/2 h-[700px] w-[700px] -translate-x-1/2 rounded-full bg-yellow-400/10 blur-3xl" />
-
-        <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(255,255,255,0.03)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.03)_1px,transparent_1px)] bg-[size:70px_70px]" />
-
-        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-black/20 to-black" />
-      </div>
+      <div
+        className="pointer-events-none absolute inset-0 opacity-[0.025]"
+        style={{
+          backgroundImage: `repeating-linear-gradient(0deg, #000 0px, #000 1px, transparent 1px, transparent 72px),
+            repeating-linear-gradient(90deg, #000 0px, #000 1px, transparent 1px, transparent 72px)`,
+        }}
+      />
 
       <div className="relative mx-auto max-w-[1600px] px-5 pt-10 pb-8 sm:px-8 lg:px-12">
         {/* TOP SECTION */}
@@ -239,31 +243,32 @@ export default function Footer() {
               y: rightY,
               opacity: titleOpacity,
             }}
-            className="bg-blur relative overflow-hidden rounded-[32px] border border-white/10 bg-black/40 p-5 backdrop-blur-2xl"
+            className="relative overflow-hidden rounded-[36px] border border-black/10 bg-white p-7 shadow-[0_20px_80px_rgba(0,0,0,0.08)]"
           >
-            <div className="absolute top-0 right-0 h-40 w-40 rounded-full bg-yellow-400/10 blur-3xl" />
+            <div className="absolute top-0 right-0 h-40 w-40 rounded-full bg-neutral-200 blur-3xl" />
 
             <div className="relative">
               <div className="mb-8 flex items-center justify-between">
                 <div>
-                  <p className="mb-2 text-sm tracking-[0.25em] text-white uppercase text-shadow-2xs">
+                  <p className="mb-2 text-sm tracking-[0.25em] text-black/40 uppercase">
                     Contact Form
                   </p>
 
-                  <h3 className="text-2xl font-semibold text-white text-shadow-lg">
+                  <h3 className="text-3xl font-semibold text-black">
                     Start Your Project
                   </h3>
                 </div>
 
-                <div className="flex h-14 w-14 items-center justify-center rounded-2xl border border-white/10 bg-white text-black">
+                <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-black text-white shadow-lg">
                   <ArrowUpRight size={22} />
                 </div>
               </div>
 
-              <form onSubmit={handleSubmit} className="flex flex-col gap-3">
+              <form onSubmit={handleSubmit} className="flex flex-col gap-5">
                 <div className="grid gap-5 md:grid-cols-2">
+                  {/* NAME */}
                   <div>
-                    <label className="mb-3 block text-sm text-white text-shadow-lg">
+                    <label className="mb-3 block text-sm font-medium text-black/70">
                       Full Name
                     </label>
 
@@ -273,19 +278,21 @@ export default function Footer() {
                       value={formData.name}
                       onChange={handleChange}
                       placeholder="Enter your name"
-                      className={`h-14 w-full rounded-2xl border bg-white/[0.04] px-5 text-sm text-white transition-all duration-300 outline-none placeholder:text-white/25 focus:border-white ${
-                        fieldErrors.name ? "border-red-500" : "border-white/10"
+                      className={`h-14 w-full rounded-2xl border bg-[#f8f8f8] px-5 text-sm text-black transition-all duration-300 outline-none placeholder:text-black/30 focus:border-black ${
+                        fieldErrors.name ? "border-red-500" : "border-black/10"
                       }`}
                     />
+
                     {fieldErrors.name && (
-                      <p className="mt-2 text-sm text-red-400">
+                      <p className="mt-2 text-sm text-red-500">
                         {fieldErrors.name}
                       </p>
                     )}
                   </div>
 
+                  {/* MOBILE */}
                   <div>
-                    <label className="mb-3 block text-sm text-white text-shadow-lg">
+                    <label className="mb-3 block text-sm font-medium text-black/70">
                       Mobile Number
                     </label>
 
@@ -310,22 +317,24 @@ export default function Footer() {
                       }}
                       inputMode="numeric"
                       placeholder="9876543210"
-                      className={`h-14 w-full rounded-2xl border bg-white/[0.04] px-5 text-sm text-white transition-all duration-300 outline-none placeholder:text-white/25 focus:border-white ${
+                      className={`h-14 w-full rounded-2xl border bg-[#f8f8f8] px-5 text-sm text-black transition-all duration-300 outline-none placeholder:text-black/30 focus:border-black ${
                         fieldErrors.mobile
                           ? "border-red-500"
-                          : "border-white/10"
+                          : "border-black/10"
                       }`}
                     />
+
                     {fieldErrors.mobile && (
-                      <p className="mt-2 text-sm text-red-400">
+                      <p className="mt-2 text-sm text-red-500">
                         {fieldErrors.mobile}
                       </p>
                     )}
                   </div>
                 </div>
 
+                {/* EMAIL */}
                 <div>
-                  <label className="mb-3 block text-sm text-white text-shadow-lg">
+                  <label className="mb-3 block text-sm font-medium text-black/70">
                     Email Address
                   </label>
 
@@ -335,19 +344,21 @@ export default function Footer() {
                     value={formData.email}
                     onChange={handleChange}
                     placeholder="you@example.com"
-                    className={`h-14 w-full rounded-2xl border bg-white/[0.04] px-5 text-sm text-white transition-all duration-300 outline-none placeholder:text-white/25 focus:border-white ${
-                      fieldErrors.email ? "border-red-500" : "border-white/10"
+                    className={`h-14 w-full rounded-2xl border bg-[#f8f8f8] px-5 text-sm text-black transition-all duration-300 outline-none placeholder:text-black/30 focus:border-black ${
+                      fieldErrors.email ? "border-red-500" : "border-black/10"
                     }`}
                   />
+
                   {fieldErrors.email && (
-                    <p className="mt-2 text-sm text-red-400">
+                    <p className="mt-2 text-sm text-red-500">
                       {fieldErrors.email}
                     </p>
                   )}
                 </div>
 
+                {/* MESSAGE */}
                 <div>
-                  <label className="mb-3 block text-sm text-white text-shadow-lg">
+                  <label className="mb-3 block text-sm font-medium text-black/70">
                     Message
                   </label>
 
@@ -357,23 +368,25 @@ export default function Footer() {
                     onChange={handleChange}
                     placeholder="Tell us about your project..."
                     rows={5}
-                    className={`w-full resize-none rounded-2xl border bg-white/[0.04] px-5 py-4 text-sm text-white transition-all duration-300 outline-none placeholder:text-white/25 focus:border-white ${
-                      fieldErrors.message ? "border-red-500" : "border-white/10"
+                    className={`w-full resize-none rounded-2xl border bg-[#f8f8f8] px-5 py-4 text-sm text-black transition-all duration-300 outline-none placeholder:text-black/30 focus:border-black ${
+                      fieldErrors.message ? "border-red-500" : "border-black/10"
                     }`}
                   />
+
                   {fieldErrors.message && (
-                    <p className="mt-2 text-sm text-red-400">
+                    <p className="mt-2 text-sm text-red-500">
                       {fieldErrors.message}
                     </p>
                   )}
                 </div>
 
+                {/* BUTTON */}
                 <button
                   type="submit"
                   disabled={loading}
-                  className="group mt-2 flex h-14 items-center justify-between rounded-2xl bg-black px-6 text-white transition-all duration-500 hover:scale-[1.02] disabled:cursor-not-allowed disabled:opacity-70"
+                  className="group mt-2 flex h-14 items-center justify-between rounded-2xl bg-black px-6 text-white shadow-lg transition-all duration-500 hover:scale-[1.02] hover:bg-neutral-900 disabled:cursor-not-allowed disabled:opacity-70"
                 >
-                  <span className="text-sm font-semibold tracking-[0.2em] uppercase text-shadow-sm">
+                  <span className="text-sm font-semibold tracking-[0.2em] uppercase">
                     {loading ? "Sending..." : "Send Message"}
                   </span>
 
@@ -381,14 +394,15 @@ export default function Footer() {
                     <ArrowUpRight size={18} />
                   </div>
                 </button>
+
                 {success && (
-                  <p className="mt-3 text-sm font-medium text-green-400">
+                  <p className="mt-3 text-sm font-medium text-green-600">
                     {success}
                   </p>
                 )}
 
                 {submitError && (
-                  <p className="mt-3 text-sm font-medium text-red-400">
+                  <p className="mt-3 text-sm font-medium text-red-500">
                     {submitError}
                   </p>
                 )}
@@ -397,7 +411,7 @@ export default function Footer() {
           </motion.div>
         </div>
         {/* MAIN GRID WRAPPER */}
-        <div className="relative right-1/2 left-1/2 mr-[-50vw] ml-[-50vw] w-screen bg-black">
+        <div className="relative right-1/2 left-1/2 mr-[-50vw] ml-[-50vw] w-screen border-t border-black/5">
           <motion.div
             style={{
               y: gridY,
@@ -412,11 +426,11 @@ export default function Footer() {
                   src="/logo.svg"
                   alt="Outright Creators"
                   fill
-                  className="object-contain brightness-0 invert"
+                  className="object-contain"
                 />
               </Link>
 
-              <p className="max-w-[420px] text-[15px] leading-[2] text-white/50">
+              <p className="max-w-[420px] text-[15px] leading-[2] text-black/70">
                 Building modern experiences through strategic branding,
                 immersive websites, high-converting visuals and futuristic
                 creative systems.
@@ -433,7 +447,7 @@ export default function Footer() {
                     <Link
                       href={item.href}
                       target="_blank"
-                      className="group flex h-14 w-14 items-center justify-center rounded-full border border-white/10 bg-white/[0.03] backdrop-blur-xl transition-all duration-500 hover:border-white hover:bg-black"
+                      className="group flex h-14 w-14 items-center justify-center rounded-full border border-black/10 bg-black/[0.03] backdrop-blur-xl transition-all duration-500 hover:border-black"
                     >
                       <Image
                         src={item.icon}
@@ -451,7 +465,7 @@ export default function Footer() {
             {/* NAVIGATION */}
             {navLinks.map((section) => (
               <div key={section.title}>
-                <h3 className="mb-7 text-sm font-semibold tracking-[0.25em] text-white uppercase">
+                <h3 className="mb-7 text-sm font-semibold tracking-[0.25em] text-black uppercase">
                   {section.title}
                 </h3>
 
@@ -460,7 +474,7 @@ export default function Footer() {
                     <button
                       key={item.label}
                       onClick={() => navigate(item.href)}
-                      className="group flex w-fit items-center gap-2 text-left text-[15px] text-white/50 transition-all duration-300 hover:text-white"
+                      className="group flex w-fit items-center gap-2 text-left text-[15px] text-black/50 transition-all duration-300 hover:text-black"
                     >
                       <span>{item.label}</span>
 
@@ -476,52 +490,52 @@ export default function Footer() {
 
             {/* CONTACT */}
             <div>
-              <h3 className="mb-7 text-sm font-semibold tracking-[0.25em] text-white uppercase">
+              <h3 className="mb-7 text-sm font-semibold tracking-[0.25em] text-black uppercase">
                 Contact
               </h3>
 
               <div className="space-y-6">
                 <div className="flex items-start gap-4">
-                  <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl border border-white/10 bg-white/[0.03] text-white backdrop-blur-xl">
+                  <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl border border-black/10 bg-black/[0.03] text-black backdrop-blur-xl">
                     <Phone size={18} />
                   </div>
 
                   <div>
-                    <p className="mb-1 text-xs tracking-[0.2em] text-white/35 uppercase">
+                    <p className="mb-1 text-xs tracking-[0.2em] text-black/35 uppercase">
                       Phone
                     </p>
 
-                    <p className="text-[15px] text-white/75">+91 9014844173</p>
+                    <p className="text-[15px] text-black/75">+91 9014844173</p>
                   </div>
                 </div>
 
                 <div className="flex items-start gap-4">
-                  <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl border border-white/10 bg-white/[0.03] text-white backdrop-blur-xl">
+                  <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl border border-black/10 bg-black/[0.03] text-black backdrop-blur-xl">
                     <Mail size={18} />
                   </div>
 
                   <div>
-                    <p className="mb-1 text-xs tracking-[0.2em] text-white/35 uppercase">
+                    <p className="mb-1 text-xs tracking-[0.2em] text-black/35 uppercase">
                       Email
                     </p>
 
-                    <p className="text-[15px] break-all text-white/75">
+                    <p className="text-[15px] break-all text-black/75">
                       info@outrightcreators.com
                     </p>
                   </div>
                 </div>
 
                 <div className="flex items-start gap-4">
-                  <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl border border-white/10 bg-white/[0.03] text-white backdrop-blur-xl">
+                  <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl border border-black/10 bg-black/[0.03] text-black backdrop-blur-xl">
                     <MapPin size={18} />
                   </div>
 
                   <div>
-                    <p className="mb-1 text-xs tracking-[0.2em] text-white/35 uppercase">
+                    <p className="mb-1 text-xs tracking-[0.2em] text-black/35 uppercase">
                       Location
                     </p>
 
-                    <p className="text-[15px] leading-relaxed text-white/75">
+                    <p className="text-[15px] leading-relaxed text-black/75">
                       4th Floor, Sairaj Towers, Plot No: 49B, above Kotak
                       Mahindra Bank, beside Mercedes Benz Showroom, CBI Colony,
                       Madhapur, Hyderabad, Telangana 500033
@@ -539,16 +553,16 @@ export default function Footer() {
             opacity: gridOpacity,
             y: useTransform(smoothProgress, [0, 1], [60, 0]),
           }}
-          className="flex flex-col gap-5 border-t border-white/10 pt-8 text-center md:flex-row md:items-center md:justify-between md:text-left"
+          className="flex flex-col gap-5 border-t border-black/10 pt-8 text-center md:flex-row md:items-center md:justify-between md:text-left"
         >
-          <p className="text-sm text-white/35">
+          <p className="text-sm text-black/45">
             © 2026 Outright Creators. All rights reserved.
           </p>
 
-          <div className="flex flex-wrap items-center justify-center gap-6 text-sm text-white/35 md:justify-end">
+          <div className="flex flex-wrap items-center justify-center gap-6 text-sm text-black/45 md:justify-end">
             <button
               onClick={() => navigate("/privacy-policy")}
-              className="transition-colors duration-300 hover:text-yellow-300"
+              className="transition-colors duration-300 hover:text-black"
             >
               Privacy Policy
             </button>
