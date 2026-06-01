@@ -227,33 +227,37 @@ export default function PremiumServiceSections({
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-[100] flex items-center justify-center bg-black/80 p-5 backdrop-blur-md"
+            className="fixed inset-0 z-[100] flex items-center justify-center bg-black/80 p-3 backdrop-blur-md sm:p-5"
           >
+            {/* BACKDROP */}
             <div
               className="absolute inset-0"
               onClick={() => setActiveAsset(null)}
             />
 
+            {/* MODAL CONTAINER */}
             <motion.div
-              initial={{ scale: 0.94, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              exit={{ scale: 0.94, opacity: 0 }}
+              initial={{ scale: 0.94, opacity: 0, y: 20 }}
+              animate={{ scale: 1, opacity: 1, y: 0 }}
+              exit={{ scale: 0.94, opacity: 0, y: 20 }}
               transition={{
                 duration: 0.3,
                 ease: [0.16, 1, 0.3, 1],
               }}
-              className="relative z-10 w-full max-w-[60vw] overflow-hidden rounded-[2.5rem] border border-white/10 bg-[#050816] shadow-[0_40px_120px_rgba(0,0,0,0.7)]"
               onClick={(e) => e.stopPropagation()}
+              className="relative z-10 w-full max-w-[95vw] overflow-hidden rounded-[1.5rem] border border-white/10 bg-[#050816] shadow-[0_40px_120px_rgba(0,0,0,0.7)] sm:max-w-[90vw] sm:rounded-[2rem] lg:max-w-[75vw] xl:max-w-[65vw]"
             >
+              {/* CLOSE BUTTON */}
               <button
                 type="button"
                 onClick={() => setActiveAsset(null)}
-                className="absolute top-5 right-5 z-50 flex h-12 w-12 items-center justify-center rounded-full border border-white/10 bg-white/10 text-white backdrop-blur-xl transition-all duration-300 hover:scale-105 hover:bg-white/20"
+                className="absolute top-3 right-3 z-50 flex h-10 w-10 items-center justify-center rounded-full border border-white/10 bg-black/40 text-white backdrop-blur-xl transition-all duration-300 hover:scale-105 hover:bg-white/20 sm:top-5 sm:right-5 sm:h-12 sm:w-12"
               >
-                <X className="h-5 w-5" />
+                <X className="h-4 w-4 sm:h-5 sm:w-5" />
               </button>
 
-              <div className="h-[60vh] overflow-hidden bg-black">
+              {/* CONTENT */}
+              <div className="relative h-[50vh] bg-black sm:h-[60vh] md:h-[70vh]">
                 {activeAsset.type === "video" ? (
                   <iframe
                     src={`https://www.youtube.com/embed/${activeAsset.youtubeId}?autoplay=1&mute=1&rel=0&modestbranding=1`}
@@ -271,37 +275,23 @@ export default function PremiumServiceSections({
                     className="h-full w-full object-cover"
                   />
                 ) : (
-                  <div className="flex h-full items-center justify-center p-10 text-center">
-                    <div>
-                      <div className="mx-auto mb-6 flex h-24 w-24 items-center justify-center rounded-[2rem] bg-blue-500 text-3xl font-bold">
+                  <div className="flex h-full w-full items-center justify-center overflow-y-auto p-5 text-center sm:p-8 md:p-10">
+                    <div className="max-w-3xl">
+                      <div className="mx-auto mb-5 flex h-20 w-20 items-center justify-center rounded-[1.5rem] bg-blue-500 text-2xl font-bold text-white sm:h-24 sm:w-24 sm:rounded-[2rem] sm:text-3xl">
                         {activeAsset.fileLabel?.slice(0, 1) || "F"}
                       </div>
 
-                      <h3 className="text-3xl font-semibold text-white">
+                      <h3 className="text-2xl font-semibold text-white sm:text-3xl md:text-4xl">
                         {activeAsset.fileLabel || "Document Preview"}
                       </h3>
 
-                      <p className="mx-auto mt-5 max-w-2xl text-base leading-8 text-white/60">
+                      <p className="mx-auto mt-4 max-w-2xl text-sm leading-7 text-white/60 sm:text-base sm:leading-8">
                         {activeAsset.description}
                       </p>
                     </div>
                   </div>
                 )}
               </div>
-
-              {/* <div className="border-t border-white/10 bg-white/[0.03] px-8 py-8">
-                <p className="text-xs tracking-[0.35em] text-white/40 uppercase">
-                  {typeLabel[activeAsset.type]}
-                </p>
-
-                <h3 className="mt-3 text-3xl font-semibold text-white">
-                  {activeAsset.title}
-                </h3>
-
-                <p className="mt-4 max-w-3xl text-base leading-8 text-white/60">
-                  {activeAsset.description}
-                </p>
-              </div> */}
             </motion.div>
           </motion.div>
         ) : null}
