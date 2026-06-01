@@ -80,15 +80,21 @@ export default function ScrollImageSequence({
     const setCanvasSize = () => {
       const dpr = window.devicePixelRatio || 1;
 
+      // RESET TRANSFORM FIRST
+      ctx.setTransform(1, 0, 0, 1, 0, 0);
+
+      // INTERNAL RESOLUTION
       canvas.width = window.innerWidth * dpr;
 
       canvas.height = window.innerHeight * dpr;
 
+      // VISUAL SIZE
       canvas.style.width = `${window.innerWidth}px`;
 
       canvas.style.height = `${window.innerHeight}px`;
 
-      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      // SCALE DRAWING OPERATIONS
+      ctx.scale(dpr, dpr);
     };
 
     setCanvasSize();
@@ -235,14 +241,17 @@ export default function ScrollImageSequence({
   }, [isActive, folder, totalFrames]);
 
   return (
-    <section ref={sectionRef} className={`relative h-[400vh] ${className}`}>
+    <section
+      ref={sectionRef}
+      className={`relative h-[400vh] overflow-hidden ${className}`}
+    >
       <div className="sticky top-0 h-screen overflow-hidden bg-black">
-        <canvas ref={canvasRef} className="block h-full w-full" />
+        <canvas ref={canvasRef} className="absolute inset-0 h-full w-full" />
 
         {title && (
           <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
             <h2
-              className="text-center font-black tracking-[-0.05em] text-white uppercase"
+              className="text-center font-black tracking-tighter text-white uppercase"
               style={{
                 fontSize: "clamp(4rem, 10vw, 10rem)",
                 lineHeight: 0.9,
