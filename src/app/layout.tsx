@@ -2,6 +2,7 @@
 
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
+import Image from "next/image";
 
 import "./globals.css";
 
@@ -26,6 +27,11 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "Outright Creators",
   description: "Creative Digital Agency",
+  icons: {
+    icon: "/lamp.png",
+    shortcut: "/lamp.png",
+    apple: "/lamp.png",
+  },
 };
 
 export default function RootLayout({
@@ -39,6 +45,18 @@ export default function RootLayout({
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
       <body className="relative flex min-h-full flex-col overflow-x-hidden bg-white text-black dark:bg-black dark:text-white">
+        {/* Optional floating logo */}
+        <div className="fixed top-4 left-4 z-[999]">
+          <Image
+            src="/lamp.png"
+            alt="Outright Creators Logo"
+            width={48}
+            height={48}
+            priority
+            className="h-12 w-12 object-contain"
+          />
+        </div>
+
         <LenisProvider>
           <IntroProvider>
             <TransitionProvider>
