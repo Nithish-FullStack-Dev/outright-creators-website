@@ -6,6 +6,7 @@ import SocialMedia from "../components/sections/SocialMedia";
 import FestivalCreatives from "../components/sections/FestivalCreatives";
 import PremiumServiceSections from "../components/sections/ServicesSections";
 import ScrollImageSequence from "../components/motion/ScrollImageSequence";
+import TestimonialsSection from "../components/sections/TestimonialsSection";
 
 export default function Home() {
   return (
@@ -20,6 +21,7 @@ export default function Home() {
       {/* <ServicesSection /> */}
       {/* <PortfolioSection /> */}
       {/* <ImageSection /> */}
+      <TestimonialsSection />
       <div className="relative h-60" style={{ background: "#f5f3ef" }}>
         <div
           className="pointer-events-none absolute inset-0 opacity-[0.025]"
