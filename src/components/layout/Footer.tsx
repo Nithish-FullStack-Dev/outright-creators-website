@@ -222,26 +222,29 @@ export default function Footer() {
 
       <div className="relative mx-auto max-w-[1600px] px-5 pt-10 pb-8 sm:px-8 lg:px-12">
         {/* TOP SECTION */}
-        <div className="grid gap-10 border-b border-white/10 pb-14 lg:grid-cols-[1fr_0.9fr] lg:gap-20">
+        <div
+          id="contact-form"
+          className="grid grid-cols-1 gap-12 border-b border-white/10 pb-12 lg:grid-cols-[1fr_0.9fr] lg:gap-20 lg:pb-14"
+        >
           {/* LEFT */}
           <motion.div
             style={{
               y: titleY,
               opacity: titleOpacity,
             }}
-            className="flex flex-col justify-center"
+            className="flex flex-col justify-center px-2 sm:px-0"
           >
-            <div className="mb-7 inline-flex w-fit items-center gap-2 rounded-full border border-yellow-400/20 bg-yellow-400/10 px-4 py-2 text-sm text-black backdrop-blur-xl">
+            <div className="mb-6 inline-flex w-fit items-center gap-2 rounded-full border border-yellow-400/20 bg-yellow-400/10 px-3 py-1.5 text-xs text-black backdrop-blur-xl sm:px-4 sm:py-2 sm:text-sm">
               <Sparkles size={14} />
               Let’s Build Something Extraordinary
             </div>
 
             <TextReveal
               lines={["Let`s", "Connect"]}
-              className="text-4xl leading-[1.05] font-bold sm:text-6xl md:text-7xl xl:text-8xl"
+              className="text-5xl leading-[1.05] font-bold sm:text-6xl md:text-7xl xl:text-8xl"
             />
 
-            <p className="mt-8 max-w-[620px] text-[15px] leading-[2] text-black sm:text-[16px]">
+            <p className="mt-6 max-w-[620px] text-sm leading-relaxed text-black sm:mt-8 sm:text-base sm:leading-[2]">
               We craft cinematic digital experiences blending strategy,
               branding, development and immersive visuals for ambitious brands.
             </p>
@@ -253,32 +256,34 @@ export default function Footer() {
               y: rightY,
               opacity: titleOpacity,
             }}
-            className="relative overflow-hidden rounded-[36px] border border-black/10 bg-white p-7 shadow-[0_20px_80px_rgba(0,0,0,0.08)]"
+            className="relative overflow-hidden rounded-[2rem] border border-black/10 bg-white p-6 shadow-[0_20px_80px_rgba(0,0,0,0.08)] sm:rounded-[36px] sm:p-8"
           >
-            <div className="absolute top-0 right-0 h-40 w-40 rounded-full bg-neutral-200 blur-3xl" />
+            <div className="absolute top-0 right-0 h-32 w-32 rounded-full bg-neutral-200 blur-3xl sm:h-40 sm:w-40" />
 
             <div className="relative">
-              <div className="mb-8 flex items-center justify-between">
+              <div className="mb-6 flex items-start justify-between sm:mb-8 sm:items-center">
                 <div>
-                  <p className="mb-2 text-sm tracking-[0.25em] text-black/40 uppercase">
+                  <p className="mb-1.5 text-xs tracking-[0.25em] text-black/40 uppercase sm:mb-2 sm:text-sm">
                     Contact Form
                   </p>
-
-                  <h3 className="text-3xl font-semibold text-black">
+                  <h3 className="text-2xl font-semibold text-black sm:text-3xl">
                     Start Your Project
                   </h3>
                 </div>
 
-                <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-black text-white shadow-lg">
+                <div className="hidden h-12 w-12 items-center justify-center rounded-2xl bg-black text-white shadow-lg sm:flex sm:h-14 sm:w-14">
                   <ArrowUpRight size={22} />
                 </div>
               </div>
 
-              <form onSubmit={handleSubmit} className="flex flex-col gap-5">
-                <div className="grid gap-5 md:grid-cols-2">
+              <form
+                onSubmit={handleSubmit}
+                className="flex flex-col gap-4 sm:gap-5"
+              >
+                <div className="grid grid-cols-1 gap-4 md:grid-cols-2 md:gap-5">
                   {/* NAME */}
                   <div>
-                    <label className="mb-3 block text-sm font-medium text-black/70">
+                    <label className="mb-2 block text-xs font-medium text-black/70 sm:mb-3 sm:text-sm">
                       Full Name
                     </label>
 
@@ -288,13 +293,13 @@ export default function Footer() {
                       value={formData.name}
                       onChange={handleChange}
                       placeholder="Enter your name"
-                      className={`h-14 w-full rounded-2xl border bg-[#f8f8f8] px-5 text-sm text-black transition-all duration-300 outline-none placeholder:text-black/30 focus:border-black ${
+                      className={`h-12 w-full rounded-xl border bg-[#f8f8f8] px-4 text-sm text-black transition-all duration-300 outline-none placeholder:text-black/30 focus:border-black sm:h-14 sm:rounded-2xl sm:px-5 ${
                         fieldErrors.name ? "border-red-500" : "border-black/10"
                       }`}
                     />
 
                     {fieldErrors.name && (
-                      <p className="mt-2 text-sm text-red-500">
+                      <p className="mt-1.5 text-xs text-red-500 sm:mt-2 sm:text-sm">
                         {fieldErrors.name}
                       </p>
                     )}
@@ -302,7 +307,7 @@ export default function Footer() {
 
                   {/* MOBILE */}
                   <div>
-                    <label className="mb-3 block text-sm font-medium text-black/70">
+                    <label className="mb-2 block text-xs font-medium text-black/70 sm:mb-3 sm:text-sm">
                       Mobile Number
                     </label>
 
@@ -327,7 +332,7 @@ export default function Footer() {
                       }}
                       inputMode="numeric"
                       placeholder="9876543210"
-                      className={`h-14 w-full rounded-2xl border bg-[#f8f8f8] px-5 text-sm text-black transition-all duration-300 outline-none placeholder:text-black/30 focus:border-black ${
+                      className={`h-12 w-full rounded-xl border bg-[#f8f8f8] px-4 text-sm text-black transition-all duration-300 outline-none placeholder:text-black/30 focus:border-black sm:h-14 sm:rounded-2xl sm:px-5 ${
                         fieldErrors.mobile
                           ? "border-red-500"
                           : "border-black/10"
@@ -335,7 +340,7 @@ export default function Footer() {
                     />
 
                     {fieldErrors.mobile && (
-                      <p className="mt-2 text-sm text-red-500">
+                      <p className="mt-1.5 text-xs text-red-500 sm:mt-2 sm:text-sm">
                         {fieldErrors.mobile}
                       </p>
                     )}
@@ -344,7 +349,7 @@ export default function Footer() {
 
                 {/* EMAIL */}
                 <div>
-                  <label className="mb-3 block text-sm font-medium text-black/70">
+                  <label className="mb-2 block text-xs font-medium text-black/70 sm:mb-3 sm:text-sm">
                     Email Address
                   </label>
 
@@ -354,13 +359,13 @@ export default function Footer() {
                     value={formData.email}
                     onChange={handleChange}
                     placeholder="you@example.com"
-                    className={`h-14 w-full rounded-2xl border bg-[#f8f8f8] px-5 text-sm text-black transition-all duration-300 outline-none placeholder:text-black/30 focus:border-black ${
+                    className={`h-12 w-full rounded-xl border bg-[#f8f8f8] px-4 text-sm text-black transition-all duration-300 outline-none placeholder:text-black/30 focus:border-black sm:h-14 sm:rounded-2xl sm:px-5 ${
                       fieldErrors.email ? "border-red-500" : "border-black/10"
                     }`}
                   />
 
                   {fieldErrors.email && (
-                    <p className="mt-2 text-sm text-red-500">
+                    <p className="mt-1.5 text-xs text-red-500 sm:mt-2 sm:text-sm">
                       {fieldErrors.email}
                     </p>
                   )}
@@ -368,7 +373,7 @@ export default function Footer() {
 
                 {/* MESSAGE */}
                 <div>
-                  <label className="mb-3 block text-sm font-medium text-black/70">
+                  <label className="mb-2 block text-xs font-medium text-black/70 sm:mb-3 sm:text-sm">
                     Message
                   </label>
 
@@ -377,14 +382,14 @@ export default function Footer() {
                     value={formData.message}
                     onChange={handleChange}
                     placeholder="Tell us about your project..."
-                    rows={5}
-                    className={`w-full resize-none rounded-2xl border bg-[#f8f8f8] px-5 py-4 text-sm text-black transition-all duration-300 outline-none placeholder:text-black/30 focus:border-black ${
+                    rows={4}
+                    className={`w-full resize-none rounded-xl border bg-[#f8f8f8] px-4 py-3 text-sm text-black transition-all duration-300 outline-none placeholder:text-black/30 focus:border-black sm:rounded-2xl sm:px-5 sm:py-4 ${
                       fieldErrors.message ? "border-red-500" : "border-black/10"
                     }`}
                   />
 
                   {fieldErrors.message && (
-                    <p className="mt-2 text-sm text-red-500">
+                    <p className="mt-1.5 text-xs text-red-500 sm:mt-2 sm:text-sm">
                       {fieldErrors.message}
                     </p>
                   )}
@@ -394,25 +399,25 @@ export default function Footer() {
                 <button
                   type="submit"
                   disabled={loading}
-                  className="group mt-2 flex h-14 items-center justify-between rounded-2xl bg-black px-6 text-white shadow-lg transition-all duration-500 hover:scale-[1.02] hover:bg-neutral-900 disabled:cursor-not-allowed disabled:opacity-70"
+                  className="group mt-2 flex h-12 w-full items-center justify-between rounded-xl bg-black px-5 text-white shadow-lg transition-all duration-500 hover:scale-[1.02] hover:bg-neutral-900 disabled:cursor-not-allowed disabled:opacity-70 sm:h-14 sm:w-auto sm:rounded-2xl sm:px-6"
                 >
-                  <span className="text-sm font-semibold tracking-[0.2em] uppercase">
+                  <span className="text-xs font-semibold tracking-[0.2em] uppercase sm:text-sm">
                     {loading ? "Sending..." : "Send Message"}
                   </span>
 
-                  <div className="flex h-10 w-10 items-center justify-center rounded-full bg-black text-white transition-all duration-500 group-hover:rotate-45">
-                    <ArrowUpRight size={18} />
+                  <div className="flex h-8 w-8 items-center justify-center rounded-full bg-white/10 text-white transition-all duration-500 group-hover:rotate-45 sm:h-10 sm:w-10 sm:bg-black">
+                    <ArrowUpRight size={18} className="scale-75 sm:scale-100" />
                   </div>
                 </button>
 
                 {success && (
-                  <p className="mt-3 text-sm font-medium text-green-600">
+                  <p className="mt-2 text-sm font-medium text-green-600">
                     {success}
                   </p>
                 )}
 
                 {submitError && (
-                  <p className="mt-3 text-sm font-medium text-red-500">
+                  <p className="mt-2 text-sm font-medium text-red-500">
                     {submitError}
                   </p>
                 )}
