@@ -1,7 +1,15 @@
 "use client";
 
-import { AnimatePresence, motion, useInView } from "framer-motion";
-import { useMemo, useRef, useState } from "react";
+import {
+  AnimatePresence,
+  motion,
+  useAnimationFrame,
+  useInView,
+  useMotionValue,
+  useScroll,
+  useTransform,
+} from "framer-motion";
+import { useEffect, useMemo, useRef, useState } from "react";
 import Image from "next/image";
 import TextReveal from "../motion/TextReveal";
 import {
@@ -22,7 +30,7 @@ const typeLabel = {
   pdf: "PDF",
   logo: "Brand Asset",
 };
-function InfiniteSlider({
+export function InfiniteSlider({
   items,
   direction = "left",
   onAssetClick,
@@ -31,33 +39,74 @@ function InfiniteSlider({
   direction?: "left" | "right";
   onAssetClick: (asset: ShowcaseItem) => void;
 }) {
-  const sliderRef = useRef(null);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [width, setWidth] = useState(0);
+  const [isDragging, setIsDragging] = useState(false);
+  const x = useMotionValue(0);
 
-  const isInView = useInView(sliderRef, {
-    margin: "-100px",
+  // Optimization: Only animate when the slider is actually visible on screen
+  const isInView = useInView(containerRef, { margin: "-100px" });
+
+  // TRICK: We triplicate (3x) the items instead of duplicating.
+  // This guarantees that if the user drags backwards instantly, they won't hit an empty white space.
+  const triplicated = useMemo(() => [...items, ...items, ...items], [items]);
+
+  useEffect(() => {
+    const updateWidth = () => {
+      if (containerRef.current) {
+        // Total scrollable width divided by 3 gives the exact width of a single set of items
+        const singleWidth = containerRef.current.scrollWidth / 3;
+        setWidth(singleWidth);
+        // Start exactly in the middle set to allow immediate seamless dragging left OR right
+        x.set(-singleWidth);
+      }
+    };
+
+    updateWidth();
+    window.addEventListener("resize", updateWidth);
+    return () => window.removeEventListener("resize", updateWidth);
+  }, [items, x]);
+
+  useAnimationFrame((t, delta) => {
+    // Pause animation if dragging, off-screen, or width hasn't calculated yet
+    if (width === 0 || isDragging || !isInView) return;
+
+    // This speed (0.035) perfectly matches your original duration: 28
+    const speed = 0.035;
+    const moveBy = direction === "left" ? -speed * delta : speed * delta;
+
+    let newX = x.get() + moveBy;
+
+    // Seamlessly loop the animation within the middle set
+    if (direction === "left" && newX <= -(width * 2)) {
+      newX += width;
+    } else if (direction === "right" && newX >= -width) {
+      newX -= width;
+    }
+
+    x.set(newX);
   });
 
-  const duplicated = useMemo(() => [...items, ...items], [items]);
+  const handleDragEnd = () => {
+    setIsDragging(false);
+    const currentX = x.get();
+
+    // MATHEMATICAL MAGIC: Seamlessly snap back into the safe middle zone if dragged way out of bounds
+    const normalized = ((currentX % width) + width) % width;
+    x.set(-(width * 2) + normalized);
+  };
 
   return (
     <div className="relative overflow-hidden rounded-2xl">
       <motion.div
-        ref={sliderRef}
-        className="flex w-max gap-5"
-        animate={
-          isInView
-            ? {
-                x: direction === "left" ? ["0%", "-50%"] : ["-50%", "0%"],
-              }
-            : undefined
-        }
-        transition={{
-          duration: 28,
-          ease: "linear",
-          repeat: Infinity,
-        }}
+        ref={containerRef}
+        style={{ x }}
+        drag="x" // Enables Framer Motion's robust dragging (works perfectly on mobile)
+        onDragStart={() => setIsDragging(true)}
+        onDragEnd={handleDragEnd}
+        className="mb-5 flex w-max cursor-grab gap-5 active:cursor-grabbing"
       >
-        {duplicated.map((asset, index) => (
+        {triplicated.map((asset, index) => (
           <button
             key={`${asset.id}-${index}`}
             type="button"
@@ -72,7 +121,8 @@ function InfiniteSlider({
                 alt={asset.title}
                 width={700}
                 height={700}
-                className="h-full w-full object-cover transition-transform duration-700 group-hover/card:scale-110"
+                // IMPORTANT: pointer-events-none prevents the browser's default ghost-image drag
+                className="pointer-events-none h-full w-full object-cover transition-transform duration-700 group-hover/card:scale-110"
               />
             )}
             <div className="absolute top-3 right-3 z-30">
@@ -80,15 +130,15 @@ function InfiniteSlider({
                 <ArrowUpRight className="h-5 w-5" />
               </div>
             </div>
-            <div className="absolute inset-0 z-20 bg-gradient-to-t from-black/90 via-black/20 to-transparent" />
+            <div className="pointer-events-none absolute inset-0 z-20 bg-gradient-to-t from-black/90 via-black/20 to-transparent" />
 
-            <div className="absolute bottom-0 z-30 p-5">
+            <div className="pointer-events-none absolute bottom-0 z-30 p-5">
               <div className="mb-3 inline-flex rounded-full border border-white/10 bg-white/10 px-3 py-1 text-[10px] tracking-[0.3em] text-white uppercase backdrop-blur-md">
                 {typeLabel[asset.type]}
               </div>
             </div>
 
-            <div className="absolute inset-0 z-20 rounded-[2rem] ring-1 ring-white/10 transition-all duration-500 group-hover/card:ring-white/30" />
+            <div className="pointer-events-none absolute inset-0 z-20 rounded-[2rem] ring-1 ring-white/10 transition-all duration-500 group-hover/card:ring-white/30" />
           </button>
         ))}
       </motion.div>
@@ -108,10 +158,29 @@ export default function PremiumServiceSections({
 
   const topRow = section.assets.slice(0, middleIndex);
   const bottomRow = section.assets.slice(middleIndex);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const { scrollYProgress } = useScroll({
+    target: containerRef,
+    offset: ["start end", "end start"],
+  });
+
+  const titleY = useTransform(scrollYProgress, [0, 1], [50, -50]);
+  const imageY = useTransform(scrollYProgress, [0, 1], [-100, 100]);
   return (
     <section className="relative overflow-hidden py-5 text-white">
       {/* <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(59,130,246,0.18),transparent_30%)]" /> */}
-
+      {section.labelImage && (
+        <motion.div
+          style={{ y: imageY }}
+          className="pointer-events-none absolute inset-0 z-0 flex items-center justify-center opacity-[0.35] grayscale"
+        >
+          <img
+            src={section.labelImage}
+            alt="background decor"
+            className="h-[280px] w-[280px] object-contain sm:h-[340px] sm:w-[340px] lg:h-[420px] lg:w-[420px]"
+          />
+        </motion.div>
+      )}
       <div className="relative z-10 container">
         <div className="space-y-28">
           <motion.div
