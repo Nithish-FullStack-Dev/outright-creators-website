@@ -36,15 +36,25 @@ const socials = [
     alt: "Facebook",
     href: "https://www.facebook.com/outrightcreators/",
   },
+  // {
+  //   icon: "/assets/insta.jpg",
+  //   alt: "Instagram",
+  //   href: "https://www.instagram.com/outrightcreators/",
+  // },
+  {
+    icon: "/assets/LinkedIn.jpg",
+    alt: "LinkedIn",
+    href: "https://www.linkedin.com/company/outright-creators",
+  },
   {
     icon: "/assets/insta.jpg",
     alt: "Instagram",
     href: "https://www.instagram.com/outrightcreators/",
   },
   {
-    icon: "/assets/LinkedIn.jpg",
-    alt: "LinkedIn",
-    href: "https://www.linkedin.com/company/outright-creators",
+    icon: "/assets/youtube.jpg",
+    alt: "YouTube",
+    href: "https://www.youtube.com/@outrightcreators",
   },
 ];
 
