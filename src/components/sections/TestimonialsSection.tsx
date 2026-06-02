@@ -28,8 +28,7 @@ const testimonials = [
     id: 3,
     name: "Aarif Pathan",
     role: "Digital Marketing",
-    image:
-      "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?q=80&w=400&auto=format&fit=crop",
+    image: "",
     review: "One of the best digital marketing company in city.",
     rating: 5,
   },
@@ -37,8 +36,7 @@ const testimonials = [
     id: 4,
     name: "sharnjit kaur",
     role: "Branding and Advertising",
-    image:
-      "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?q=80&w=400&auto=format&fit=crop",
+    image: "",
     review:
       "I am happy with Outright Creator's branding services. They helped me to promote my novel. Their amazing branding and advertising ideas have boosted my novel sale from day 1. This agency is filled with creative and innovative people. All the best for the future!",
     rating: 5,
@@ -47,8 +45,7 @@ const testimonials = [
     id: 5,
     name: "amita sharma",
     role: "Branding and Advertising",
-    image:
-      "https://images.unsplash.com/photo-1524504388940-b1c1722653e1?q=80&w=400&auto=format&fit=crop",
+    image: "",
     review:
       "The team Outright is very friendly, creative, flexible, and helpful. They created an awesome e-commerce website for me. Moreover, They give realistic timelines and always there to assist you. I would definitely recommend the web designing and development services of this agency.",
     rating: 5,
@@ -57,8 +54,7 @@ const testimonials = [
     id: 6,
     name: "Aamantran Restaurant",
     role: "Branding and Advertising",
-    image:
-      "https://images.unsplash.com/photo-1531123897727-8e284d1bfaec?q=80&w=400&auto=format&fit=crop",
+    image: "",
     review:
       "The team is very young & energetic with lots of creative ideas. The service is superb. All the Best Guys 😊",
     rating: 5,
@@ -67,8 +63,7 @@ const testimonials = [
     id: 7,
     name: "Amrinder maan 5233",
     role: "Branding and Advertising",
-    image:
-      "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?q=80&w=400&auto=format&fit=crop",
+    image: "",
     review:
       "We are pleased with our order of 1000 leaflets for marketing our clothing business. These people completely understand the requirements of the customers. We got great quality prints at a very reasonable price from Outright Creators. Apart from this their delivery is very fast. Highly recommended this agency for digital printing!!",
     rating: 5,

@@ -213,10 +213,21 @@ export default function Header() {
                       info@outrightcreators.com
                     </span>
                   </div>
-                  <button className="group flex items-center gap-2 rounded-full bg-black px-6 py-3 text-white transition-all duration-300 hover:bg-black/80">
+                  <button
+                    onClick={() => {
+                      setMenuOpen(false);
+
+                      document.getElementById("contact-form")?.scrollIntoView({
+                        behavior: "smooth",
+                        block: "start",
+                      });
+                    }}
+                    className="group flex items-center gap-2 rounded-full bg-black px-6 py-3 text-white transition-all duration-300 hover:bg-black/80"
+                  >
                     <span className="text-[13px] font-semibold">
                       Talk to us
                     </span>
+
                     <ArrowUpRight
                       size={14}
                       className="transition-transform duration-300 group-hover:rotate-45"
