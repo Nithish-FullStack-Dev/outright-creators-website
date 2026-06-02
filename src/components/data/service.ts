@@ -4,7 +4,7 @@ export type ShowcaseItem = {
   id: string;
   title: string;
   type: AssetType;
-  thumbnail: string;
+  thumbnail?: string;
   caption: string;
   description: string;
   videoSrc?: string;
@@ -62,7 +62,7 @@ export const services: ServiceSection[] = [
         id: "motion-video-1",
         title: "Launch animation",
         type: "video",
-        thumbnail: "/header-image-3.webp",
+        // thumbnail: "/header-image-3.webp",
         caption: "Dynamic product film",
         description: "A launch sequence with premium motion detail.",
         videoSrc: "/videos/MOTION-GRAPHICS/mg1.mp4",
@@ -71,38 +71,35 @@ export const services: ServiceSection[] = [
         id: "motion-image-1",
         title: "Motion storyboard",
         type: "video",
-        thumbnail: "/header-image-1.webp",
+        // thumbnail: "/header-image-1.webp",
         caption: "Animation concept frames",
         description: "Storyboard visuals for a campaign narrative.",
         videoSrc: "/videos/MOTION-GRAPHICS/mg2.mp4",
-
       },
       {
         id: "motion-pdf-1",
         title: "Presentation deck",
         type: "video",
-        thumbnail: "/header-image-2.webp",
+        // thumbnail: "/header-image-2.webp",
         caption: "Campaign overview",
         description: "Strategy and motion direction in a branded deck.",
         fileLabel: "Video",
         videoSrc: "/videos/MOTION-GRAPHICS/mg3.mp4",
-
       },
       {
         id: "motion-logo-1",
         title: "Motion identity",
         type: "video",
-        thumbnail: "/header-image-4.webp",
+        // thumbnail: "/header-image-4.webp",
         caption: "Animated mark set",
         description: "A motion-ready identity system for screen.",
         videoSrc: "/videos/MOTION-GRAPHICS/mg4.mp4",
-
       },
       {
         id: "motion-video-2",
         title: "Explainer animation",
         type: "video",
-        thumbnail: "/header-image-1.webp",
+        // thumbnail: "/header-image-1.webp",
         caption: "Product explainer",
         description: "A concise animation breaking down product features.",
         videoSrc: "/videos/MOTION-GRAPHICS/mg5.mp4",
@@ -111,7 +108,7 @@ export const services: ServiceSection[] = [
         id: "motion-video-3",
         title: "UI motion concept",
         type: "video",
-        thumbnail: "/header-image-2.webp",
+        // thumbnail: "/header-image-2.webp",
         caption: "Interface animation",
         description: "Motion design concepts for a digital product.",
         videoSrc: "/videos/MOTION-GRAPHICS/mg6.mp4",
@@ -133,7 +130,6 @@ export const services: ServiceSection[] = [
         caption: "Animation concept frames",
         description: "Storyboard visuals for a campaign narrative.",
         videoSrc: "/videos/MOTION-GRAPHICS/mg8.mp4",
-
       },
       {
         id: "motion-pdf-1",
@@ -144,7 +140,6 @@ export const services: ServiceSection[] = [
         description: "Strategy and motion direction in a branded deck.",
         fileLabel: "Video",
         videoSrc: "/videos/MOTION-GRAPHICS/mg9.mp4",
-
       },
       {
         id: "motion-logo-1",
@@ -154,7 +149,6 @@ export const services: ServiceSection[] = [
         caption: "Animated mark set",
         description: "A motion-ready identity system for screen.",
         videoSrc: "/videos/MOTION-GRAPHICS/mg10.mp4",
-
       },
       {
         id: "motion-video-2",
@@ -289,38 +283,36 @@ export const services: ServiceSection[] = [
 
     assets: [
       {
-        id: "social-video-1",
-        title: "Reel spotlight",
-        type: "video",
-        thumbnail: "/header-image-2.webp",
-        caption: "Platform-ready reel",
-        description: "A polished vertical video designed for engagement.",
-        videoSrc: "dQw4w9WgXcQ",
+        id: "social-image-1",
+        title: "Banners",
+        type: "image",
+        thumbnail: "/assets/social-media/banners/1.jpg",
+        caption: "Ad banner set",
+        description: "A series of digital banners for a social campaign.",
       },
       {
-        id: "social-image-1",
-        title: "Carousel concept",
+        id: "social-image-2",
+        title: "Grids & carousels",
         type: "image",
-        thumbnail: "/header-image-4.webp",
+        thumbnail: "/assets/social-media/grids/1.jpg",
         caption: "Social carousel",
         description: "Story-led content for a product launch.",
       },
       {
-        id: "social-pdf-1",
-        title: "Campaign blueprint",
-        type: "pdf",
-        thumbnail: "/header-image-1.webp",
-        caption: "Media strategy PDF",
-        description: "A brand-first social plan for maximum reach.",
-        fileLabel: "Campaign PDF",
+        id: "social-image-3",
+        title: "Posters",
+        type: "image",
+        thumbnail: "/assets/social-media/posters/1.jpg",
+        caption: "Event poster",
+        description: "A digital poster design for a festival campaign.",
       },
       {
-        id: "social-logo-1",
-        title: "Brand badge",
-        type: "logo",
-        thumbnail: "/header-image-3.webp",
-        caption: "Platform-ready marks",
-        description: "Social-first brand assets for every format.",
+        id: "social-image-4",
+        title: "Mark system",
+        type: "image",
+        thumbnail: "/assets/social-media/grids/3.jpg",
+        caption: "Social templates",
+        description: "Branded templates for consistent social content.",
       },
     ],
   },

@@ -423,10 +423,11 @@ export default function Footer() {
             <div>
               <Link href="/" className="relative mb-8 block h-[58px] w-[190px]">
                 <Image
-                  src="/logo.svg"
+                  src="/logo.webp"
                   alt="Outright Creators"
                   fill
                   className="object-contain"
+                  loading="eager"
                 />
               </Link>
 

@@ -1,13 +1,34 @@
-import PortfolioSection from "../components/sections/PortfolioSection";
+import dynamic from "next/dynamic";
+
+const MotionGraphic = dynamic(
+  () => import("../components/sections/MotionGraphic"),
+  {
+    loading: () => <div className="h-screen" />,
+  },
+);
 import Stats from "../components/sections/Stats";
-import MotionGraphic from "../components/sections/MotionGraphic";
-import Branding from "../components/sections/Branding";
-import SocialMedia from "../components/sections/SocialMedia";
-import FestivalCreatives from "../components/sections/FestivalCreatives";
-import PremiumServiceSections from "../components/sections/ServicesSections";
-import ScrollImageSequence from "../components/motion/ScrollImageSequence";
+
 import TestimonialsSection from "../components/sections/TestimonialsSection";
-import GraphicDesign from "../components/sections/GraphicDesign";
+
+const GraphicDesign = dynamic(
+  () => import("../components/sections/GraphicDesign"),
+  {
+    loading: () => <div className="h-screen" />,
+  },
+);
+
+const Branding = dynamic(() => import("../components/sections/Branding"), {
+  loading: () => <div className="h-screen" />,
+});
+
+const SocialMedia = dynamic(
+  () => import("../components/sections/SocialMedia"),
+  {
+    loading: () => <div className="h-screen" />,
+  },
+);
+
+import ScrollImageSequence from "../components/motion/ScrollImageSequence";
 
 export default function Home() {
   return (

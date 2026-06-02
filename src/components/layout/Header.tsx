@@ -77,10 +77,10 @@ export default function Header() {
             className="pointer-events-auto relative block h-[38px] w-[110px] sm:h-[42px] sm:w-[124px] md:h-[46px] md:w-[136px]"
           >
             <Image
-              src="/logo.svg"
+              src="/logo.webp"
               alt="Logo"
               fill
-              priority
+              loading="eager"
               className="object-contain"
             />
           </Link>

@@ -149,11 +149,11 @@ const IntroScreen = ({ onComplete }: { onComplete: () => void }) => {
               className="relative"
             >
               <Image
-                src="/logo.svg"
+                src="/logo.webp"
                 alt="Outright Creators"
                 width={280}
                 height={180}
-                priority
+                loading="eager"
                 className="h-auto w-[180px] drop-shadow-[0_0_45px_rgba(255,215,0,0.7)] sm:w-[240px] md:w-[320px]"
               />
             </motion.div>

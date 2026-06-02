@@ -1,7 +1,7 @@
 "use client";
 
-import { AnimatePresence, motion } from "framer-motion";
-import { useMemo, useState } from "react";
+import { AnimatePresence, motion, useInView } from "framer-motion";
+import { useMemo, useRef, useState } from "react";
 import Image from "next/image";
 import TextReveal from "../motion/TextReveal";
 import {
@@ -14,6 +14,7 @@ import {
   X,
 } from "lucide-react";
 import { ServiceSection, ShowcaseItem } from "../data/service";
+import ViewportRender from "@/src/utils/ViewportRender";
 
 const typeLabel = {
   video: "Video",
@@ -30,15 +31,26 @@ function InfiniteSlider({
   direction?: "left" | "right";
   onAssetClick: (asset: ShowcaseItem) => void;
 }) {
+  const sliderRef = useRef(null);
+
+  const isInView = useInView(sliderRef, {
+    margin: "-100px",
+  });
+
   const duplicated = useMemo(() => [...items, ...items], [items]);
 
   return (
     <div className="relative overflow-hidden rounded-2xl">
       <motion.div
+        ref={sliderRef}
         className="flex w-max gap-5"
-        animate={{
-          x: direction === "left" ? ["0%", "-50%"] : ["-50%", "0%"],
-        }}
+        animate={
+          isInView
+            ? {
+                x: direction === "left" ? ["0%", "-50%"] : ["-50%", "0%"],
+              }
+            : undefined
+        }
         transition={{
           duration: 28,
           ease: "linear",
@@ -54,13 +66,15 @@ function InfiniteSlider({
           >
             <div className="absolute inset-0 z-10 bg-gradient-to-b from-transparent via-black/10 to-black/70" />
 
-            <Image
-              src={asset.thumbnail}
-              alt={asset.title}
-              width={700}
-              height={700}
-              className="h-full w-full object-cover transition-transform duration-700 group-hover/card:scale-110"
-            />
+            {asset.thumbnail && (
+              <Image
+                src={asset.thumbnail}
+                alt={asset.title}
+                width={700}
+                height={700}
+                className="h-full w-full object-cover transition-transform duration-700 group-hover/card:scale-110"
+              />
+            )}
             <div className="absolute top-3 right-3 z-30">
               <div className="flex h-10 w-10 scale-75 items-center justify-center rounded-full bg-transparent text-white opacity-0 shadow-lg backdrop-blur-xl transition-all duration-300 group-hover/card:scale-100 group-hover/card:opacity-100">
                 <ArrowUpRight className="h-5 w-5" />
@@ -202,21 +216,23 @@ export default function PremiumServiceSections({
 
               {/* RIGHT */}
               <div className="relative flex flex-col justify-center gap-6 overflow-hidden rounded-2xl">
-                <div className="px-6">
-                  <InfiniteSlider
-                    items={topRow}
-                    direction="left"
-                    onAssetClick={setActiveAsset}
-                  />
-                </div>
+                <ViewportRender>
+                  <div className="px-6">
+                    <InfiniteSlider
+                      items={topRow}
+                      direction="left"
+                      onAssetClick={setActiveAsset}
+                    />
+                  </div>
 
-                <div className="px-6">
-                  <InfiniteSlider
-                    items={bottomRow}
-                    direction="right"
-                    onAssetClick={setActiveAsset}
-                  />
-                </div>
+                  <div className="px-6">
+                    <InfiniteSlider
+                      items={bottomRow}
+                      direction="right"
+                      onAssetClick={setActiveAsset}
+                    />
+                  </div>
+                </ViewportRender>
 
                 {/* CLICK LAYER */}
                 {/* <div className="absolute inset-0 z-40 grid grid-cols-2 gap-5 px-6 py-10">
@@ -293,7 +309,7 @@ export default function PremiumServiceSections({
                     preload="metadata"
                     poster={activeAsset.thumbnail}
                   />
-                ) : activeAsset.type === "image" ? (
+                ) : activeAsset.type === "image" && activeAsset.thumbnail ? (
                   <Image
                     src={activeAsset.thumbnail}
                     alt={activeAsset.title}

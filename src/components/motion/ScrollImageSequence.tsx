@@ -150,10 +150,7 @@ export default function ScrollImageSequence({
         render(0);
       });
 
-      loadBatch(1, 29);
-      setTimeout(() => loadBatch(30, 59), 300);
-      setTimeout(() => loadBatch(60, 89), 700);
-      setTimeout(() => loadBatch(90, totalFrames - 1), 1200);
+      loadBatch(1, 6);
 
       const frame = frameRef.current;
 
@@ -165,11 +162,12 @@ export default function ScrollImageSequence({
           trigger: section,
           start: "top top",
           end: "bottom bottom",
-          scrub: 0.5,
+          scrub: true,
+          invalidateOnRefresh: true,
           onUpdate: (self) => {
             const activeIndex = Math.round(self.progress * (totalFrames - 1));
-            const bufferStart = Math.max(0, activeIndex - 5);
-            const bufferEnd = Math.min(totalFrames - 1, activeIndex + 20);
+            const bufferStart = Math.max(0, activeIndex - 2);
+            const bufferEnd = Math.min(totalFrames - 1, activeIndex + 8);
             loadBatch(bufferStart, bufferEnd);
           },
         },
@@ -190,7 +188,7 @@ export default function ScrollImageSequence({
         });
       },
       {
-        rootMargin: "1000px 0px",
+        rootMargin: "200px 0px",
         threshold: 0,
       },
     );
@@ -213,8 +211,13 @@ export default function ScrollImageSequence({
     return () => {
       observer.disconnect();
       resizeObserver.disconnect();
+
+      tweenRef.current?.scrollTrigger?.kill();
       tweenRef.current?.kill();
-      ScrollTrigger.getAll().forEach((st) => st.kill());
+
+      revealTweenRef.current?.scrollTrigger?.kill();
+      revealTweenRef.current?.kill();
+
       hasInitializedRef.current = false;
     };
   }, [folder, totalFrames]);
@@ -223,7 +226,7 @@ export default function ScrollImageSequence({
     <section ref={sectionRef} className={`relative h-[400vh] ${className}`}>
       <div
         ref={stickyRef}
-        className="sticky top-0 h-screen w-full overflow-hidden bg-black"
+        className="sticky top-0 h-screen w-full overflow-hidden bg-black will-change-transform"
       >
         <canvas
           ref={canvasRef}
