@@ -104,8 +104,10 @@ export default function PremiumServiceSections({
   index: number;
 }) {
   const [activeAsset, setActiveAsset] = useState<ShowcaseItem | null>(null);
-  const topRow = section.assets.slice(0, 2);
-  const bottomRow = section.assets.slice(2, 4);
+  const middleIndex = Math.ceil(section.assets.length / 2);
+
+  const topRow = section.assets.slice(0, middleIndex);
+  const bottomRow = section.assets.slice(middleIndex);
   return (
     <section className="relative overflow-hidden py-5 text-white">
       {/* <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(59,130,246,0.18),transparent_30%)]" /> */}
@@ -288,18 +290,11 @@ export default function PremiumServiceSections({
               </button>
 
               {/* CONTENT */}
-              <div className="relative h-[50vh] bg-black sm:h-[60vh] md:h-[70vh]">
+              <div className="relative flex max-h-[90vh] items-center justify-center overflow-hidden bg-transparent p-2 sm:p-4">
                 {activeAsset.type === "video" ? (
-                  // <iframe
-                  //   src={`https://www.youtube.com/embed/${activeAsset.youtubeId}?autoplay=1&mute=1&rel=0&modestbranding=1`}
-                  //   title={activeAsset.title}
-                  //   className="h-full w-full"
-                  //   allow="autoplay; encrypted-media; picture-in-picture"
-                  //   allowFullScreen
-                  // />
                   <video
                     key={activeAsset.videoSrc}
-                    className="h-full w-full object-contain"
+                    className="max-h-[90vh] w-auto max-w-full rounded-2xl object-contain"
                     src={activeAsset.videoSrc}
                     autoPlay
                     muted
@@ -315,10 +310,10 @@ export default function PremiumServiceSections({
                     alt={activeAsset.title}
                     width={1600}
                     height={1200}
-                    className="h-full w-full object-cover"
+                    className="max-h-[90vh] w-auto max-w-full rounded-2xl object-contain"
                   />
                 ) : (
-                  <div className="flex h-full w-full items-center justify-center overflow-y-auto p-5 text-center sm:p-8 md:p-10">
+                  <div className="flex w-full items-center justify-center overflow-y-auto p-5 text-center sm:p-8 md:p-10">
                     <div className="max-w-3xl">
                       <div className="mx-auto mb-5 flex h-20 w-20 items-center justify-center rounded-[1.5rem] bg-blue-500 text-2xl font-bold text-white sm:h-24 sm:w-24 sm:rounded-[2rem] sm:text-3xl">
                         {activeAsset.fileLabel?.slice(0, 1) || "F"}
