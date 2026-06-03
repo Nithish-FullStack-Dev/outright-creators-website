@@ -13,6 +13,8 @@ import Header from "../components/layout/Header";
 import Footer from "../components/layout/Footer";
 
 import TransitionProvider from "../components/transitions/TransitionProvider";
+import FloatingContactForm from "../components/common/FloatingContactForm";
+import ScrollToTop from "../components/common/ScrollToTop";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -44,9 +46,10 @@ export default function RootLayout({
       lang="en"
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
-      <body className="relative flex min-h-full flex-col overflow-x-hidden bg-white text-black dark:bg-black dark:text-white">
-
+      <body className="relative flex min-h-full flex-col overflow-x-hidden text-black dark:text-white">
         <LenisProvider>
+          <ScrollToTop />
+
           <IntroProvider>
             <TransitionProvider>
               <Header />
@@ -55,6 +58,8 @@ export default function RootLayout({
 
               <Footer />
             </TransitionProvider>
+
+            <FloatingContactForm />
           </IntroProvider>
         </LenisProvider>
       </body>

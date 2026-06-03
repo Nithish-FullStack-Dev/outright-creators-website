@@ -1,7 +1,5 @@
 "use client";
 
-import Link from "next/link";
-import Image from "next/image";
 import { ArrowUpRight, X } from "lucide-react";
 import {
   motion,
@@ -71,20 +69,7 @@ export default function Header() {
         transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
         className="pointer-events-none fixed top-0 left-0 z-50 w-full"
       >
-        <div className="mx-auto flex h-[72px] max-w-[1400px] items-center justify-between px-5 md:px-10">
-          <Link
-            href="/"
-            className="pointer-events-auto relative block h-[38px] w-[110px] sm:h-[42px] sm:w-[124px] md:h-[46px] md:w-[136px]"
-          >
-            <Image
-              src="/logo.webp"
-              alt="Logo"
-              fill
-              loading="eager"
-              className="object-contain"
-            />
-          </Link>
-
+        <div className="mx-auto flex h-[72px] max-w-[1400px] items-center justify-end px-5 md:px-10">
           <motion.button
             onClick={() => setMenuOpen(!menuOpen)}
             className="pointer-events-auto flex h-12 w-12 items-center justify-center rounded-full bg-black shadow-lg shadow-black/20"

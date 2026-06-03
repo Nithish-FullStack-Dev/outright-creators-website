@@ -15,5 +15,9 @@ export default function ViewportRender({
     margin: "200px",
   });
 
-  return <div ref={ref}>{isInView ? children : null}</div>;
+  return (
+    <div ref={ref} className="flex flex-col justify-center gap-6 md:gap-10">
+      {isInView ? children : null}
+    </div>
+  );
 }
