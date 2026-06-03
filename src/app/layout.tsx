@@ -50,17 +50,17 @@ export default function RootLayout({
         <LenisProvider>
           <ScrollToTop />
 
-          <IntroProvider>
-            <TransitionProvider>
-              <Header />
+          {/* <IntroProvider> */}
+          <TransitionProvider>
+            <Header />
 
-              {children}
+            {children}
 
-              <Footer />
-            </TransitionProvider>
+            <Footer />
+          </TransitionProvider>
 
-            <FloatingContactForm />
-          </IntroProvider>
+          <FloatingContactForm />
+          {/* </IntroProvider> */}
         </LenisProvider>
       </body>
     </html>

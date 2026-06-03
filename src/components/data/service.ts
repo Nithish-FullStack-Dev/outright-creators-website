@@ -41,6 +41,7 @@ export const services: ServiceSection[] = [
       { name: "Adobe After Effects", icon: "/assets/AfterEffect.jpg" },
       { name: "Adobe Premiere Pro", icon: "/assets/pr.jpg" },
       { name: "Animate CC", icon: "/assets/Animate.jpg" },
+      { name: "Adobe Photoshop", icon: "/assets/Photoshop.jpg" },
 
       // AI Video & Motion Models
       { name: "Kling 3.0", icon: "/assets/kling-color.png" },
