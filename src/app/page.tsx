@@ -37,9 +37,9 @@ export default function Home() {
       <MotionGraphic />
       <ScrollImageSequence folder="/sequences/graphic" totalFrames={114} />
       <GraphicDesign />
-      <ScrollImageSequence folder="/sequences/branding" totalFrames={114} />
+      <ScrollImageSequence folder="/sequences/branding" totalFrames={45} />
       <Branding />
-      <ScrollImageSequence folder="/sequences/social" totalFrames={114} />
+      <ScrollImageSequence folder="/sequences/social" totalFrames={40} />
       <SocialMedia />
       <Stats />
       <TestimonialsSection />

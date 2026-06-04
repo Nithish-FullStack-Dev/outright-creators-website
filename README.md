@@ -36,3 +36,5 @@ The easiest way to deploy your Next.js app is to use the [Vercel Platform](https
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
 
 [`ffmpeg -i input.mp4 -vf scale=960:-1 -movflags faststart -vcodec libx264 -crf 20 -g 1 -pix_fmt yuv420p output.mp4`](ffmpeg -i input.mp4 -vf scale=960:-1 -movflags faststart -vcodec libx264 -crf 20 -g 1 -pix_fmt yuv420p output.mp4)
+
+TO generate frames -> ffmpeg -i public/videos/Mg.mp4 -vf "fps=24,scale=1600:-1" -c:v libwebp -q:v 95 -compression*level 4 -fps_mode passthrough public/sequences/motion/frame*%04d.webp
