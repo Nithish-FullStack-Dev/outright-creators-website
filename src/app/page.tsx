@@ -29,17 +29,18 @@ const SocialMedia = dynamic(
 );
 
 import ScrollImageSequence from "../components/motion/ScrollImageSequence";
+import ScrollImageSmall from "../components/motion/ScrollImageSmall";
 
 export default function Home() {
   return (
     <div className="bg-zinc-50 font-sans">
       <ScrollImageSequence folder="/sequences/motion" totalFrames={114} />
       <MotionGraphic />
-      <ScrollImageSequence folder="/sequences/graphic" totalFrames={114} />
+      <ScrollImageSmall folder="/sequences/graphic" totalFrames={40} />
       <GraphicDesign />
-      <ScrollImageSequence folder="/sequences/branding" totalFrames={45} />
+      <ScrollImageSmall folder="/sequences/branding" totalFrames={45} />
       <Branding />
-      <ScrollImageSequence folder="/sequences/social" totalFrames={40} />
+      <ScrollImageSmall folder="/sequences/social" totalFrames={40} />
       <SocialMedia />
       <Stats />
       <TestimonialsSection />

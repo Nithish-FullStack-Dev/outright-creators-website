@@ -52,7 +52,7 @@ export const services: ServiceSection[] = [
       { name: "MiniMax Hailuo 2.3", icon: "/assets/minimax.webp" },
       { name: "PixVerse 6.5", icon: "/assets/pixverse.png" },
       { name: "Wan 2.7", icon: "/assets/wan.png" },
-      { name: "LTX 2 Pro", icon: "/assets/itx.png" },
+      { name: "LTX 2 Pro", icon: "/assets/ltx.png" },
       { name: "Veed Fabric 1.0", icon: "/assets/veed.png" },
       { name: "Grok", icon: "/assets/grok.png" },
     ],
