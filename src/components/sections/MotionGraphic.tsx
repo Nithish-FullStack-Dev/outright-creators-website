@@ -1,10 +1,7 @@
 "use client";
 
-import { useRef } from "react";
 import { motion } from "framer-motion";
-import ScrollVideoSection from "../motion/ScrollVideoSection";
 import TextReveal from "../motion/TextReveal";
-import ScrollImageSequence from "../motion/ScrollImageSequence";
 import PremiumServiceSections from "./ServicesSections";
 import { services } from "../data/service";
 
@@ -36,7 +33,7 @@ export default function MotionGraphic() {
                 >
                   <div className="h-px w-10 bg-black/20" />
                   <img
-                    src="/assets/bulb.svg"
+                    src="/assets/otc-bulb.png"
                     alt="Bulb"
                     className="h-6 w-6 md:h-9 md:w-9"
                   />
@@ -46,7 +43,7 @@ export default function MotionGraphic() {
                 </motion.div>
 
                 <div
-                  className="leading-[0.92] font-black tracking-[-0.05em] text-[#0a0a0a]"
+                  className="leading-[0.92] font-black tracking-tighter text-[#0a0a0a]"
                   style={{
                     fontSize: "clamp(3rem, 7vw, 6rem)",
                   }}

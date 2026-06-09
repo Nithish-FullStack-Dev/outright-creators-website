@@ -34,7 +34,7 @@ export default function GraphicDesign() {
                   <div className="h-px w-10 bg-black/20" />
 
                   <img
-                    src="/assets/bulb.svg"
+                    src="/assets/otc-bulb.png"
                     alt="Bulb"
                     className="h-6 w-6 md:h-9 md:w-9"
                   />

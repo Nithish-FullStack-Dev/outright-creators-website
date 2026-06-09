@@ -165,7 +165,11 @@ const SocialMedia = () => {
             <SlideIn delay={0}>
               <div className="mb-6 flex items-center gap-3">
                 <div className="h-px w-8 bg-black/20" />
-                <img src="/assets/bulb.svg" alt="Bulb" className="h-6 w-6" />
+                <img
+                  src="/assets/otc-bulb.png"
+                  alt="Bulb"
+                  className="h-6 w-6"
+                />
 
                 <span className="text-[10px] font-semibold tracking-[0.35em] text-black/50 uppercase md:text-[14px]">
                   Social Media Marketing

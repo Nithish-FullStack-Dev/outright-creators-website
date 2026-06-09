@@ -11,10 +11,10 @@ import { useState } from "react";
 import { usePageTransition } from "../transitions/TransitionProvider";
 
 const navItems = [
-  { label: "Home", href: "/", num: "01" },
-  { label: "About", href: "/about", num: "02" },
-  { label: "Services", href: "/services", num: "03" },
-  { label: "Collections", href: "/collections", num: "04" },
+  { label: "Motion Graphic", id: "motion-graphic", num: "01" },
+  { label: "Graphic Design", id: "graphic-design", num: "02" },
+  { label: "Branding", id: "branding", num: "03" },
+  { label: "Social Media", id: "social-media", num: "04" },
 ];
 
 const menuVariants = {
@@ -69,7 +69,7 @@ export default function Header() {
         transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
         className="pointer-events-none fixed top-0 left-0 z-50 w-full"
       >
-        <div className="mx-auto flex h-[72px] max-w-[1400px] items-center justify-end px-5 md:px-10">
+        <div className="mx-auto flex h-18 max-w-350 items-center justify-end px-5 md:px-10">
           <motion.button
             onClick={() => setMenuOpen(!menuOpen)}
             className="pointer-events-auto flex h-12 w-12 items-center justify-center rounded-full bg-black shadow-lg shadow-black/20"
@@ -78,7 +78,7 @@ export default function Header() {
             transition={{ duration: 0.2 }}
             aria-label="Toggle menu"
           >
-            <div className="flex w-[20px] flex-col items-center justify-center gap-[5px]">
+            <div className="flex w-5 flex-col items-center justify-center gap-1.25">
               <motion.span
                 animate={
                   menuOpen
@@ -135,7 +135,7 @@ export default function Header() {
               exit="closed"
               className="fixed top-0 right-0 z-50 flex h-full w-full flex-col overflow-hidden bg-white md:w-[40%]"
             >
-              <div className="flex h-[72px] items-center justify-between border-b border-black/5 px-8">
+              <div className="flex h-18 items-center justify-between border-b border-black/5 px-8">
                 <span className="text-[11px] font-semibold tracking-[0.18em] text-black/30 uppercase">
                   Navigation
                 </span>
@@ -161,7 +161,15 @@ export default function Header() {
                     <button
                       onClick={() => {
                         setMenuOpen(false);
-                        navigate(item.href);
+
+                        const element = document.getElementById(item.id);
+
+                        if (element) {
+                          element.scrollIntoView({
+                            behavior: "smooth",
+                            block: "start",
+                          });
+                        }
                       }}
                       className="flex w-full items-center justify-between py-7"
                     >

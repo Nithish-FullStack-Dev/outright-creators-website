@@ -8,24 +8,55 @@ import { ArrowUpRight, Mail, MapPin, Phone, Sparkles } from "lucide-react";
 import { motion, useScroll, useTransform, useSpring } from "framer-motion";
 import { useRef, useState } from "react";
 import TextReveal from "../motion/TextReveal";
-import { usePageTransition } from "../transitions/TransitionProvider";
 
-const navLinks = [
+type NavLink =
+  | { label: string; type: "scroll"; target: string }
+  | { label: string; type: "link"; href: string };
+
+type NavSection = {
+  title: string;
+  links: NavLink[];
+};
+
+const navLinks: NavSection[] = [
   {
-    title: "Navigation",
+    title: "Services",
     links: [
-      { label: "Home", href: "/" },
-      { label: "About", href: "/about" },
-      { label: "Services", href: "/services" },
-      { label: "Collections", href: "/collections" },
+      {
+        label: "Motion Graphic",
+        type: "scroll",
+        target: "motion-graphic",
+      },
+      {
+        label: "Graphic Design",
+        type: "scroll",
+        target: "graphic-design",
+      },
+      {
+        label: "Branding",
+        type: "scroll",
+        target: "branding",
+      },
+      {
+        label: "Social Media",
+        type: "scroll",
+        target: "social-media",
+      },
     ],
   },
   {
     title: "Company",
     links: [
-      { label: "Privacy Policy", href: "/privacy-policy" },
-      { label: "Terms & Conditions", href: "/terms-and-conditions" },
-      { label: "Contact", href: "/contact" },
+      {
+        label: "Privacy Policy",
+        type: "link",
+        href: "/privacy-policy",
+      },
+      {
+        label: "Terms & Conditions",
+        type: "link",
+        href: "/terms-and-conditions",
+      },
     ],
   },
 ];
@@ -59,8 +90,6 @@ const socials = [
 ];
 
 export default function Footer() {
-  const footerRef = useRef<HTMLDivElement>(null);
-  const { navigate } = usePageTransition();
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -78,24 +107,6 @@ export default function Footer() {
     mobile: "",
     message: "",
   });
-
-  const { scrollYProgress } = useScroll({
-    target: footerRef,
-    offset: ["start end", "end end"],
-  });
-
-  const smoothProgress = useSpring(scrollYProgress, {
-    stiffness: 120,
-    damping: 22,
-    mass: 0.5,
-  });
-
-  const titleY = useTransform(smoothProgress, [0, 1], [180, 0]);
-  const titleOpacity = useTransform(smoothProgress, [0, 0.4], [0, 1]);
-
-  const rightY = useTransform(smoothProgress, [0, 1], [120, 0]);
-  const gridY = useTransform(smoothProgress, [0, 1], [100, 0]);
-  const gridOpacity = useTransform(smoothProgress, [0, 0.4], [0, 1]);
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
@@ -207,7 +218,6 @@ export default function Footer() {
 
   return (
     <footer
-      ref={footerRef}
       className="relative overflow-hidden"
       style={{ background: "#f5f3ef" }}
     >
@@ -220,20 +230,14 @@ export default function Footer() {
         }}
       />
 
-      <div className="relative mx-auto max-w-[1600px] px-5 pt-10 pb-8 sm:px-8 lg:px-12">
+      <div className="max-w400 relative mx-auto px-5 pt-10 pb-8 sm:px-8 lg:px-12">
         {/* TOP SECTION */}
         <div
           id="contact-form"
           className="grid grid-cols-1 gap-12 border-b border-white/10 pb-12 lg:grid-cols-[1fr_0.9fr] lg:gap-20 lg:pb-14"
         >
           {/* LEFT */}
-          <motion.div
-            style={{
-              y: titleY,
-              opacity: titleOpacity,
-            }}
-            className="flex flex-col justify-center px-2 sm:px-0"
-          >
+          <div className="flex flex-col justify-center px-2 sm:px-0">
             <div className="mb-6 inline-flex w-fit items-center gap-2 rounded-full border border-yellow-400/20 bg-yellow-400/10 px-3 py-1.5 text-xs text-black backdrop-blur-xl sm:px-4 sm:py-2 sm:text-sm">
               <Sparkles size={14} />
               Let’s Build Something Extraordinary
@@ -244,20 +248,14 @@ export default function Footer() {
               className="text-5xl leading-[1.05] font-bold sm:text-6xl md:text-7xl xl:text-8xl"
             />
 
-            <p className="mt-6 max-w-[620px] text-sm leading-relaxed text-black sm:mt-8 sm:text-base sm:leading-[2]">
+            <p className="mt-6 max-w-155 text-sm leading-relaxed text-black sm:mt-8 sm:text-base sm:leading-loose">
               We craft cinematic digital experiences blending strategy,
               branding, development and immersive visuals for ambitious brands.
             </p>
-          </motion.div>
+          </div>
 
           {/* RIGHT FORM */}
-          <motion.div
-            style={{
-              y: rightY,
-              opacity: titleOpacity,
-            }}
-            className="relative overflow-hidden rounded-[2rem] border border-black/10 bg-white p-6 shadow-[0_20px_80px_rgba(0,0,0,0.08)] sm:rounded-[36px] sm:p-8"
-          >
+          <div className="relative overflow-hidden rounded-[2rem] border border-black/10 bg-white p-6 shadow-[0_20px_80px_rgba(0,0,0,0.08)] sm:rounded-[36px] sm:p-8">
             <div className="absolute top-0 right-0 h-32 w-32 rounded-full bg-neutral-200 blur-3xl sm:h-40 sm:w-40" />
 
             <div className="relative">
@@ -423,20 +421,14 @@ export default function Footer() {
                 )}
               </form>
             </div>
-          </motion.div>
+          </div>
         </div>
         {/* MAIN GRID WRAPPER */}
         <div className="relative right-1/2 left-1/2 mr-[-50vw] ml-[-50vw] w-screen border-t border-black/5">
-          <motion.div
-            style={{
-              y: gridY,
-              opacity: gridOpacity,
-            }}
-            className="mx-auto grid max-w-[1600px] gap-14 px-5 py-16 sm:px-8 lg:grid-cols-[1.2fr_0.7fr_0.7fr_1fr] lg:gap-20 lg:px-12"
-          >
+          <div className="mx-auto grid max-w-400 gap-14 px-5 py-16 sm:px-8 lg:grid-cols-[1.2fr_0.7fr_0.7fr_1fr] lg:gap-20 lg:px-12">
             {/* BRAND */}
             <div>
-              <Link href="/" className="relative mb-8 block h-[58px] w-[190px]">
+              <Link href="/" className="relative mb-8 block h-14.5 w-47.5">
                 <Image
                   src="/logo.webp"
                   alt="Outright Creators"
@@ -446,7 +438,7 @@ export default function Footer() {
                 />
               </Link>
 
-              <p className="max-w-[420px] text-[15px] leading-[2] text-black/70">
+              <p className="max-w-105 text-[15px] leading-loose text-black/70">
                 Building modern experiences through strategic branding,
                 immersive websites, high-converting visuals and futuristic
                 creative systems.
@@ -463,7 +455,7 @@ export default function Footer() {
                     <Link
                       href={item.href}
                       target="_blank"
-                      className="group flex h-14 w-14 items-center justify-center rounded-full border border-black/10 bg-black/[0.03] backdrop-blur-xl transition-all duration-500 hover:border-black"
+                      className="group flex h-14 w-14 items-center justify-center rounded-full border border-black/10 bg-black/3 backdrop-blur-xl transition-all duration-500 hover:border-black"
                     >
                       <Image
                         src={item.icon}
@@ -489,7 +481,22 @@ export default function Footer() {
                   {section.links.map((item) => (
                     <button
                       key={item.label}
-                      onClick={() => navigate(item.href)}
+                      onClick={() => {
+                        if (item.type === "scroll") {
+                          const element = document.getElementById(item.target);
+
+                          if (element) {
+                            element.scrollIntoView({
+                              behavior: "smooth",
+                              block: "start",
+                            });
+                          }
+                        }
+
+                        if (item.type === "link") {
+                          window.location.href = item.href;
+                        }
+                      }}
                       className="group flex w-fit items-center gap-2 text-left text-[15px] text-black/50 transition-all duration-300 hover:text-black"
                     >
                       <span>{item.label}</span>
@@ -512,7 +519,7 @@ export default function Footer() {
 
               <div className="space-y-6">
                 <div className="flex items-start gap-4">
-                  <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl border border-black/10 bg-black/[0.03] text-black backdrop-blur-xl">
+                  <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl border border-black/10 bg-black/3 text-black backdrop-blur-xl">
                     <Phone size={18} />
                   </div>
 
@@ -526,7 +533,7 @@ export default function Footer() {
                 </div>
 
                 <div className="flex items-start gap-4">
-                  <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl border border-black/10 bg-black/[0.03] text-black backdrop-blur-xl">
+                  <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl border border-black/10 bg-black/3 text-black backdrop-blur-xl">
                     <Mail size={18} />
                   </div>
 
@@ -542,7 +549,7 @@ export default function Footer() {
                 </div>
 
                 <div className="flex items-start gap-4">
-                  <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl border border-black/10 bg-black/[0.03] text-black backdrop-blur-xl">
+                  <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl border border-black/10 bg-black/3 text-black backdrop-blur-xl">
                     <MapPin size={18} />
                   </div>
 
@@ -560,44 +567,15 @@ export default function Footer() {
                 </div>
               </div>
             </div>
-          </motion.div>
+          </div>
         </div>
 
         {/* BOTTOM */}
-        <motion.div
-          style={{
-            opacity: gridOpacity,
-            y: useTransform(smoothProgress, [0, 1], [60, 0]),
-          }}
-          className="flex flex-col gap-5 border-t border-black/10 pt-8 text-center md:flex-row md:items-center md:justify-between md:text-left"
-        >
+        <div className="flex flex-col gap-5 border-t border-black/10 pt-8 text-center">
           <p className="text-sm text-black/45">
             © 2026 Outright Creators. All rights reserved.
           </p>
-
-          <div className="flex flex-wrap items-center justify-center gap-6 text-sm text-black/45 md:justify-end">
-            <button
-              onClick={() => navigate("/privacy-policy")}
-              className="transition-colors duration-300 hover:text-black"
-            >
-              Privacy Policy
-            </button>
-
-            <button
-              onClick={() => navigate("/terms-and-conditions")}
-              className="transition-colors duration-300 hover:text-yellow-300"
-            >
-              Terms & Conditions
-            </button>
-
-            <button
-              onClick={() => navigate("/cookies")}
-              className="transition-colors duration-300 hover:text-yellow-300"
-            >
-              Cookies
-            </button>
-          </div>
-        </motion.div>
+        </div>
       </div>
     </footer>
   );

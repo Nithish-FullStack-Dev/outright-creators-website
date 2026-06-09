@@ -3,33 +3,29 @@
 import {
   AnimatePresence,
   motion,
-  useAnimationFrame,
   useInView,
-  useMotionValue,
   useScroll,
   useTransform,
 } from "framer-motion";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useRef, useState, useCallback } from "react";
 import Image from "next/image";
-import TextReveal from "../motion/TextReveal";
-import {
-  ArrowBigDown,
-  ArrowUp,
-  ArrowUpRight,
-  ClipboardCheck,
-  LucideMousePointerClick,
-  Sparkles,
-  X,
-} from "lucide-react";
+import { ArrowUpRight, Sparkles, X, Play, ZoomIn } from "lucide-react";
 import { ServiceSection, ShowcaseItem } from "../data/service";
-import ViewportRender from "@/src/utils/ViewportRender";
 
-const typeLabel = {
+const typeLabel: Record<ShowcaseItem["type"], string> = {
   video: "Video",
   image: "Image",
   pdf: "PDF",
   logo: "Brand Asset",
 };
+
+const typeBadgeStyle: Record<ShowcaseItem["type"], string> = {
+  video: "bg-rose-50 text-rose-600 border-rose-100",
+  image: "bg-sky-50 text-sky-600 border-sky-100",
+  pdf: "bg-amber-50 text-amber-600 border-amber-100",
+  logo: "bg-violet-50 text-violet-600 border-violet-100",
+};
+
 export function InfiniteSlider({
   items,
   direction = "left",
@@ -39,110 +35,381 @@ export function InfiniteSlider({
   direction?: "left" | "right";
   onAssetClick: (asset: ShowcaseItem) => void;
 }) {
+  const trackRef = useRef<HTMLDivElement>(null);
+  const posRef = useRef(0);
+  const rafRef = useRef<number>(0);
+  const isPageVisibleRef = useRef(true);
+  const singleWidthRef = useRef(0);
   const containerRef = useRef<HTMLDivElement>(null);
-  const [width, setWidth] = useState(0);
-  const [isDragging, setIsDragging] = useState(false);
-  const x = useMotionValue(0);
 
-  // Optimization: Only animate when the slider is actually visible on screen
-  const isInView = useInView(containerRef, { margin: "-100px" });
+  const isInView = useInView(containerRef, { amount: 0.1, once: false });
+  const doubled = [...items, ...items];
 
-  // TRICK: We triplicate (3x) the items instead of duplicating.
-  // This guarantees that if the user drags backwards instantly, they won't hit an empty white space.
-  const triplicated = useMemo(() => [...items, ...items, ...items], [items]);
+  const applyTransform = useCallback((x: number) => {
+    if (trackRef.current) {
+      trackRef.current.style.transform = `translate3d(${x}px, 0, 0)`;
+    }
+  }, []);
 
   useEffect(() => {
-    const updateWidth = () => {
-      if (containerRef.current) {
-        // Total scrollable width divided by 3 gives the exact width of a single set of items
-        const singleWidth = containerRef.current.scrollWidth / 3;
-        setWidth(singleWidth);
-        // Start exactly in the middle set to allow immediate seamless dragging left OR right
-        x.set(-singleWidth);
+    const measure = () => {
+      if (trackRef.current) {
+        singleWidthRef.current = trackRef.current.scrollWidth / 2;
+        posRef.current = direction === "left" ? 0 : -singleWidthRef.current;
+        applyTransform(posRef.current);
       }
     };
+    measure();
+    window.addEventListener("resize", measure);
+    return () => window.removeEventListener("resize", measure);
+  }, [items, direction, applyTransform]);
 
-    updateWidth();
-    window.addEventListener("resize", updateWidth);
-    return () => window.removeEventListener("resize", updateWidth);
-  }, [items, x]);
+  useEffect(() => {
+    const onVisibility = () => {
+      isPageVisibleRef.current = !document.hidden;
+    };
+    document.addEventListener("visibilitychange", onVisibility);
+    return () => document.removeEventListener("visibilitychange", onVisibility);
+  }, []);
 
-  useAnimationFrame((t, delta) => {
-    // Pause animation if dragging, off-screen, or width hasn't calculated yet
-    if (width === 0 || isDragging || !isInView) return;
+  useEffect(() => {
+    let lastTime: number | null = null;
+    const SPEED = 0.04;
 
-    // This speed (0.035) perfectly matches your original duration: 28
-    const speed = 0.035;
-    const moveBy = direction === "left" ? -speed * delta : speed * delta;
+    const tick = (now: number) => {
+      rafRef.current = requestAnimationFrame(tick);
 
-    let newX = x.get() + moveBy;
+      if (!isInView || !isPageVisibleRef.current) {
+        lastTime = null;
+        return;
+      }
 
-    // Seamlessly loop the animation within the middle set
-    if (direction === "left" && newX <= -(width * 2)) {
-      newX += width;
-    } else if (direction === "right" && newX >= -width) {
-      newX -= width;
-    }
+      if (lastTime === null) {
+        lastTime = now;
+        return;
+      }
 
-    x.set(newX);
-  });
+      const delta = Math.min(now - lastTime, 50);
+      lastTime = now;
 
-  const handleDragEnd = () => {
-    setIsDragging(false);
-    const currentX = x.get();
+      const w = singleWidthRef.current;
+      if (w === 0) return;
 
-    // MATHEMATICAL MAGIC: Seamlessly snap back into the safe middle zone if dragged way out of bounds
-    const normalized = ((currentX % width) + width) % width;
-    x.set(-(width * 2) + normalized);
-  };
+      if (direction === "left") {
+        posRef.current -= SPEED * delta;
+        if (posRef.current <= -w) posRef.current += w;
+      } else {
+        posRef.current += SPEED * delta;
+        if (posRef.current >= 0) posRef.current -= w;
+      }
+
+      applyTransform(posRef.current);
+    };
+
+    rafRef.current = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(rafRef.current);
+  }, [direction, isInView, applyTransform]);
 
   return (
-    <div className="relative overflow-hidden rounded-2xl">
-      <motion.div
-        ref={containerRef}
-        style={{ x }}
-        drag="x" // Enables Framer Motion's robust dragging (works perfectly on mobile)
-        onDragStart={() => setIsDragging(true)}
-        onDragEnd={handleDragEnd}
-        className="mb-5 flex w-max cursor-grab gap-5 active:cursor-grabbing"
+    <div ref={containerRef} className="relative overflow-hidden">
+      <div
+        ref={trackRef}
+        className="flex w-max gap-4 will-change-transform"
+        style={{ userSelect: "none" }}
       >
-        {triplicated.map((asset, index) => (
+        {doubled.map((asset, index) => (
           <button
             key={`${asset.id}-${index}`}
             type="button"
-            onClick={() => onAssetClick(asset)}
-            className="group/card relative h-[270px] w-[260px] flex-shrink-0 overflow-hidden rounded-[2rem] border border-white/10 bg-white/[0.03] text-left backdrop-blur-xl"
+            onClick={() => {
+              onAssetClick(asset);
+            }}
+            className="group/card relative h-64 w-64 shrink-0 overflow-hidden rounded-3xl border border-gray-100 bg-white text-left shadow-sm transition-shadow duration-300 hover:shadow-xl"
           >
-            <div className="absolute inset-0 z-10 bg-gradient-to-b from-transparent via-black/10 to-black/70" />
-
             {asset.thumbnail && (
               <Image
                 src={asset.thumbnail}
                 alt={asset.title}
-                width={700}
-                height={700}
-                // IMPORTANT: pointer-events-none prevents the browser's default ghost-image drag
-                className="pointer-events-none h-full w-full object-cover transition-transform duration-700 group-hover/card:scale-110"
+                width={512}
+                height={512}
+                loading="eager"
+                sizes="256px"
+                className="pointer-events-none h-full w-full object-cover transition-transform duration-500 group-hover/card:scale-105"
               />
             )}
-            <div className="absolute top-3 right-3 z-30">
-              <div className="flex h-10 w-10 scale-75 items-center justify-center rounded-full bg-transparent text-white opacity-0 shadow-lg backdrop-blur-xl transition-all duration-300 group-hover/card:scale-100 group-hover/card:opacity-100">
-                <ArrowUpRight className="h-5 w-5" />
-              </div>
-            </div>
-            <div className="pointer-events-none absolute inset-0 z-20 bg-gradient-to-t from-black/90 via-black/20 to-transparent" />
 
-            <div className="pointer-events-none absolute bottom-0 z-30 p-5">
-              <div className="mb-3 inline-flex rounded-full border border-white/10 bg-white/10 px-3 py-1 text-[10px] tracking-[0.3em] text-white uppercase backdrop-blur-md">
+            <div className="pointer-events-none absolute inset-0 bg-linear-to-t from-white/95 via-white/20 to-transparent" />
+
+            {asset.type === "video" && (
+              <div className="absolute inset-0 flex items-center justify-center opacity-0 transition-opacity duration-300 group-hover/card:opacity-100">
+                <div className="flex h-14 w-14 items-center justify-center rounded-full bg-white/95 shadow-xl ring-4 ring-white/40">
+                  <Play className="h-5 w-5 translate-x-0.5 text-gray-900" />
+                </div>
+              </div>
+            )}
+
+            {asset.type === "image" && (
+              <div className="absolute inset-0 flex items-center justify-center opacity-0 transition-opacity duration-300 group-hover/card:opacity-100">
+                <div className="flex h-14 w-14 items-center justify-center rounded-full bg-white/95 shadow-xl ring-4 ring-white/40">
+                  <ZoomIn className="h-5 w-5 text-gray-900" />
+                </div>
+              </div>
+            )}
+
+            {(asset.type === "pdf" || asset.type === "logo") && (
+              <div className="absolute top-3 right-3 translate-y-1 opacity-0 transition-all duration-300 group-hover/card:translate-y-0 group-hover/card:opacity-100">
+                <div className="flex h-8 w-8 items-center justify-center rounded-full bg-white shadow-md">
+                  <ArrowUpRight className="h-4 w-4 text-gray-700" />
+                </div>
+              </div>
+            )}
+
+            <div className="pointer-events-none absolute right-0 bottom-0 left-0 p-4">
+              <span
+                className={`inline-flex items-center rounded-full border px-2.5 py-0.5 text-[10px] font-medium tracking-widest uppercase ${typeBadgeStyle[asset.type]}`}
+              >
                 {typeLabel[asset.type]}
-              </div>
+              </span>
+              <p className="mt-1.5 truncate text-sm font-semibold text-gray-900">
+                {asset.title}
+              </p>
             </div>
-
-            <div className="pointer-events-none absolute inset-0 z-20 rounded-[2rem] ring-1 ring-white/10 transition-all duration-500 group-hover/card:ring-white/30" />
           </button>
         ))}
-      </motion.div>
+      </div>
     </div>
+  );
+}
+
+function VideoDialog({
+  asset,
+  onClose,
+}: {
+  asset: ShowcaseItem;
+  onClose: () => void;
+}) {
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") onClose();
+    };
+
+    document.addEventListener("keydown", onKey);
+
+    return () => document.removeEventListener("keydown", onKey);
+  }, [onClose]);
+
+  return (
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.2 }}
+      className="fixed inset-0 z-100 flex items-center justify-center bg-black/90 p-4 backdrop-blur-sm"
+      onClick={onClose}
+    >
+      <motion.div
+        initial={{ scale: 0.93, opacity: 0 }}
+        animate={{ scale: 1, opacity: 1 }}
+        exit={{ scale: 0.93, opacity: 0 }}
+        transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
+        onClick={(e) => e.stopPropagation()}
+        className="relative w-full max-w-5xl"
+      >
+        <button
+          type="button"
+          onClick={onClose}
+          className="absolute -top-12 right-0 z-50 flex h-9 w-9 items-center justify-center rounded-full bg-white/10 text-white transition-colors duration-200 hover:bg-white/20"
+        >
+          <X className="h-4 w-4" />
+        </button>
+
+        <div className="relative overflow-hidden rounded-2xl bg-black shadow-2xl">
+          {isLoading && (
+            <div className="absolute inset-0 z-20 flex flex-col items-center justify-center bg-black">
+              <div className="h-10 w-10 animate-spin rounded-full border-2 border-white/30 border-t-white" />
+
+              <p className="mt-4 text-sm font-medium text-white/80">
+                Loading video, please wait...
+              </p>
+            </div>
+          )}
+
+          <video
+            key={asset.videoSrc}
+            className={`aspect-video w-full object-contain transition-opacity duration-300 ${
+              isLoading ? "opacity-0" : "opacity-100"
+            }`}
+            src={asset.videoSrc}
+            autoPlay
+            loop
+            playsInline
+            controls
+            preload="auto"
+            poster={asset.thumbnail}
+            onLoadedData={() => setIsLoading(false)}
+          />
+        </div>
+
+        <div className="mt-4 flex items-center justify-between px-1">
+          <p className="text-sm font-semibold text-white">{asset.title}</p>
+
+          <span
+            className={`inline-flex items-center rounded-full border px-2.5 py-0.5 text-[10px] font-medium tracking-widest uppercase ${typeBadgeStyle[asset.type]}`}
+          >
+            {typeLabel[asset.type]}
+          </span>
+        </div>
+      </motion.div>
+    </motion.div>
+  );
+}
+
+function ImageDialog({
+  asset,
+  onClose,
+}: {
+  asset: ShowcaseItem;
+  onClose: () => void;
+}) {
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") onClose();
+    };
+
+    document.addEventListener("keydown", onKey);
+
+    return () => document.removeEventListener("keydown", onKey);
+  }, [onClose]);
+
+  return (
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.2 }}
+      className="fixed inset-0 z-100 flex items-center justify-center bg-black/80 p-4 backdrop-blur-md"
+      onClick={onClose}
+    >
+      <motion.div
+        initial={{ scale: 0.94, opacity: 0 }}
+        animate={{ scale: 1, opacity: 1 }}
+        exit={{ scale: 0.94, opacity: 0 }}
+        transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
+        onClick={(e) => e.stopPropagation()}
+        className="relative flex max-h-[90vh] max-w-[90vw] flex-col"
+      >
+        <button
+          type="button"
+          onClick={onClose}
+          className="absolute -top-12 right-0 z-50 flex h-9 w-9 items-center justify-center rounded-full bg-white/10 text-white transition-colors duration-200 hover:bg-white/20"
+        >
+          <X className="h-4 w-4" />
+        </button>
+
+        <div className="relative overflow-hidden rounded-2xl shadow-2xl ring-1 ring-white/10">
+          {isLoading && (
+            <div className="absolute inset-0 z-20 flex flex-col items-center justify-center bg-black">
+              <div className="h-10 w-10 animate-spin rounded-full border-2 border-white/30 border-t-white" />
+
+              <p className="mt-4 text-sm font-medium text-white/80">
+                Loading image, please wait...
+              </p>
+            </div>
+          )}
+
+          <Image
+            src={asset.thumbnail!}
+            alt={asset.title}
+            width={1600}
+            height={1200}
+            priority
+            onLoad={() => setIsLoading(false)}
+            className={`block max-h-[80vh] w-auto max-w-[88vw] object-contain transition-opacity duration-300 ${
+              isLoading ? "opacity-0" : "opacity-100"
+            }`}
+          />
+        </div>
+
+        <div className="mt-4 flex items-center justify-between px-1">
+          <p className="text-sm font-semibold text-white">{asset.title}</p>
+
+          <span
+            className={`inline-flex items-center rounded-full border px-2.5 py-0.5 text-[10px] font-medium tracking-widest uppercase ${typeBadgeStyle[asset.type]}`}
+          >
+            {typeLabel[asset.type]}
+          </span>
+        </div>
+      </motion.div>
+    </motion.div>
+  );
+}
+
+function FallbackDialog({
+  asset,
+  onClose,
+}: {
+  asset: ShowcaseItem;
+  onClose: () => void;
+}) {
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") onClose();
+    };
+    document.addEventListener("keydown", onKey);
+    return () => document.removeEventListener("keydown", onKey);
+  }, [onClose]);
+
+  return (
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.2 }}
+      className="fixed inset-0 z-100 flex items-center justify-center bg-black/60 p-4 backdrop-blur-md"
+      onClick={onClose}
+    >
+      <motion.div
+        initial={{ scale: 0.95, opacity: 0, y: 16 }}
+        animate={{ scale: 1, opacity: 1, y: 0 }}
+        exit={{ scale: 0.95, opacity: 0, y: 16 }}
+        transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
+        onClick={(e) => e.stopPropagation()}
+        className="relative w-full max-w-lg overflow-hidden rounded-3xl border border-gray-100 bg-white shadow-2xl"
+      >
+        <button
+          type="button"
+          onClick={onClose}
+          className="absolute top-4 right-4 z-50 flex h-9 w-9 items-center justify-center rounded-full border border-gray-100 bg-white text-gray-500 shadow-sm transition-all duration-200 hover:bg-gray-50 hover:text-gray-900"
+        >
+          <X className="h-4 w-4" />
+        </button>
+
+        <div className="flex flex-col items-center justify-center p-12 text-center">
+          <div className="mb-5 flex h-20 w-20 items-center justify-center rounded-3xl bg-linear-to-br from-blue-500 to-violet-500 text-2xl font-bold text-white shadow-lg">
+            {asset.fileLabel?.slice(0, 1) ?? "F"}
+          </div>
+          <h3 className="text-2xl font-bold text-gray-900">
+            {asset.fileLabel ?? "Document Preview"}
+          </h3>
+          <p className="mx-auto mt-3 max-w-md text-sm leading-7 text-gray-500">
+            {asset.description}
+          </p>
+        </div>
+
+        <div className="flex items-center justify-between border-t border-gray-100 px-6 py-4">
+          <p className="text-sm font-semibold text-gray-900">{asset.title}</p>
+          <span
+            className={`inline-flex items-center rounded-full border px-2.5 py-0.5 text-[10px] font-medium tracking-widest uppercase ${typeBadgeStyle[asset.type]}`}
+          >
+            {typeLabel[asset.type]}
+          </span>
+        </div>
+      </motion.div>
+    </motion.div>
   );
 }
 
@@ -155,253 +422,177 @@ export default function PremiumServiceSections({
 }) {
   const [activeAsset, setActiveAsset] = useState<ShowcaseItem | null>(null);
   const middleIndex = Math.ceil(section.assets.length / 2);
-
   const topRow = section.assets.slice(0, middleIndex);
   const bottomRow = section.assets.slice(middleIndex);
+
   const containerRef = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({
     target: containerRef,
     offset: ["start end", "end start"],
   });
 
-  const titleY = useTransform(scrollYProgress, [0, 1], [50, -50]);
-  const imageY = useTransform(scrollYProgress, [0, 1], [-100, 100]);
+  const imageY = useTransform(scrollYProgress, [0, 1], [-60, 60]);
+
   return (
-    <section className="relative overflow-hidden py-5 text-white">
-      {/* <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(59,130,246,0.18),transparent_30%)]" /> */}
+    <section
+      ref={containerRef}
+      className="relative overflow-hidden py-5 text-white"
+    >
       {section.labelImage && (
         <motion.div
           style={{ y: imageY }}
-          className="pointer-events-none absolute inset-0 z-0 flex items-center justify-center opacity-[0.35] grayscale"
+          className="pointer-events-none absolute inset-0 z-0 flex items-center justify-center opacity-[0.06]"
         >
           <img
             src={section.labelImage}
-            alt="background decor"
-            className="h-[280px] w-[280px] object-contain sm:h-[340px] sm:w-[340px] lg:h-[420px] lg:w-[420px]"
+            alt=""
+            width={500}
+            height={500}
+            loading="eager"
+            className="h-80 w-80 object-contain sm:h-96 sm:w-96 lg:h-112 lg:w-md"
           />
         </motion.div>
       )}
+
       <div className="relative z-10 container">
-        <div className="space-y-28">
-          <motion.div
-            key={section.id}
-            initial={{ opacity: 0, y: 80 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{
-              duration: 1,
-              ease: [0.16, 1, 0.3, 1],
-              delay: index * 0.08,
-            }}
-            viewport={{ once: true }}
-            className="group relative overflow-hidden rounded-[3rem] border border-white/10 bg-white/[0.03] backdrop-blur-2xl"
-          >
-            <div className="absolute inset-0 bg-gradient-to-br from-blue-500/[0.08] via-transparent to-purple-500/[0.08]" />
-
-            <div className="relative grid lg:grid-cols-[0.9fr_1.1fr]">
-              {/* LEFT */}
-              <div className="relative border-b border-white/10 p-5 sm:p-8 lg:border-r lg:border-b-0">
-                <div className="mb-3 inline-flex items-center gap-4">
-                  <div className="flex h-10 w-10 items-center justify-center rounded-2xl text-sm font-bold shadow-2xl shadow-blue-500/30">
-                    {section.labelImage ? (
-                      <Image
-                        src={section.labelImage}
-                        alt={section.label}
-                        width={100}
-                        height={100}
-                        className="h-full w-full object-contain"
-                      />
-                    ) : (
-                      <span>{section.label.slice(0, 1)}</span>
-                    )}
-                  </div>
-
-                  <div>
-                    <p className="text-xs tracking-[0.35em] text-black uppercase">
-                      {section.label}
-                    </p>
-                  </div>
+        <motion.div
+          key={section.id}
+          initial={{ opacity: 0, y: 60 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{
+            duration: 0.8,
+            ease: [0.16, 1, 0.3, 1],
+            delay: index * 0.06,
+          }}
+          viewport={{ once: true }}
+          className="overflow-hidden rounded-[2.5rem] border border-gray-100 bg-white shadow-xl shadow-gray-200/60"
+        >
+          <div className="grid lg:grid-cols-[0.9fr_1.1fr]">
+            <div className="relative border-b border-gray-100 p-6 sm:p-8 lg:border-r lg:border-b-0">
+              <div className="mb-5 flex items-center gap-3">
+                <div className="flex h-10 w-10 shrink-0 items-center justify-center overflow-hidden rounded-2xl border border-gray-100 bg-gray-50">
+                  {section.labelImage ? (
+                    <Image
+                      src={section.labelImage}
+                      alt={section.label}
+                      width={40}
+                      height={40}
+                      className="h-7 w-7 object-contain"
+                    />
+                  ) : (
+                    <span className="text-sm font-bold text-gray-700">
+                      {section.label.slice(0, 1)}
+                    </span>
+                  )}
                 </div>
-
-                <h2 className="text-2xl leading-tight font-semibold tracking-tight text-black md:text-4xl">
-                  {section.title}
-                </h2>
-
-                <p className="mt-2 text-base leading-8 text-black">
-                  {section.description}
-                </p>
-
-                <div className="mt-2 grid gap-2">
-                  <div className="rounded-[2rem] p-3">
-                    <h3 className="mb-5 text-xs tracking-[0.3em] text-black uppercase">
-                      Tools & Technology
-                    </h3>
-
-                    <div className="grid grid-cols-1 gap-x-4 gap-y-2 sm:grid-cols-2">
-                      {section.tech.map((item) => (
-                        <div
-                          key={item.name}
-                          className="flex items-center gap-3 px-2 py-2 transition-all duration-300 hover:scale-[1.02] hover:shadow-sm"
-                        >
-                          <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-lg shadow-sm">
-                            <Image
-                              src={item.icon}
-                              alt={item.name}
-                              width={100}
-                              height={100}
-                              className="h-7 w-7 object-contain"
-                            />
-                          </div>
-
-                          <p className="text-sm font-medium text-black">
-                            {item.name}
-                          </p>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-
-                  <div className="w-fit rounded-2xl p-2">
-                    <h3 className="mb-4 text-xs tracking-[0.35em] text-black/60 uppercase">
-                      Features
-                    </h3>
-
-                    <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-                      {section.features.map((feature) => (
-                        <div
-                          key={feature}
-                          className="group flex items-center gap-3 rounded-xl bg-white px-3 py-2 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-md"
-                        >
-                          <div className="flex h-7 w-7 items-center justify-center rounded-full bg-blue-100 transition-colors duration-300 group-hover:bg-blue-500">
-                            <Sparkles className="h-3.5 w-3.5 text-blue-500 transition-colors duration-300 group-hover:text-white" />
-                          </div>
-
-                          <span className="text-sm font-medium text-black/90">
-                            {feature}
-                          </span>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                </div>
+                <span className="text-xs font-semibold tracking-[0.3em] text-gray-400 uppercase">
+                  {section.label}
+                </span>
               </div>
 
-              {/* RIGHT */}
-              <div className="relative flex flex-col justify-center gap-6 overflow-hidden rounded-2xl">
-                <ViewportRender>
-                  <div className="px-6">
-                    <InfiniteSlider
-                      items={topRow}
-                      direction="left"
-                      onAssetClick={setActiveAsset}
-                    />
-                  </div>
+              <h2 className="text-2xl leading-tight font-bold tracking-tight text-gray-900 md:text-3xl">
+                {section.title}
+              </h2>
 
-                  <div className="px-6">
-                    <InfiniteSlider
-                      items={bottomRow}
-                      direction="right"
-                      onAssetClick={setActiveAsset}
-                    />
-                  </div>
-                </ViewportRender>
+              <p className="mt-3 text-sm leading-7 text-gray-500">
+                {section.description}
+              </p>
 
-                {/* CLICK LAYER */}
-                {/* <div className="absolute inset-0 z-40 grid grid-cols-2 gap-5 px-6 py-10">
-                  {[...topRow, ...bottomRow].map((asset) => (
-                    <button
-                      key={asset.id}
-                      type="button"
-                      onClick={() => setActiveAsset(asset)}
-                      className="rounded-[2rem]"
-                    />
-                  ))}
-                </div> */}
+              <div className="mt-6 space-y-6">
+                <div>
+                  <p className="mb-3 text-[10px] font-semibold tracking-[0.3em] text-gray-400 uppercase">
+                    Tools & Technology
+                  </p>
+                  <div className="grid grid-cols-2 gap-2">
+                    {section.tech.map((item) => (
+                      <div
+                        key={item.name}
+                        className="flex items-center gap-3 rounded-2xl border border-gray-100 bg-gray-50/80 px-3 py-2.5 transition-all duration-200 hover:border-gray-200 hover:bg-white hover:shadow-sm"
+                      >
+                        <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-xl border border-gray-100 bg-white shadow-sm">
+                          <Image
+                            src={item.icon}
+                            alt={item.name}
+                            width={32}
+                            height={32}
+                            className="h-5 w-5 object-contain"
+                          />
+                        </div>
+                        <span className="text-xs font-medium text-gray-700">
+                          {item.name}
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                <div>
+                  <p className="mb-3 text-[10px] font-semibold tracking-[0.3em] text-gray-400 uppercase">
+                    Features
+                  </p>
+                  <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
+                    {section.features.map((feature) => (
+                      <div
+                        key={feature}
+                        className="group flex items-center gap-2.5 rounded-xl border border-gray-100 bg-gray-50/80 px-3 py-2.5 transition-all duration-200 hover:border-blue-100 hover:bg-blue-50/50"
+                      >
+                        <div className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-white shadow-sm transition-colors duration-200 group-hover:bg-blue-500">
+                          <Sparkles className="h-3 w-3 text-blue-500 transition-colors duration-200 group-hover:text-white" />
+                        </div>
+                        <span className="text-xs font-medium text-gray-700">
+                          {feature}
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
               </div>
             </div>
-          </motion.div>
-        </div>
+
+            <div className="flex flex-col justify-center gap-5 overflow-hidden bg-gray-50/50 py-8">
+              <div className="px-6">
+                <InfiniteSlider
+                  items={topRow}
+                  direction="left"
+                  onAssetClick={setActiveAsset}
+                />
+              </div>
+              <div className="px-6">
+                <InfiniteSlider
+                  items={bottomRow}
+                  direction="right"
+                  onAssetClick={setActiveAsset}
+                />
+              </div>
+            </div>
+          </div>
+        </motion.div>
       </div>
 
-      {/* MODAL */}
       <AnimatePresence>
-        {activeAsset ? (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="fixed inset-0 z-[100] flex items-center justify-center bg-black/80 p-3 backdrop-blur-md sm:p-5"
-          >
-            {/* BACKDROP */}
-            <div
-              className="absolute inset-0"
-              onClick={() => setActiveAsset(null)}
+        {activeAsset?.type === "video" && (
+          <VideoDialog
+            key="video-dialog"
+            asset={activeAsset}
+            onClose={() => setActiveAsset(null)}
+          />
+        )}
+        {activeAsset?.type === "image" && (
+          <ImageDialog
+            key="image-dialog"
+            asset={activeAsset}
+            onClose={() => setActiveAsset(null)}
+          />
+        )}
+        {activeAsset &&
+          activeAsset.type !== "video" &&
+          activeAsset.type !== "image" && (
+            <FallbackDialog
+              key="fallback-dialog"
+              asset={activeAsset}
+              onClose={() => setActiveAsset(null)}
             />
-
-            {/* MODAL CONTAINER */}
-            <motion.div
-              initial={{ scale: 0.94, opacity: 0, y: 20 }}
-              animate={{ scale: 1, opacity: 1, y: 0 }}
-              exit={{ scale: 0.94, opacity: 0, y: 20 }}
-              transition={{
-                duration: 0.3,
-                ease: [0.16, 1, 0.3, 1],
-              }}
-              onClick={(e) => e.stopPropagation()}
-              className="relative z-10 w-full max-w-[95vw] overflow-hidden rounded-[1.5rem] border border-white/10 bg-[#050816] shadow-[0_40px_120px_rgba(0,0,0,0.7)] sm:max-w-[90vw] sm:rounded-[2rem] lg:max-w-[75vw] xl:max-w-[65vw]"
-            >
-              {/* CLOSE BUTTON */}
-              <button
-                type="button"
-                onClick={() => setActiveAsset(null)}
-                className="absolute top-3 right-3 z-50 flex h-10 w-10 items-center justify-center rounded-full border border-white/10 bg-black/40 text-white backdrop-blur-xl transition-all duration-300 hover:scale-105 hover:bg-white/20 sm:top-5 sm:right-5 sm:h-12 sm:w-12"
-              >
-                <X className="h-4 w-4 sm:h-5 sm:w-5" />
-              </button>
-
-              {/* CONTENT */}
-              <div className="relative flex max-h-[90vh] items-center justify-center overflow-hidden bg-transparent p-2 sm:p-4">
-                {activeAsset.type === "video" ? (
-                  <video
-                    key={activeAsset.videoSrc}
-                    className="max-h-[90vh] w-auto max-w-full rounded-2xl object-contain"
-                    src={activeAsset.videoSrc}
-                    autoPlay
-                    muted
-                    loop
-                    playsInline
-                    controls
-                    preload="metadata"
-                    poster={activeAsset.thumbnail}
-                  />
-                ) : activeAsset.type === "image" && activeAsset.thumbnail ? (
-                  <Image
-                    src={activeAsset.thumbnail}
-                    alt={activeAsset.title}
-                    width={1600}
-                    height={1200}
-                    className="max-h-[90vh] w-auto max-w-full rounded-2xl object-contain"
-                  />
-                ) : (
-                  <div className="flex w-full items-center justify-center overflow-y-auto p-5 text-center sm:p-8 md:p-10">
-                    <div className="max-w-3xl">
-                      <div className="mx-auto mb-5 flex h-20 w-20 items-center justify-center rounded-[1.5rem] bg-blue-500 text-2xl font-bold text-white sm:h-24 sm:w-24 sm:rounded-[2rem] sm:text-3xl">
-                        {activeAsset.fileLabel?.slice(0, 1) || "F"}
-                      </div>
-
-                      <h3 className="text-2xl font-semibold text-white sm:text-3xl md:text-4xl">
-                        {activeAsset.fileLabel || "Document Preview"}
-                      </h3>
-
-                      <p className="mx-auto mt-4 max-w-2xl text-sm leading-7 text-white/60 sm:text-base sm:leading-8">
-                        {activeAsset.description}
-                      </p>
-                    </div>
-                  </div>
-                )}
-              </div>
-            </motion.div>
-          </motion.div>
-        ) : null}
+          )}
       </AnimatePresence>
     </section>
   );

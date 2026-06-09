@@ -11,23 +11,14 @@ type Props = {
   title: string;
 };
 
-export default function ScrollVideoSection({
-  video,
-  title,
-}: Props) {
+export default function ScrollVideoSection({ video, title }: Props) {
   const sectionRef = useRef<HTMLDivElement | null>(null);
 
-  const videoRef = useRef<HTMLVideoElement | null>(
-    null,
-  );
+  const videoRef = useRef<HTMLVideoElement | null>(null);
 
-  const overlayRef = useRef<HTMLDivElement | null>(
-    null,
-  );
+  const overlayRef = useRef<HTMLDivElement | null>(null);
 
-  const titleRef = useRef<HTMLHeadingElement | null>(
-    null,
-  );
+  const titleRef = useRef<HTMLHeadingElement | null>(null);
 
   useEffect(() => {
     const section = sectionRef.current;
@@ -38,13 +29,7 @@ export default function ScrollVideoSection({
 
     const title = titleRef.current;
 
-    if (
-      !section ||
-      !video ||
-      !overlay ||
-      !title
-    )
-      return;
+    if (!section || !video || !overlay || !title) return;
 
     const ctx = gsap.context(() => {
       const onLoaded = () => {
@@ -106,10 +91,7 @@ export default function ScrollVideoSection({
       if (video.readyState >= 1) {
         onLoaded();
       } else {
-        video.addEventListener(
-          "loadedmetadata",
-          onLoaded,
-        );
+        video.addEventListener("loadedmetadata", onLoaded);
       }
     }, section);
 
@@ -117,10 +99,7 @@ export default function ScrollVideoSection({
   }, []);
 
   return (
-    <section
-      ref={sectionRef}
-      className="relative h-[400vh]"
-    >
+    <section ref={sectionRef} className="relative h-[400vh]">
       {/* STICKY VIDEO */}
       <div className="sticky top-0 h-screen overflow-hidden bg-black">
         <video
@@ -133,16 +112,13 @@ export default function ScrollVideoSection({
         />
 
         {/* DARK OVERLAY */}
-        <div
-          ref={overlayRef}
-          className="absolute inset-0 bg-black/40"
-        />
+        <div ref={overlayRef} className="absolute inset-0 bg-black/40" />
 
         {/* TITLE */}
         <div className="absolute inset-0 flex items-center justify-center overflow-hidden">
           <h2
             ref={titleRef}
-            className="text-center font-black tracking-[-0.05em] text-white uppercase"
+            className="text-center font-black tracking-tighter text-white uppercase"
             style={{
               fontSize: "clamp(4rem, 10vw, 10rem)",
               lineHeight: 0.9,

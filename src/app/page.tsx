@@ -30,20 +30,32 @@ const SocialMedia = dynamic(
 
 import ScrollImageSequence from "../components/motion/ScrollImageSequence";
 import ScrollImageSmall from "../components/motion/ScrollImageSmall";
+import PageLoader from "../components/loader/PageLoader";
 
 export default function Home() {
   return (
-    <div className="bg-zinc-50 font-sans">
-      <ScrollImageSequence folder="/sequences/motion" totalFrames={114} />
-      <MotionGraphic />
-      <ScrollImageSmall folder="/sequences/graphic" totalFrames={40} />
-      <GraphicDesign />
-      <ScrollImageSmall folder="/sequences/branding" totalFrames={45} />
-      <Branding />
-      <ScrollImageSmall folder="/sequences/social" totalFrames={40} />
-      <SocialMedia />
-      <Stats />
-      <TestimonialsSection />
-    </div>
+    <>
+      <PageLoader />
+      <div className="bg-zinc-50 font-sans">
+        <div id="motion-graphic">
+          <ScrollImageSequence folder="/sequences/motion" totalFrames={114} />
+          <MotionGraphic />
+        </div>
+        <div id="graphic-design">
+          <ScrollImageSmall folder="/sequences/graphic" totalFrames={40} />
+          <GraphicDesign />
+        </div>
+        <div id="branding">
+          <ScrollImageSmall folder="/sequences/branding" totalFrames={45} />
+          <Branding />
+        </div>
+        <div id="social-media">
+          <ScrollImageSmall folder="/sequences/social" totalFrames={40} />
+          <SocialMedia />
+        </div>
+        <Stats />
+        <TestimonialsSection />
+      </div>
+    </>
   );
 }

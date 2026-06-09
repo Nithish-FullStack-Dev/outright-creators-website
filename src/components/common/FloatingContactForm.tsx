@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from "react";
 import { ArrowUpRight, X, MessageCircle, ChevronUp } from "lucide-react";
-import { AnimatePresence, motion } from "framer-motion";
 
 type FormData = {
   name: string;
@@ -137,7 +136,7 @@ export default function FloatingContactForm() {
   return (
     <>
       {/* FLOATING ACTIONS */}
-      <div className="fixed right-5 bottom-5 z-[999] flex flex-col items-end gap-3 md:right-8 md:bottom-8">
+      <div className="fixed right-5 bottom-5 z-999 flex flex-col items-end gap-3 md:right-8 md:bottom-8">
         {/* ACTION BUTTONS */}
         <div
           className={`flex flex-col items-end gap-3 transition-all duration-500 ${
@@ -190,11 +189,11 @@ export default function FloatingContactForm() {
           {/* BACKDROP */}
           <div
             onClick={() => setOpen(false)}
-            className="fixed inset-0 z-[999] bg-black/30 backdrop-blur-sm"
+            className="fixed inset-0 z-999 bg-black/30 backdrop-blur-sm"
           />
 
           {/* FORM CARD */}
-          <div className="fixed right-4 bottom-4 z-[1000] max-h-[85vh] w-[92%] max-w-md overflow-y-auto rounded-3xl border border-black/10 bg-white p-5 shadow-[0_20px_80px_rgba(0,0,0,0.18)] sm:right-6 sm:bottom-6 sm:p-6">
+          <div className="fixed right-4 bottom-4 z-999 max-h-[85vh] w-[92%] max-w-md overflow-y-auto rounded-3xl border border-black/10 bg-white p-5 shadow-[0_20px_80px_rgba(0,0,0,0.18)] sm:right-6 sm:bottom-6 sm:p-6">
             {/* HEADER */}
             <div className="mb-6 flex items-center justify-between">
               <div>
