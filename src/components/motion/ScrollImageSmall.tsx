@@ -175,10 +175,13 @@ export default function ScrollImageSmall({
   }, [isReady, totalFrames]);
 
   return (
-    <section ref={sectionRef} className={`relative h-[200vh] ${className}`}>
+    <section
+      ref={sectionRef}
+      className={`relative h-[200vh] overflow-x-clip ${className}`}
+    >
       <div
         ref={stickyRef}
-        className="sticky top-0 h-screen w-full overflow-hidden bg-black will-change-transform"
+        className="sticky top-0 h-dvh w-full overflow-hidden bg-white"
       >
         <canvas
           ref={canvasRef}

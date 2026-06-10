@@ -101,8 +101,8 @@ export default function ScrollImageSequence({
       const w = window.innerWidth;
       const h = window.innerHeight;
 
-      canvas.width = w * dpr;
-      canvas.height = h * dpr;
+      canvas.width = Math.ceil(w * dpr);
+      canvas.height = Math.ceil(h * dpr);
 
       canvas.style.width = `${w}px`;
       canvas.style.height = `${h}px`;
@@ -114,19 +114,36 @@ export default function ScrollImageSequence({
 
     const drawImage = (img: HTMLImageElement) => {
       const w = window.innerWidth;
-      const h = window.innerHeight;
+
+      const h = window.visualViewport?.height || window.innerHeight;
 
       ctx.clearRect(0, 0, w, h);
 
-      const scale = Math.max(w / img.naturalWidth, h / img.naturalHeight);
+      const imageAspect = img.naturalWidth / img.naturalHeight;
 
-      const sw = img.naturalWidth * scale;
-      const sh = img.naturalHeight * scale;
+      const canvasAspect = w / h;
 
-      const sx = (w - sw) / 2;
-      const sy = (h - sh) / 2;
+      let drawWidth;
+      let drawHeight;
+      let offsetX;
+      let offsetY;
 
-      ctx.drawImage(img, sx, sy, sw, sh);
+      // portrait/mobile handling
+      if (imageAspect > canvasAspect) {
+        drawHeight = h;
+        drawWidth = h * imageAspect;
+
+        offsetX = (w - drawWidth) / 2;
+        offsetY = 0;
+      } else {
+        drawWidth = w;
+        drawHeight = w / imageAspect;
+
+        offsetX = 0;
+        offsetY = (h - drawHeight) / 2;
+      }
+
+      ctx.drawImage(img, offsetX, offsetY, drawWidth, drawHeight);
     };
 
     const render = (index: number) => {
@@ -138,6 +155,12 @@ export default function ScrollImageSequence({
     };
 
     render(0);
+
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        handleResize();
+      });
+    });
 
     const tween = gsap.to(frameRef.current, {
       current: totalFrames - 1,
@@ -175,10 +198,13 @@ export default function ScrollImageSequence({
   }, [isReady, totalFrames]);
 
   return (
-    <section ref={sectionRef} className={`relative h-[400vh] ${className}`}>
+    <section
+      ref={sectionRef}
+      className={`relative h-[400vh] overflow-x-clip ${className}`}
+    >
       <div
         ref={stickyRef}
-        className="sticky top-0 h-screen w-full overflow-hidden bg-black will-change-transform"
+        className="sticky top-0 h-dvh w-full overflow-hidden bg-white"
       >
         <canvas
           ref={canvasRef}

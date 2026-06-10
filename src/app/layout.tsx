@@ -40,7 +40,7 @@ export default function RootLayout({
       lang="en"
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
-      <body className="relative flex min-h-full flex-col overflow-x-hidden text-black dark:text-white">
+      <body className="relative flex min-h-full max-w-full flex-col overflow-x-hidden text-black dark:text-white">
         <LoaderProvider>
           <LenisProvider>
             <ScrollToTop />

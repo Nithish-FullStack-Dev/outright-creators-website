@@ -36,7 +36,7 @@ export default function Home() {
   return (
     <>
       <PageLoader />
-      <div className="bg-zinc-50 font-sans">
+      <div className="overflow-clip bg-zinc-50 font-sans">
         <div id="motion-graphic">
           <ScrollImageSequence
             desktopFolder="/sequences/motion"
