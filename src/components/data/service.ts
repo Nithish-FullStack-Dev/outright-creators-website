@@ -86,7 +86,7 @@ export const services: ServiceSection[] = [
         id: "motion-video-1",
         type: "video",
         thumbnail: "/videos/MOTION-GRAPHICS/1.png",
-        videoSrc: "/videos/MOTION-GRAPHICS/mg1.mp4",
+        videoSrc: "/videos/MOTION-GRAPHICS/Mg1.mp4",
       },
       {
         id: "motion-image-1",
