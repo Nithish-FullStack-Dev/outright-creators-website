@@ -178,9 +178,12 @@ export default function ScrollImageSequence({
     <section ref={sectionRef} className={`relative h-[400vh] ${className}`}>
       <div
         ref={stickyRef}
-        className="sticky top-0 h-screen w-full overflow-hidden bg-black"
+        className="sticky top-0 h-screen w-full overflow-hidden bg-black will-change-transform"
       >
-        <canvas ref={canvasRef} className="absolute inset-0 h-full w-full" />
+        <canvas
+          ref={canvasRef}
+          className="absolute inset-0 block h-full w-full"
+        />
 
         {title && (
           <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
