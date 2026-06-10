@@ -9,12 +9,79 @@ import {
 } from "framer-motion";
 import { useState } from "react";
 import { usePageTransition } from "../transitions/TransitionProvider";
+import MenuRevealItem, { ImageSource } from "../ui/reveal-images";
 
-const navItems = [
-  { label: "Motion Graphic", id: "motion-graphic", num: "01" },
-  { label: "Graphic Design", id: "graphic-design", num: "02" },
-  { label: "Branding", id: "branding", num: "03" },
-  { label: "Social Media", id: "social-media", num: "04" },
+interface NavItem {
+  label: string;
+  id: string;
+  num: string;
+  images: [ImageSource, ImageSource];
+}
+
+const navItems: NavItem[] = [
+  {
+    label: "Motion Graphic",
+    id: "motion-graphic",
+    num: "01",
+    images: [
+      {
+        src: "/assets/social-media/social/2.webp",
+        alt: "Motion Graphic",
+      },
+      {
+        src: "/assets/social-media/social/3.jpg",
+        alt: "Motion Graphic",
+      },
+    ],
+  },
+
+  {
+    label: "Graphic Design",
+    id: "graphic-design",
+    num: "02",
+    images: [
+      {
+        src: "/assets/social-media/posters/1.jpg",
+        alt: "Graphic Design",
+      },
+      {
+        src: "/assets/social-media/posters/4.jpg",
+        alt: "Graphic Design",
+      },
+    ],
+  },
+
+  {
+    label: "Branding",
+    id: "branding",
+    num: "03",
+    images: [
+      {
+        src: "/assets/branding/10.png",
+        alt: "Branding",
+      },
+      {
+        src: "/assets/branding/9.png",
+        alt: "Branding",
+      },
+    ],
+  },
+
+  {
+    label: "Social Media",
+    id: "social-media",
+    num: "04",
+    images: [
+      {
+        src: "/assets/social-media/posters/9.webp",
+        alt: "Social Media",
+      },
+      {
+        src: "/assets/social-media/posters/12.webp",
+        alt: "Social Media",
+      },
+    ],
+  },
 ];
 
 const menuVariants = {
@@ -153,12 +220,12 @@ export default function Header() {
 
               <nav className="flex flex-1 flex-col px-8 pt-10">
                 {navItems.map((item, i) => (
-                  <motion.div
-                    key={i}
-                    variants={itemVariants}
-                    className="group border-b border-black/8 last:border-b-0"
-                  >
-                    <button
+                  <motion.div key={i} variants={itemVariants}>
+                    <MenuRevealItem
+                      text={item.label}
+                      num={item.num}
+                      id={item.id}
+                      images={item.images}
                       onClick={() => {
                         setMenuOpen(false);
 
@@ -171,24 +238,7 @@ export default function Header() {
                           });
                         }
                       }}
-                      className="flex w-full items-center justify-between py-7"
-                    >
-                      <div className="flex items-baseline gap-4">
-                        <span className="text-[11px] font-medium text-black/25 tabular-nums">
-                          {item.num}
-                        </span>
-                        <span className="text-[36px] font-bold tracking-tight text-black transition-colors duration-300 group-hover:text-black/40 md:text-[42px]">
-                          {item.label}
-                        </span>
-                      </div>
-                      <motion.div
-                        className="flex h-10 w-10 items-center justify-center rounded-full border border-black/10 text-black/30"
-                        whileHover={{ rotate: 45, scale: 1.1 }}
-                        transition={{ duration: 0.3 }}
-                      >
-                        <ArrowUpRight size={16} />
-                      </motion.div>
-                    </button>
+                    />
                   </motion.div>
                 ))}
               </nav>

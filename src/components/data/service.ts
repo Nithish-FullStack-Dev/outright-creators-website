@@ -2,11 +2,11 @@ type AssetType = "video" | "image" | "pdf" | "logo";
 
 export type ShowcaseItem = {
   id: string;
-  title: string;
+  title?: string;
   type: AssetType;
   thumbnail?: string;
-  caption: string;
-  description: string;
+  caption?: string;
+  description?: string;
   videoSrc?: string;
   fileLabel?: string;
 };
@@ -32,10 +32,10 @@ export const services: ServiceSection[] = [
     labelImage: "/assets/MotionDesign.png",
 
     title:
-      "Motion graphics and AI-powered videos built for digital storytelling",
+      "Cinematic motion design and AI-powered visual storytelling for modern digital brands",
 
     description:
-      "We create visually compelling motion graphics, reels, explainers, AI-powered videos, product promos, and launch campaigns designed for ads, social platforms, and scalable digital marketing content.",
+      "We create high-end 3D animations, motion graphics, VFX sequences, AI-powered videos, explainer content, branding films, festival campaigns, and social media visuals designed to deliver immersive storytelling experiences across digital platforms, advertising, and modern marketing campaigns.",
 
     tech: [
       { name: "Adobe After Effects", icon: "/assets/AfterEffect.jpg" },
@@ -58,10 +58,21 @@ export const services: ServiceSection[] = [
     ],
 
     features: [
-      "2D/3D Motion Graphics",
-      "AI Videos + Voiceovers",
+      "3D Animation",
+      "2D Animation",
+      "VFX & Compositing",
+      "Motion Graphics",
+      "AI Videos",
+      "AI Movies",
       "Explainer Videos",
-      "Reels & Product Promos",
+      "Branding Videos",
+      "Festival Creative Videos",
+      "Social Media Videos",
+      "Website Videos",
+      "Creative Campaign Videos",
+      "Visual Presentations",
+      "Video Editing",
+      "Audio Editing & Sync",
     ],
 
     clients: [
@@ -73,122 +84,114 @@ export const services: ServiceSection[] = [
     assets: [
       {
         id: "motion-video-1",
-        title: "Launch animation",
         type: "video",
         thumbnail: "/videos/MOTION-GRAPHICS/1.png",
-        caption: "Dynamic product film",
-        description: "A launch sequence with premium motion detail.",
         videoSrc: "/videos/MOTION-GRAPHICS/mg1.mp4",
       },
       {
         id: "motion-image-1",
-        title: "Motion storyboard",
         type: "video",
         thumbnail: "/videos/MOTION-GRAPHICS/2.png",
-        caption: "Animation concept frames",
-        description: "Storyboard visuals for a campaign narrative.",
         videoSrc: "/videos/MOTION-GRAPHICS/mg2.mp4",
       },
       {
         id: "motion-pdf-1",
-        title: "Presentation deck",
         type: "video",
         thumbnail: "/videos/MOTION-GRAPHICS/3.png",
-        caption: "Campaign overview",
-        description: "Strategy and motion direction in a branded deck.",
         fileLabel: "Video",
         videoSrc: "/videos/MOTION-GRAPHICS/mg3.mp4",
       },
       {
         id: "motion-logo-1",
-        title: "Motion identity",
         type: "video",
         thumbnail: "/videos/MOTION-GRAPHICS/4.png",
-        caption: "Animated mark set",
-        description: "A motion-ready identity system for screen.",
         videoSrc: "/videos/MOTION-GRAPHICS/mg4.mp4",
       },
       {
         id: "motion-video-2",
-        title: "Explainer animation",
         type: "video",
         thumbnail: "/videos/MOTION-GRAPHICS/5.png",
-        caption: "Product explainer",
-        description: "A concise animation breaking down product features.",
         videoSrc: "/videos/MOTION-GRAPHICS/mg5.mp4",
       },
       {
         id: "motion-video-3",
-        title: "UI motion concept",
         type: "video",
         thumbnail: "/videos/MOTION-GRAPHICS/6.png",
-        caption: "Interface animation",
-        description: "Motion design concepts for a digital product.",
         videoSrc: "/videos/MOTION-GRAPHICS/mg6.mp4",
       },
       {
         id: "motion-video-1",
-        title: "Launch animation",
         type: "video",
         thumbnail: "/videos/MOTION-GRAPHICS/7.png",
-        caption: "Dynamic product film",
-        description: "A launch sequence with premium motion detail.",
         videoSrc: "/videos/MOTION-GRAPHICS/mg7.mp4",
       },
       {
         id: "motion-image-1",
-        title: "Motion storyboard",
         type: "video",
         thumbnail: "/videos/MOTION-GRAPHICS/8.png",
-        caption: "Animation concept frames",
-        description: "Storyboard visuals for a campaign narrative.",
         videoSrc: "/videos/MOTION-GRAPHICS/mg8.mp4",
       },
       {
         id: "motion-pdf-1",
-        title: "Presentation deck",
         type: "video",
         thumbnail: "/videos/MOTION-GRAPHICS/9.png",
-        caption: "Campaign overview",
-        description: "Strategy and motion direction in a branded deck.",
         fileLabel: "Video",
         videoSrc: "/videos/MOTION-GRAPHICS/mg9.mp4",
       },
       {
         id: "motion-logo-1",
-        title: "Motion identity",
         type: "video",
         thumbnail: "/videos/MOTION-GRAPHICS/10.png",
-        caption: "Animated mark set",
-        description: "A motion-ready identity system for screen.",
         videoSrc: "/videos/MOTION-GRAPHICS/mg10.mp4",
       },
       {
         id: "motion-video-2",
-        title: "Explainer animation",
         type: "video",
         thumbnail: "/videos/MOTION-GRAPHICS/11.png",
-        caption: "Product explainer",
-        description: "A concise animation breaking down product features.",
         videoSrc: "/videos/MOTION-GRAPHICS/mg11.mp4",
       },
       {
         id: "motion-video-3",
-        title: "UI motion concept",
         type: "video",
         thumbnail: "/videos/MOTION-GRAPHICS/12.png",
-        caption: "Interface animation",
-        description: "Motion design concepts for a digital product.",
         videoSrc: "/videos/MOTION-GRAPHICS/mg12.mp4",
       },
       {
         id: "motion-video-1",
-        title: "Launch animation",
+
         type: "video",
         thumbnail: "/videos/MOTION-GRAPHICS/13.png",
-        caption: "Dynamic product film",
-        description: "A launch sequence with premium motion detail.",
         videoSrc: "/videos/MOTION-GRAPHICS/mg13.mp4",
+      },
+      {
+        id: "motion-video-1",
+        type: "video",
+        thumbnail: "/videos/MOTION-GRAPHICS/14.png",
+        videoSrc: "/videos/MOTION-GRAPHICS/mg14.mp4",
+      },
+      {
+        id: "motion-video-1",
+        type: "video",
+        thumbnail: "/videos/MOTION-GRAPHICS/15.png",
+        videoSrc: "/videos/MOTION-GRAPHICS/mg15.mp4",
+      },
+      {
+        id: "motion-video-1",
+        type: "video",
+        thumbnail: "/videos/MOTION-GRAPHICS/16.png",
+        videoSrc: "/videos/MOTION-GRAPHICS/mg16.mp4",
+      },
+      {
+        id: "motion-video-1",
+        type: "video",
+        thumbnail: "/videos/MOTION-GRAPHICS/17.png",
+        videoSrc: "/videos/MOTION-GRAPHICS/mg17.mp4",
+      },
+      {
+        id: "motion-video-1",
+        type: "video",
+        thumbnail: "/videos/MOTION-GRAPHICS/18.png",
+        videoSrc: "/videos/MOTION-GRAPHICS/mg18.mp4",
       },
     ],
   },
@@ -198,10 +201,11 @@ export const services: ServiceSection[] = [
     label: "Graphic Design",
     labelImage: "/assets/graphic-design.png",
 
-    title: "Static creatives designed for modern brands and scalable campaigns",
+    title:
+      "Creative graphic design systems built for branding, marketing, and digital engagement",
 
     description:
-      "From social media creatives and ad campaigns to festival promotions and product visuals — we create high-quality static content built to maintain brand consistency, engagement, and platform-ready delivery.",
+      "From social media creatives and banner designs to posters, packaging, mockups, brochures, and brand identity systems — we create visually impactful graphic design solutions that strengthen brand presence across digital, print, and promotional platforms.",
 
     tech: [
       { name: "Adobe Photoshop", icon: "/assets/Photoshop.jpg" },
@@ -212,10 +216,18 @@ export const services: ServiceSection[] = [
     ],
 
     features: [
-      "Feed Posts",
-      "Carousel Creatives",
-      "Story Designs",
-      "Ad Creatives",
+      "Social Media Creatives",
+      "Banner Designs",
+      "Logo Design",
+      "Mockup Designs",
+      "Grid & Carousel Designs",
+      "Festival Creatives",
+      "Poster Designs",
+      "Brand Identity Design",
+      "Print Design",
+      "Packaging Design",
+      "Brochure Design",
+      "Marketing Creatives",
     ],
 
     clients: [
@@ -228,149 +240,77 @@ export const services: ServiceSection[] = [
     assets: [
       {
         id: "graphic-video-1",
-        title: "Brand debut reel",
         type: "image",
         thumbnail: "/assets/social-media/posters/1.jpg",
-        caption: "Video case study",
-        description: "A cinematic reveal for a high-end brand launch.",
       },
       {
         id: "graphic-image-1",
-        title: "Edition cover",
         type: "image",
         thumbnail: "/assets/social-media/posters/2.jpg",
-        caption: "Premium editorial layout",
-        description: "Visual treatment for a limited release campaign.",
       },
       {
         id: "graphic-pdf-1",
-        title: "Print brochure",
         type: "image",
         thumbnail: "/assets/social-media/posters/3.jpg",
-        caption: "Brochure concept",
-        description: "A tactile print system for launch events.",
-        fileLabel: "Brochure PDF",
       },
       {
         id: "graphic-logo-1",
-        title: "Logo network",
         type: "image",
         thumbnail: "/assets/social-media/posters/4.jpg",
-        caption: "Brand mark suite",
-        description: "Flexible logo lockups for digital and print.",
       },
       {
         id: "graphic-video-2",
-        title: "Brand debut reel",
         type: "image",
         thumbnail: "/assets/social-media/posters/5.jpg",
-        caption: "Video case study",
-        description: "A cinematic reveal for a high-end brand launch.",
       },
       {
         id: "graphic-image-2",
-        title: "Edition cover",
         type: "image",
         thumbnail: "/assets/social-media/posters/6.jpg",
-        caption: "Premium editorial layout",
-        description: "Visual treatment for a limited release campaign.",
       },
       {
         id: "graphic-pdf-2",
-        title: "Print brochure",
         type: "image",
         thumbnail: "/assets/social-media/posters/7.jpg",
-        caption: "Brochure concept",
-        description: "A tactile print system for launch events.",
-        fileLabel: "Brochure PDF",
       },
       {
         id: "graphic-logo-2",
-        title: "Logo network",
         type: "image",
         thumbnail: "/assets/social-media/posters/8.jpg",
-        caption: "Brand mark suite",
-        description: "Flexible logo lockups for digital and print.",
+      },
+      {
+        id: "graphic-logo-2",
+        type: "image",
+        thumbnail: "/assets/social-media/posters/9.webp",
+      },
+      {
+        id: "graphic-logo-2",
+        type: "image",
+        thumbnail: "/assets/social-media/posters/10.webp",
+      },
+      {
+        id: "graphic-logo-2",
+        type: "image",
+        thumbnail: "/assets/social-media/posters/11.jpg",
+      },
+      {
+        id: "graphic-logo-2",
+        type: "image",
+        thumbnail: "/assets/social-media/posters/12.webp",
       },
     ],
   },
   {
     index: 2,
-    id: "social-media",
-    label: "Social Media",
-    labelImage: "/assets/Sociaal.png",
-
-    title: "Platform-ready social media creatives designed for engagement",
-
-    description:
-      "We create scroll-stopping social media content including feed posts, stories, ad creatives, reels, and campaign visuals tailored for Instagram, Facebook, LinkedIn, and digital advertising platforms.",
-
-    tech: [
-      { name: "Instagram", icon: "/assets/insta.jpg" },
-      { name: "FaceBook", icon: "/assets/FaceBook.jpg" },
-      { name: "Google Ads", icon: "/assets/Google-ads.jpg" },
-      { name: "YouTube", icon: "/assets/youtube.jpg" },
-    ],
-
-    features: [
-      "Social Campaigns",
-      "Ad Creatives",
-      "Reels Templates",
-      "Festival Creatives",
-    ],
-
-    clients: [
-      "Restaurants",
-      "Fashion Stores",
-      "Event Brands",
-      "Healthcare Clinics",
-    ],
-
-    assets: [
-      {
-        id: "social-image-1",
-        title: "Banners",
-        type: "image",
-        thumbnail: "/assets/social-media/banners/1.jpg",
-        caption: "Ad banner set",
-        description: "A series of digital banners for a social campaign.",
-      },
-      {
-        id: "social-image-2",
-        title: "Grids & carousels",
-        type: "image",
-        thumbnail: "/assets/social-media/grids/1.jpg",
-        caption: "Social carousel",
-        description: "Story-led content for a product launch.",
-      },
-      {
-        id: "social-image-3",
-        title: "Posters",
-        type: "image",
-        thumbnail: "/assets/social-media/posters/1.jpg",
-        caption: "Event poster",
-        description: "A digital poster design for a festival campaign.",
-      },
-      {
-        id: "social-image-4",
-        title: "Mark system",
-        type: "image",
-        thumbnail: "/assets/social-media/grids/3.jpg",
-        caption: "Social templates",
-        description: "Branded templates for consistent social content.",
-      },
-    ],
-  },
-  {
-    index: 3,
     id: "branding",
     label: "Branding",
     labelImage: "/assets/branding.png",
 
-    title: "Brand identity and print design systems built for consistency",
+    title:
+      "Strategic branding systems designed to build memorable and scalable brand identities",
 
     description:
-      "From logo creation and identity kits to brochures, packaging, menu cards, and print-ready collateral — we build cohesive branding systems that work seamlessly across digital and offline touchpoints.",
+      "We build complete branding experiences including logo design, identity systems, outdoor branding, packaging, and menu design crafted to create strong visual recognition, consistent communication, and long-term brand value across digital and physical touchpoints.",
 
     tech: [
       { name: "Adobe Photoshop", icon: "/assets/Photoshop.jpg" },
@@ -383,8 +323,9 @@ export const services: ServiceSection[] = [
     features: [
       "Logo Design",
       "Identity Systems",
+      "Outdoor Branding",
       "Packaging Design",
-      "Print Collateral",
+      "Menu Card Design",
     ],
 
     clients: [
@@ -395,38 +336,188 @@ export const services: ServiceSection[] = [
     ],
     assets: [
       {
-        id: "brand-video-1",
-        title: "Launch signature",
+        id: "brand-image-1",
         type: "video",
-        thumbnail: "/header-image-4.webp",
-        caption: "Identity reveal",
-        description: "A brand film introducing a new visual universe.",
-        videoSrc: "dQw4w9WgXcQ",
+        thumbnail: "/assets/branding/1.png",
+        videoSrc: "/assets/branding/1.mp4",
       },
       {
         id: "brand-image-1",
-        title: "Brochure spread",
+        type: "video",
+        thumbnail: "/assets/branding/2.png",
+        videoSrc: "/assets/branding/2.mp4",
+      },
+      {
+        id: "brand-image-1",
+        type: "video",
+        thumbnail: "/assets/branding/3.png",
+        videoSrc: "/assets/branding/3.mp4",
+      },
+      {
+        id: "brand-image-1",
+        type: "video",
+        thumbnail: "/assets/branding/4.png",
+        videoSrc: "/assets/branding/4.mp4",
+      },
+      {
+        id: "brand-image-1",
+        type: "video",
+        thumbnail: "/assets/branding/5.png",
+        videoSrc: "/assets/branding/5.mp4",
+      },
+      {
+        id: "brand-image-1",
+        type: "video",
+        thumbnail: "/assets/branding/6.png",
+        videoSrc: "/assets/branding/6.mp4",
+      },
+      {
+        id: "brand-image-1",
+        type: "video",
+        thumbnail: "/assets/branding/7.png",
+        videoSrc: "/assets/branding/7.mp4",
+      },
+      {
+        id: "brand-image-1",
+        type: "video",
+        thumbnail: "/assets/branding/8.png",
+        videoSrc: "/assets/branding/8.mp4",
+      },
+      {
+        id: "brand-image-1",
+        type: "video",
+        thumbnail: "/assets/branding/9.png",
+        videoSrc: "/assets/branding/9.mp4",
+      },
+      {
+        id: "brand-image-1",
+        type: "video",
+        thumbnail: "/assets/branding/10.png",
+        videoSrc: "/assets/branding/10.mp4",
+      },
+      {
+        id: "brand-image-1",
+        type: "video",
+        thumbnail: "/assets/branding/11.png",
+        videoSrc: "/assets/branding/11.mp4",
+      },
+    ],
+  },
+  {
+    index: 3,
+    id: "social-media",
+    label: "Social Media",
+    labelImage: "/assets/Sociaal.png",
+
+    title:
+      "Social-first creative content designed for engagement, reach, and brand growth",
+
+    description:
+      "We create platform-ready social media content including reels, stories, ad creatives, grid systems, marketing visuals, and campaign assets tailored to increase engagement, maintain visual consistency, and scale brand visibility across Instagram, Meta, YouTube, WhatsApp, and modern digital platforms.",
+
+    tech: [
+      { name: "Instagram", icon: "/assets/insta.jpg" },
+      { name: "Meta", icon: "/assets/meta.webp" },
+      { name: "Google Ads", icon: "/assets/Google-ads.jpg" },
+      { name: "YouTube", icon: "/assets/youtube.jpg" },
+      { name: "Whatsapp", icon: "/assets/whatsapp.jpg" },
+      { name: "X (Twitter)", icon: "/assets/twitter.png" },
+      { name: "Snapchat", icon: "/assets/Snapchat.jpeg" },
+    ],
+
+    features: [
+      "Logo Design",
+      "Social Media Management",
+      "Instagram Feed Designs",
+      "Reels & Shorts Content",
+      "Festival Creatives",
+      "Story Creatives",
+      "Ad Creatives",
+      "Social Media Videos",
+      "Print Design",
+      "Packaging Design",
+      "Brochure Design",
+      "Marketing Creatives",
+      "Mockup Designs",
+      "Grid & Carousel Designs",
+    ],
+
+    clients: [
+      "Restaurants",
+      "Fashion Stores",
+      "Event Brands",
+      "Healthcare Clinics",
+    ],
+
+    assets: [
+      {
+        id: "social-image-1",
         type: "image",
-        thumbnail: "/header-image-1.webp",
-        caption: "Premium printed spread",
-        description: "A brochure layout made for luxury brands.",
+        thumbnail: "/assets/social-media/banners/1.jpg",
       },
       {
-        id: "brand-pdf-1",
-        title: "Print guide",
-        type: "pdf",
-        thumbnail: "/header-image-2.webp",
-        caption: "Brand standards",
-        description: "A printing-ready PDF with every asset included.",
-        fileLabel: "Guide PDF",
+        id: "social-image-2",
+        type: "image",
+        thumbnail: "/assets/social-media/grids/1.jpg",
       },
       {
-        id: "brand-logo-1",
-        title: "Mark system",
-        type: "logo",
-        thumbnail: "/header-image-3.webp",
-        caption: "Logo family",
-        description: "A complete symbol set for brand consistency.",
+        id: "social-image-3",
+        type: "image",
+        thumbnail: "/assets/social-media/posters/1.jpg",
+      },
+      {
+        id: "social-image-4",
+        type: "image",
+        thumbnail: "/assets/social-media/grids/3.jpg",
+      },
+      {
+        id: "social-image-4",
+        type: "image",
+        thumbnail: "/assets/social-media/social/1.jpg",
+      },
+      {
+        id: "social-image-4",
+        type: "image",
+        thumbnail: "/assets/social-media/social/2.webp",
+      },
+      {
+        id: "social-image-4",
+        type: "image",
+        thumbnail: "/assets/social-media/social/3.jpg",
+      },
+      {
+        id: "social-image-4",
+        type: "image",
+        thumbnail: "/assets/social-media/social/4.jpg",
+      },
+      {
+        id: "social-image-4",
+        type: "image",
+        thumbnail: "/assets/social-media/social/5.jpg",
+      },
+      {
+        id: "social-image-4",
+        type: "video",
+        thumbnail: "/assets/social-media/social/6.png",
+        videoSrc: "/assets/social-media/social/6.mp4",
+      },
+      {
+        id: "social-image-4",
+        type: "video",
+        thumbnail: "/assets/social-media/social/7.png",
+        videoSrc: "/assets/social-media/social/7.mp4",
+      },
+      {
+        id: "social-image-4",
+        type: "video",
+        thumbnail: "/assets/social-media/social/8.png",
+        videoSrc: "/assets/social-media/social/8.mp4",
+      },
+      {
+        id: "social-image-4",
+        type: "video",
+        thumbnail: "/assets/social-media/social/9.png",
+        videoSrc: "/assets/social-media/social/9.mp4",
       },
     ],
   },

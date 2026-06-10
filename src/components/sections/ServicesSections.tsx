@@ -124,21 +124,19 @@ export function InfiniteSlider({
             onClick={() => {
               onAssetClick(asset);
             }}
-            className="group/card relative h-64 w-64 shrink-0 overflow-hidden rounded-3xl border border-gray-100 bg-white text-left shadow-sm transition-shadow duration-300 hover:shadow-xl"
+            className="group/card relative h-80 w-80 shrink-0 overflow-hidden rounded-md border border-gray-100 bg-white text-left shadow-sm transition-shadow duration-300 hover:shadow-xl"
           >
             {asset.thumbnail && (
               <Image
                 src={asset.thumbnail}
-                alt={asset.title}
+                alt={asset.title ?? "Showcase item"}
                 width={512}
                 height={512}
                 loading="eager"
-                sizes="256px"
+                sizes="320px"
                 className="pointer-events-none h-full w-full object-cover transition-transform duration-500 group-hover/card:scale-105"
               />
             )}
-
-            <div className="pointer-events-none absolute inset-0 bg-linear-to-t from-white/95 via-white/20 to-transparent" />
 
             {asset.type === "video" && (
               <div className="absolute inset-0 flex items-center justify-center opacity-0 transition-opacity duration-300 group-hover/card:opacity-100">
@@ -170,9 +168,6 @@ export function InfiniteSlider({
               >
                 {typeLabel[asset.type]}
               </span>
-              <p className="mt-1.5 truncate text-sm font-semibold text-gray-900">
-                {asset.title}
-              </p>
             </div>
           </button>
         ))}
@@ -253,7 +248,9 @@ function VideoDialog({
         </div>
 
         <div className="mt-4 flex items-center justify-between px-1">
-          <p className="text-sm font-semibold text-white">{asset.title}</p>
+          <p className="text-sm font-semibold text-white">
+            {asset.title ?? "Showcase item"}
+          </p>
 
           <span
             className={`inline-flex items-center rounded-full border px-2.5 py-0.5 text-[10px] font-medium tracking-widest uppercase ${typeBadgeStyle[asset.type]}`}
@@ -323,7 +320,7 @@ function ImageDialog({
 
           <Image
             src={asset.thumbnail!}
-            alt={asset.title}
+            alt={asset.title ?? "Showcase item"}
             width={1600}
             height={1200}
             priority
@@ -526,7 +523,7 @@ export default function PremiumServiceSections({
                   </div>
                 </div>
 
-                <div>
+                {/* <div>
                   <p className="mb-3 text-[10px] font-semibold tracking-[0.3em] text-gray-400 uppercase">
                     Features
                   </p>
@@ -545,7 +542,7 @@ export default function PremiumServiceSections({
                       </div>
                     ))}
                   </div>
-                </div>
+                </div> */}
               </div>
             </div>
 

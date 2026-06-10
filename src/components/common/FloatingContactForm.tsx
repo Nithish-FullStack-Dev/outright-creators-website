@@ -136,7 +136,7 @@ export default function FloatingContactForm() {
   return (
     <>
       {/* FLOATING ACTIONS */}
-      <div className="fixed right-5 bottom-5 z-999 flex flex-col items-end gap-3 md:right-8 md:bottom-8">
+      <div className="fixed right-5 bottom-5 z-47 flex flex-col items-end gap-3 md:right-8 md:bottom-8">
         {/* ACTION BUTTONS */}
         <div
           className={`flex flex-col items-end gap-3 transition-all duration-500 ${
