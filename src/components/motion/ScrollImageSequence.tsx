@@ -8,15 +8,21 @@ import { useLoader } from "../providers/LoaderProvider";
 gsap.registerPlugin(ScrollTrigger);
 
 type Props = {
-  folder: string;
-  totalFrames: number;
+  desktopFolder: string;
+  mobileFolder: string;
+
+  desktopFrames: number;
+  mobileFrames: number;
+
   title?: string;
   className?: string;
 };
 
 export default function ScrollImageSequence({
-  folder,
-  totalFrames,
+  desktopFolder,
+  mobileFolder,
+  desktopFrames,
+  mobileFrames,
   title,
   className = "",
 }: Props) {
@@ -31,6 +37,12 @@ export default function ScrollImageSequence({
 
   const [isReady, setIsReady] = useState(false);
 
+  const isMobile = typeof window !== "undefined" && window.innerWidth < 768;
+
+  const activeFolder = isMobile ? mobileFolder : desktopFolder;
+
+  const totalFrames = isMobile ? mobileFrames : desktopFrames;
+
   useEffect(() => {
     addAssets(totalFrames);
 
@@ -41,14 +53,20 @@ export default function ScrollImageSequence({
         return new Promise<void>((resolve, reject) => {
           const img = new Image();
 
-          img.src = `${folder}/frame_${String(i + 1).padStart(4, "0")}.webp`;
+          img.src = `${activeFolder}/frame_${String(i + 1).padStart(
+            4,
+            "0",
+          )}.webp`;
 
           img.onload = () => {
             assetLoaded();
             resolve();
           };
 
-          img.onerror = () => reject();
+          img.onerror = () => {
+            console.error("Failed:", img.src);
+            reject();
+          };
 
           images.push(img);
         });
@@ -62,7 +80,7 @@ export default function ScrollImageSequence({
     };
 
     preloadImages();
-  }, [folder, totalFrames]);
+  }, [activeFolder, totalFrames]);
 
   useEffect(() => {
     if (!isReady) return;
@@ -121,36 +139,6 @@ export default function ScrollImageSequence({
 
     render(0);
 
-    gsap.set(sticky, {
-      yPercent: 10,
-      opacity: 0,
-      scale: 0.96,
-    });
-
-    gsap
-      .timeline({
-        scrollTrigger: {
-          trigger: section,
-          start: "top 70%",
-          toggleActions: "play none none none",
-        },
-      })
-      .to(sticky, {
-        yPercent: 0,
-        scale: 1,
-        duration: 1.4,
-        ease: "sine.inOut",
-      })
-      .to(
-        sticky,
-        {
-          opacity: 1,
-          duration: 0.6,
-          ease: "sine.inOut",
-        },
-        "<",
-      );
-
     const tween = gsap.to(frameRef.current, {
       current: totalFrames - 1,
       snap: "current",
@@ -182,8 +170,6 @@ export default function ScrollImageSequence({
       tween.scrollTrigger?.kill();
       tween.kill();
 
-      ScrollTrigger.getAll().forEach((st) => st.kill());
-
       window.removeEventListener("resize", handleResize);
     };
   }, [isReady, totalFrames]);
@@ -192,12 +178,9 @@ export default function ScrollImageSequence({
     <section ref={sectionRef} className={`relative h-[400vh] ${className}`}>
       <div
         ref={stickyRef}
-        className="sticky top-0 h-screen w-full overflow-hidden bg-black will-change-transform"
+        className="sticky top-0 h-screen w-full overflow-hidden bg-black"
       >
-        <canvas
-          ref={canvasRef}
-          className="absolute inset-0 block h-full w-full"
-        />
+        <canvas ref={canvasRef} className="absolute inset-0 h-full w-full" />
 
         {title && (
           <div className="pointer-events-none absolute inset-0 flex items-center justify-center">

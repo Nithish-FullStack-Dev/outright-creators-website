@@ -38,19 +38,39 @@ export default function Home() {
       <PageLoader />
       <div className="bg-zinc-50 font-sans">
         <div id="motion-graphic">
-          <ScrollImageSequence folder="/sequences/motion" totalFrames={114} />
+          <ScrollImageSequence
+            desktopFolder="/sequences/motion"
+            desktopFrames={114}
+            mobileFolder="/sequences-mobile/motion"
+            mobileFrames={114}
+          />
           <MotionGraphic />
         </div>
         <div id="graphic-design">
-          <ScrollImageSmall folder="/sequences/graphic" totalFrames={40} />
+          <ScrollImageSmall
+            desktopFolder="/sequences/graphic"
+            desktopFrames={40}
+            mobileFolder="/sequences-mobile/graphic"
+            mobileFrames={60}
+          />
           <GraphicDesign />
         </div>
         <div id="branding">
-          <ScrollImageSmall folder="/sequences/branding" totalFrames={45} />
+          <ScrollImageSmall
+            desktopFolder="/sequences/branding"
+            desktopFrames={45}
+            mobileFolder="/sequences-mobile/branding"
+            mobileFrames={51}
+          />
           <Branding />
         </div>
         <div id="social-media">
-          <ScrollImageSmall folder="/sequences/social" totalFrames={40} />
+          <ScrollImageSmall
+            desktopFolder="/sequences/social"
+            desktopFrames={40}
+            mobileFolder="/sequences-mobile/social"
+            mobileFrames={51}
+          />
           <SocialMedia />
         </div>
         <Stats />
