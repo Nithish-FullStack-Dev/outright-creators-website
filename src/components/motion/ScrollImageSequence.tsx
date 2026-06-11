@@ -27,7 +27,7 @@ export default function ScrollImageSequence({
   className = "",
 }: Props) {
   const { addAssets, assetLoaded } = useLoader();
-
+  const introTextRef = useRef<HTMLDivElement | null>(null);
   const sectionRef = useRef<HTMLDivElement | null>(null);
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const stickyRef = useRef<HTMLDivElement | null>(null);
@@ -156,6 +156,40 @@ export default function ScrollImageSequence({
 
     render(0);
 
+    gsap.to(".scroll-dot", {
+      y: 16,
+      duration: 1,
+      repeat: -1,
+      yoyo: true,
+      ease: "power1.inOut",
+    });
+
+    if (introTextRef.current) {
+      gsap.fromTo(
+        introTextRef.current,
+        {
+          y: 0,
+          opacity: 1,
+        },
+        {
+          y: -250,
+          opacity: 0,
+          ease: "none",
+          scrollTrigger: {
+            trigger: section,
+            start: "top top",
+            end: "+=30%",
+            scrub: true,
+            onUpdate: (self) => {
+              gsap.set(introTextRef.current, {
+                filter: `blur(${self.progress * 8}px)`,
+              });
+            },
+          },
+        },
+      );
+    }
+
     requestAnimationFrame(() => {
       requestAnimationFrame(() => {
         handleResize();
@@ -211,19 +245,30 @@ export default function ScrollImageSequence({
           className="absolute inset-0 block h-full w-full"
         />
 
-        {title && (
-          <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
-            <h2
-              className="text-center font-black tracking-tighter text-white uppercase"
-              style={{
-                fontSize: "clamp(4rem, 10vw, 10rem)",
-                lineHeight: 0.9,
-              }}
-            >
-              {title}
-            </h2>
+        <div
+          ref={introTextRef}
+          className="pointer-events-none absolute right-0 bottom-15 left-0 flex items-center justify-center"
+        >
+          <div className="text-center">
+            <p className="mb-4 text-sm tracking-[0.3em] text-black/80 uppercase">
+              Creative Agency
+            </p>
+
+            <p className="mt-6 text-4xl text-[#4f033e]">
+              We build immersive digital experiences
+            </p>
+
+            <div className="mt-10 flex flex-col items-center">
+              <span className="mb-3 text-xs tracking-[0.25em] text-black/50 uppercase">
+                Scroll
+              </span>
+
+              <div className="flex h-12 w-7 justify-center rounded-full border border-black/30">
+                <div className="scroll-dot mt-2 h-2 w-2 rounded-full bg-black/70" />
+              </div>
+            </div>
           </div>
-        )}
+        </div>
       </div>
     </section>
   );

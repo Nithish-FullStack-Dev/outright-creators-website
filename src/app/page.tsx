@@ -37,40 +37,40 @@ export default function Home() {
     <>
       <PageLoader />
       <div className="overflow-clip bg-zinc-50 font-sans">
+        <ScrollImageSequence
+          desktopFolder="/sequences/motion"
+          desktopFrames={114}
+          mobileFolder="/sequences-mobile/motion"
+          mobileFrames={114}
+        />
         <div id="motion-graphic">
-          <ScrollImageSequence
-            desktopFolder="/sequences/motion"
-            desktopFrames={114}
-            mobileFolder="/sequences-mobile/motion"
-            mobileFrames={114}
-          />
           <MotionGraphic />
         </div>
+        <ScrollImageSmall
+          desktopFolder="/sequences/graphic"
+          desktopFrames={40}
+          mobileFolder="/sequences-mobile/graphic"
+          mobileFrames={60}
+        />
         <div id="graphic-design">
-          <ScrollImageSmall
-            desktopFolder="/sequences/graphic"
-            desktopFrames={40}
-            mobileFolder="/sequences-mobile/graphic"
-            mobileFrames={60}
-          />
           <GraphicDesign />
         </div>
+        <ScrollImageSmall
+          desktopFolder="/sequences/branding"
+          desktopFrames={45}
+          mobileFolder="/sequences-mobile/branding"
+          mobileFrames={51}
+        />
         <div id="branding">
-          <ScrollImageSmall
-            desktopFolder="/sequences/branding"
-            desktopFrames={45}
-            mobileFolder="/sequences-mobile/branding"
-            mobileFrames={51}
-          />
           <Branding />
         </div>
+        <ScrollImageSmall
+          desktopFolder="/sequences/social"
+          desktopFrames={40}
+          mobileFolder="/sequences-mobile/social"
+          mobileFrames={51}
+        />
         <div id="social-media">
-          <ScrollImageSmall
-            desktopFolder="/sequences/social"
-            desktopFrames={40}
-            mobileFolder="/sequences-mobile/social"
-            mobileFrames={51}
-          />
           <SocialMedia />
         </div>
         <Stats />

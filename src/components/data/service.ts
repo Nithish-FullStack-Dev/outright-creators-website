@@ -1,26 +1,18 @@
 type AssetType = "video" | "image" | "pdf" | "logo";
 
 export type ShowcaseItem = {
-  id: string;
-  title?: string;
+  id: number;
   type: AssetType;
   thumbnail?: string;
-  caption?: string;
-  description?: string;
   videoSrc?: string;
-  fileLabel?: string;
 };
 
 export type ServiceSection = {
   index: number;
   id: string;
-  title: string;
-  label: string;
   labelImage?: string;
-  description: string;
   tech: { name: string; icon: string }[];
   features: string[];
-  clients: string[];
   assets: ShowcaseItem[];
 };
 
@@ -28,14 +20,6 @@ export const services: ServiceSection[] = [
   {
     index: 0,
     id: "motion-ai",
-    label: "Motion + AI",
-    labelImage: "/assets/MotionDesign.png",
-
-    title:
-      "Cinematic motion design and AI-powered visual storytelling for modern digital brands",
-
-    description:
-      "We create high-end 3D animations, motion graphics, VFX sequences, AI-powered videos, explainer content, branding films, festival campaigns, and social media visuals designed to deliver immersive storytelling experiences across digital platforms, advertising, and modern marketing campaigns.",
 
     tech: [
       { name: "Adobe After Effects", icon: "/assets/AfterEffect.jpg" },
@@ -74,121 +58,112 @@ export const services: ServiceSection[] = [
       "Video Editing",
       "Audio Editing & Sync",
     ],
-
-    clients: [
-      "Hospitality Brands",
-      "Fashion Campaigns",
-      "F&B Promotions",
-      "Tech Startups",
-    ],
     assets: [
       {
-        id: "motion-video-1",
+        id: 1,
         type: "video",
         thumbnail: "/videos/MOTION-GRAPHICS/1.png",
         videoSrc: "/videos/MOTION-GRAPHICS/Mg1.mp4",
       },
       {
-        id: "motion-image-1",
+        id: 2,
         type: "video",
         thumbnail: "/videos/MOTION-GRAPHICS/2.png",
         videoSrc: "/videos/MOTION-GRAPHICS/mg2.mp4",
       },
       {
-        id: "motion-pdf-1",
+        id: 3,
         type: "video",
         thumbnail: "/videos/MOTION-GRAPHICS/3.png",
-        fileLabel: "Video",
         videoSrc: "/videos/MOTION-GRAPHICS/mg3.mp4",
       },
       {
-        id: "motion-logo-1",
+        id: 4,
         type: "video",
         thumbnail: "/videos/MOTION-GRAPHICS/4.png",
         videoSrc: "/videos/MOTION-GRAPHICS/mg4.mp4",
       },
       {
-        id: "motion-video-2",
+        id: 5,
         type: "video",
         thumbnail: "/videos/MOTION-GRAPHICS/5.png",
         videoSrc: "/videos/MOTION-GRAPHICS/mg5.mp4",
       },
       {
-        id: "motion-video-3",
+        id: 6,
         type: "video",
         thumbnail: "/videos/MOTION-GRAPHICS/6.png",
         videoSrc: "/videos/MOTION-GRAPHICS/mg6.mp4",
       },
       {
-        id: "motion-video-1",
+        id: 7,
         type: "video",
         thumbnail: "/videos/MOTION-GRAPHICS/7.png",
         videoSrc: "/videos/MOTION-GRAPHICS/mg7.mp4",
       },
       {
-        id: "motion-image-1",
+        id: 8,
         type: "video",
         thumbnail: "/videos/MOTION-GRAPHICS/8.png",
         videoSrc: "/videos/MOTION-GRAPHICS/mg8.mp4",
       },
       {
-        id: "motion-pdf-1",
+        id: 9,
         type: "video",
         thumbnail: "/videos/MOTION-GRAPHICS/9.png",
-        fileLabel: "Video",
         videoSrc: "/videos/MOTION-GRAPHICS/mg9.mp4",
       },
       {
-        id: "motion-logo-1",
+        id: 10,
         type: "video",
         thumbnail: "/videos/MOTION-GRAPHICS/10.png",
         videoSrc: "/videos/MOTION-GRAPHICS/mg10.mp4",
       },
       {
-        id: "motion-video-2",
+        id: 11,
         type: "video",
         thumbnail: "/videos/MOTION-GRAPHICS/11.png",
         videoSrc: "/videos/MOTION-GRAPHICS/mg11.mp4",
       },
       {
-        id: "motion-video-3",
+        id: 12,
         type: "video",
         thumbnail: "/videos/MOTION-GRAPHICS/12.png",
         videoSrc: "/videos/MOTION-GRAPHICS/mg12.mp4",
       },
       {
-        id: "motion-video-1",
+        id: 13,
 
         type: "video",
         thumbnail: "/videos/MOTION-GRAPHICS/13.png",
         videoSrc: "/videos/MOTION-GRAPHICS/mg13.mp4",
       },
       {
-        id: "motion-video-1",
+        id: 14,
         type: "video",
         thumbnail: "/videos/MOTION-GRAPHICS/14.png",
         videoSrc: "/videos/MOTION-GRAPHICS/mg14.mp4",
       },
       {
-        id: "motion-video-1",
+        id: 15,
         type: "video",
         thumbnail: "/videos/MOTION-GRAPHICS/15.png",
         videoSrc: "/videos/MOTION-GRAPHICS/mg15.mp4",
       },
       {
-        id: "motion-video-1",
+        id: 16,
         type: "video",
         thumbnail: "/videos/MOTION-GRAPHICS/16.png",
         videoSrc: "/videos/MOTION-GRAPHICS/mg16.mp4",
       },
       {
-        id: "motion-video-1",
+        id: 17,
         type: "video",
         thumbnail: "/videos/MOTION-GRAPHICS/17.png",
         videoSrc: "/videos/MOTION-GRAPHICS/mg17.mp4",
       },
       {
-        id: "motion-video-1",
+        id: 18,
         type: "video",
         thumbnail: "/videos/MOTION-GRAPHICS/18.png",
         videoSrc: "/videos/MOTION-GRAPHICS/mg18.mp4",
@@ -198,15 +173,6 @@ export const services: ServiceSection[] = [
   {
     index: 1,
     id: "graphic-design",
-    label: "Graphic Design",
-    labelImage: "/assets/graphic-design.png",
-
-    title:
-      "Creative graphic design systems built for branding, marketing, and digital engagement",
-
-    description:
-      "From social media creatives and banner designs to posters, packaging, mockups, brochures, and brand identity systems — we create visually impactful graphic design solutions that strengthen brand presence across digital, print, and promotional platforms.",
-
     tech: [
       { name: "Adobe Photoshop", icon: "/assets/Photoshop.jpg" },
       { name: "Adobe Premiere Pro", icon: "/assets/pr.jpg" },
@@ -229,72 +195,64 @@ export const services: ServiceSection[] = [
       "Brochure Design",
       "Marketing Creatives",
     ],
-
-    clients: [
-      "F&B Brands",
-      "Hospitality Businesses",
-      "Fashion Campaigns",
-      "Jewellery Brands",
-    ],
-
     assets: [
       {
-        id: "graphic-video-1",
+        id: 1,
         type: "image",
         thumbnail: "/assets/social-media/posters/1.jpg",
       },
       {
-        id: "graphic-image-1",
+        id: 2,
         type: "image",
         thumbnail: "/assets/social-media/posters/2.jpg",
       },
       {
-        id: "graphic-pdf-1",
+        id: 3,
         type: "image",
         thumbnail: "/assets/social-media/posters/3.jpg",
       },
       {
-        id: "graphic-logo-1",
+        id: 4,
         type: "image",
         thumbnail: "/assets/social-media/posters/4.jpg",
       },
       {
-        id: "graphic-video-2",
+        id: 5,
         type: "image",
         thumbnail: "/assets/social-media/posters/5.jpg",
       },
       {
-        id: "graphic-image-2",
+        id: 6,
         type: "image",
         thumbnail: "/assets/social-media/posters/6.jpg",
       },
       {
-        id: "graphic-pdf-2",
+        id: 7,
         type: "image",
         thumbnail: "/assets/social-media/posters/7.jpg",
       },
       {
-        id: "graphic-logo-2",
+        id: 8,
         type: "image",
         thumbnail: "/assets/social-media/posters/8.jpg",
       },
       {
-        id: "graphic-logo-2",
+        id: 9,
         type: "image",
         thumbnail: "/assets/social-media/posters/9.webp",
       },
       {
-        id: "graphic-logo-2",
+        id: 10,
         type: "image",
         thumbnail: "/assets/social-media/posters/10.webp",
       },
       {
-        id: "graphic-logo-2",
+        id: 11,
         type: "image",
         thumbnail: "/assets/social-media/posters/11.jpg",
       },
       {
-        id: "graphic-logo-2",
+        id: 12,
         type: "image",
         thumbnail: "/assets/social-media/posters/12.webp",
       },
@@ -303,15 +261,6 @@ export const services: ServiceSection[] = [
   {
     index: 2,
     id: "branding",
-    label: "Branding",
-    labelImage: "/assets/branding.png",
-
-    title:
-      "Strategic branding systems designed to build memorable and scalable brand identities",
-
-    description:
-      "We build complete branding experiences including logo design, identity systems, outdoor branding, packaging, and menu design crafted to create strong visual recognition, consistent communication, and long-term brand value across digital and physical touchpoints.",
-
     tech: [
       { name: "Adobe Photoshop", icon: "/assets/Photoshop.jpg" },
       { name: "Adobe Illustrator", icon: "/assets/RedirectNotice.jpg" },
@@ -327,76 +276,69 @@ export const services: ServiceSection[] = [
       "Packaging Design",
       "Menu Card Design",
     ],
-
-    clients: [
-      "Retail Brands",
-      "Restaurants",
-      "Corporate Businesses",
-      "Fashion Labels",
-    ],
     assets: [
       {
-        id: "brand-image-1",
+        id: 1,
         type: "video",
         thumbnail: "/assets/branding/1.png",
         videoSrc: "/assets/branding/1.mp4",
       },
       {
-        id: "brand-image-1",
+        id: 2,
         type: "video",
         thumbnail: "/assets/branding/2.png",
         videoSrc: "/assets/branding/2.mp4",
       },
       {
-        id: "brand-image-1",
+        id: 3,
         type: "video",
         thumbnail: "/assets/branding/3.png",
         videoSrc: "/assets/branding/3.mp4",
       },
       {
-        id: "brand-image-1",
+        id: 4,
         type: "video",
         thumbnail: "/assets/branding/4.png",
         videoSrc: "/assets/branding/4.mp4",
       },
       {
-        id: "brand-image-1",
+        id: 5,
         type: "video",
         thumbnail: "/assets/branding/5.png",
         videoSrc: "/assets/branding/5.mp4",
       },
       {
-        id: "brand-image-1",
+        id: 6,
         type: "video",
         thumbnail: "/assets/branding/6.png",
         videoSrc: "/assets/branding/6.mp4",
       },
       {
-        id: "brand-image-1",
+        id: 7,
         type: "video",
         thumbnail: "/assets/branding/7.png",
         videoSrc: "/assets/branding/7.mp4",
       },
       {
-        id: "brand-image-1",
+        id: 8,
         type: "video",
         thumbnail: "/assets/branding/8.png",
         videoSrc: "/assets/branding/8.mp4",
       },
       {
-        id: "brand-image-1",
+        id: 9,
         type: "video",
         thumbnail: "/assets/branding/9.png",
         videoSrc: "/assets/branding/9.mp4",
       },
       {
-        id: "brand-image-1",
+        id: 10,
         type: "video",
         thumbnail: "/assets/branding/10.png",
         videoSrc: "/assets/branding/10.mp4",
       },
       {
-        id: "brand-image-1",
+        id: 11,
         type: "video",
         thumbnail: "/assets/branding/11.png",
         videoSrc: "/assets/branding/11.mp4",
@@ -406,15 +348,6 @@ export const services: ServiceSection[] = [
   {
     index: 3,
     id: "social-media",
-    label: "Social Media",
-    labelImage: "/assets/Sociaal.png",
-
-    title:
-      "Social-first creative content designed for engagement, reach, and brand growth",
-
-    description:
-      "We create platform-ready social media content including reels, stories, ad creatives, grid systems, marketing visuals, and campaign assets tailored to increase engagement, maintain visual consistency, and scale brand visibility across Instagram, Meta, YouTube, WhatsApp, and modern digital platforms.",
-
     tech: [
       { name: "Instagram", icon: "/assets/insta.jpg" },
       { name: "Meta", icon: "/assets/meta.webp" },
@@ -442,79 +375,72 @@ export const services: ServiceSection[] = [
       "Grid & Carousel Designs",
     ],
 
-    clients: [
-      "Restaurants",
-      "Fashion Stores",
-      "Event Brands",
-      "Healthcare Clinics",
-    ],
-
     assets: [
       {
-        id: "social-image-1",
+        id: 1,
         type: "image",
         thumbnail: "/assets/social-media/banners/1.jpg",
       },
       {
-        id: "social-image-2",
+        id: 2,
         type: "image",
         thumbnail: "/assets/social-media/grids/1.jpg",
       },
       {
-        id: "social-image-3",
+        id: 3,
         type: "image",
         thumbnail: "/assets/social-media/posters/1.jpg",
       },
       {
-        id: "social-image-4",
+        id: 4,
         type: "image",
         thumbnail: "/assets/social-media/grids/3.jpg",
       },
       {
-        id: "social-image-4",
+        id: 5,
         type: "image",
         thumbnail: "/assets/social-media/social/1.jpg",
       },
       {
-        id: "social-image-4",
+        id: 6,
         type: "image",
         thumbnail: "/assets/social-media/social/2.webp",
       },
       {
-        id: "social-image-4",
+        id: 7,
         type: "image",
         thumbnail: "/assets/social-media/social/3.jpg",
       },
       {
-        id: "social-image-4",
+        id: 8,
         type: "image",
         thumbnail: "/assets/social-media/social/4.jpg",
       },
       {
-        id: "social-image-4",
+        id: 9,
         type: "image",
         thumbnail: "/assets/social-media/social/5.jpg",
       },
       {
-        id: "social-image-4",
+        id: 10,
         type: "video",
         thumbnail: "/assets/social-media/social/6.png",
         videoSrc: "/assets/social-media/social/6.mp4",
       },
       {
-        id: "social-image-4",
+        id: 11,
         type: "video",
         thumbnail: "/assets/social-media/social/7.png",
         videoSrc: "/assets/social-media/social/7.mp4",
       },
       {
-        id: "social-image-4",
+        id: 12,
         type: "video",
         thumbnail: "/assets/social-media/social/8.png",
         videoSrc: "/assets/social-media/social/8.mp4",
       },
       {
-        id: "social-image-4",
+        id: 13,
         type: "video",
         thumbnail: "/assets/social-media/social/9.png",
         videoSrc: "/assets/social-media/social/9.mp4",

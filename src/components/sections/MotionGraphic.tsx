@@ -2,8 +2,27 @@
 
 import { motion } from "framer-motion";
 import TextReveal from "../motion/TextReveal";
-import PremiumServiceSections from "./ServicesSections";
-import { services } from "../data/service";
+import CoverflowCarousel, { MediaItem } from "../ui/Coverflowcarousel";
+
+const items: MediaItem[] = [
+  {
+    type: "image",
+    src: "https://images.unsplash.com/photo-1506744038136-46273834b3fb?w=800&q=80",
+  },
+  {
+    type: "image",
+    src: "https://images.unsplash.com/photo-1469474968028-56623f02e42e?w=800&q=80",
+  },
+  { type: "image", src: "/assets/social-media/posters/1.jpg" },
+  { type: "image", src: "/assets/social-media/posters/2.jpg" },
+  { type: "image", src: "/assets/social-media/posters/3.jpg" },
+  { type: "image", src: "/assets/social-media/posters/4.jpg" },
+  {
+    type: "video",
+    src: "/assets/branding/11.mp4",
+    poster: "/assets/branding/11.png",
+  },
+];
 
 export default function MotionGraphic() {
   const features = [
@@ -113,11 +132,7 @@ export default function MotionGraphic() {
         </div>
 
         <div className="mt-24">
-          <PremiumServiceSections
-            key={services[0].id}
-            index={services[0].index}
-            section={services[0]}
-          />
+          <CoverflowCarousel items={items} />
         </div>
       </div>
     </section>

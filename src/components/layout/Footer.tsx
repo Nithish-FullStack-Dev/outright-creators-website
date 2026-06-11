@@ -435,6 +435,7 @@ export default function Footer() {
                   fill
                   className="object-contain"
                   loading="eager"
+                  sizes=""
                 />
               </Link>
 

@@ -4,6 +4,34 @@ import { motion } from "framer-motion";
 import TextReveal from "../motion/TextReveal";
 import PremiumServiceSections from "./ServicesSections";
 import { services } from "../data/service";
+import Orbit3DCarousel from "../ui/Orbit3DCarousel";
+
+const items: {
+  type: "image" | "video";
+  src: string;
+  alt?: string;
+  poster?: string;
+}[] = [
+  {
+    type: "image",
+    src: "https://images.unsplash.com/photo-1506744038136-46273834b3fb?w=800&q=80",
+    alt: "Card 1",
+  },
+  {
+    type: "image",
+    src: "https://images.unsplash.com/photo-1469474968028-56623f02e42e?w=800&q=80",
+    alt: "Card 1",
+  },
+  { type: "image", src: "/assets/social-media/posters/1.jpg", alt: "Card 1" },
+  { type: "image", src: "/assets/social-media/posters/2.jpg", alt: "Card 1" },
+  { type: "image", src: "/assets/social-media/posters/3.jpg", alt: "Card 1" },
+  { type: "image", src: "/assets/social-media/posters/4.jpg", alt: "Card 1" },
+  {
+    type: "video",
+    src: "/assets/branding/11.mp4",
+    poster: "/assets/branding/11.png",
+  },
+];
 
 export default function GraphicDesign() {
   const features = [
@@ -43,7 +71,7 @@ export default function GraphicDesign() {
             viewport={{ once: true }}
             className="flex flex-col justify-center"
           >
-            <div className="mb-6 flex items-center gap-4">
+            <div className="mb-2 flex items-center gap-4">
               <div className="h-px w-10 bg-black/20" />
 
               <img
@@ -110,12 +138,8 @@ export default function GraphicDesign() {
           </motion.div>
         </div>
 
-        <div className="mt-24">
-          <PremiumServiceSections
-            key={services[1].id}
-            index={services[1].index}
-            section={services[1]}
-          />
+        <div className="">
+          <Orbit3DCarousel items={items} radius={500} />
         </div>
       </div>
     </section>

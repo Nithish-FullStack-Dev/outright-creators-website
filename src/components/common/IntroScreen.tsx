@@ -155,6 +155,8 @@ const IntroScreen = ({ onComplete }: { onComplete: () => void }) => {
                 height={180}
                 loading="eager"
                 className="h-auto w-[180px] drop-shadow-[0_0_45px_rgba(255,215,0,0.7)] sm:w-[240px] md:w-[320px]"
+                fill
+                sizes=""
               />
             </motion.div>
           </motion.div>
