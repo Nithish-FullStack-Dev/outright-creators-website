@@ -3,28 +3,106 @@
 import { motion } from "framer-motion";
 import TextReveal from "../motion/TextReveal";
 import CoverflowCarousel, { MediaItem } from "../ui/Coverflowcarousel";
+import { useState } from "react";
+import { ArrowUpRight } from "lucide-react";
+import ContactFormDialog from "../ui/ContactFormDialog";
 
 const items: MediaItem[] = [
   {
-    type: "image",
-    src: "https://images.unsplash.com/photo-1506744038136-46273834b3fb?w=800&q=80",
+    type: "video",
+    src: "/videos/MOTION-GRAPHICS/Mg1.mp4",
+    poster: "/videos/MOTION-GRAPHICS/1.png",
   },
-  {
-    type: "image",
-    src: "https://images.unsplash.com/photo-1469474968028-56623f02e42e?w=800&q=80",
-  },
-  { type: "image", src: "/assets/social-media/posters/1.jpg" },
-  { type: "image", src: "/assets/social-media/posters/2.jpg" },
-  { type: "image", src: "/assets/social-media/posters/3.jpg" },
-  { type: "image", src: "/assets/social-media/posters/4.jpg" },
   {
     type: "video",
-    src: "/assets/branding/11.mp4",
-    poster: "/assets/branding/11.png",
+    src: "/videos/MOTION-GRAPHICS/mg2.mp4",
+    poster: "/videos/MOTION-GRAPHICS/2.png",
+  },
+  {
+    type: "video",
+    src: "/videos/MOTION-GRAPHICS/mg3.mp4",
+    poster: "/videos/MOTION-GRAPHICS/3.png",
+  },
+  {
+    type: "video",
+    src: "/videos/MOTION-GRAPHICS/mg4.mp4",
+    poster: "/videos/MOTION-GRAPHICS/4.png",
+  },
+  {
+    type: "video",
+    src: "/videos/MOTION-GRAPHICS/mg5.mp4",
+    poster: "/videos/MOTION-GRAPHICS/5.png",
+  },
+  {
+    type: "video",
+    src: "/videos/MOTION-GRAPHICS/mg6.mp4",
+    poster: "/videos/MOTION-GRAPHICS/6.png",
+  },
+  {
+    type: "video",
+    src: "/videos/MOTION-GRAPHICS/mg7.mp4",
+    poster: "/videos/MOTION-GRAPHICS/7.png",
+  },
+  {
+    type: "video",
+    src: "/videos/MOTION-GRAPHICS/mg8.mp4",
+    poster: "/videos/MOTION-GRAPHICS/8.png",
+  },
+  {
+    type: "video",
+    src: "/videos/MOTION-GRAPHICS/mg9.mp4",
+    poster: "/videos/MOTION-GRAPHICS/9.png",
+  },
+  {
+    type: "video",
+    src: "/videos/MOTION-GRAPHICS/mg10.mp4",
+    poster: "/videos/MOTION-GRAPHICS/10.png",
+  },
+  {
+    type: "video",
+    src: "/videos/MOTION-GRAPHICS/mg11.mp4",
+    poster: "/videos/MOTION-GRAPHICS/11.png",
+  },
+  {
+    type: "video",
+    src: "/videos/MOTION-GRAPHICS/mg12.mp4",
+    poster: "/videos/MOTION-GRAPHICS/12.png",
+  },
+  {
+    type: "video",
+    src: "/videos/MOTION-GRAPHICS/mg13.mp4",
+    poster: "/videos/MOTION-GRAPHICS/13.png",
+  },
+  {
+    type: "video",
+    src: "/videos/MOTION-GRAPHICS/mg14.mp4",
+    poster: "/videos/MOTION-GRAPHICS/14.png",
+  },
+  {
+    type: "video",
+    src: "/videos/MOTION-GRAPHICS/mg15.mp4",
+    poster: "/videos/MOTION-GRAPHICS/15.png",
+  },
+  {
+    type: "video",
+    src: "/videos/MOTION-GRAPHICS/mg16.mp4",
+    poster: "/videos/MOTION-GRAPHICS/16.png",
+  },
+  {
+    type: "video",
+    src: "/videos/MOTION-GRAPHICS/mg17.mp4",
+    poster: "/videos/MOTION-GRAPHICS/17.png",
+  },
+  {
+    type: "video",
+    src: "/videos/MOTION-GRAPHICS/mg18.mp4",
+    poster: "/videos/MOTION-GRAPHICS/18.png",
   },
 ];
 
 export default function MotionGraphic() {
+  const [openContact, setOpenContact] = useState(false);
+
   const features = [
     "3D Animation",
     "2D Animation",
@@ -128,6 +206,18 @@ export default function MotionGraphic() {
                 </div>
               ))}
             </div>
+            <div className="mt-8">
+              <button
+                onClick={() => setOpenContact(true)}
+                className="group inline-flex items-center gap-3 text-sm font-semibold tracking-[0.2em] text-black uppercase transition-all duration-300"
+              >
+                <span>Schedule a Strategy Call</span>
+
+                <div className="flex h-9 w-9 items-center justify-center rounded-full border border-black/10 transition-all duration-300 group-hover:rotate-45 group-hover:border-black">
+                  <ArrowUpRight size={18} />
+                </div>
+              </button>
+            </div>
           </motion.div>
         </div>
 
@@ -135,6 +225,7 @@ export default function MotionGraphic() {
           <CoverflowCarousel items={items} />
         </div>
       </div>
+      <ContactFormDialog open={openContact} onOpenChange={setOpenContact} />
     </section>
   );
 }

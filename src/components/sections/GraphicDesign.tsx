@@ -5,6 +5,9 @@ import TextReveal from "../motion/TextReveal";
 import PremiumServiceSections from "./ServicesSections";
 import { services } from "../data/service";
 import Orbit3DCarousel from "../ui/Orbit3DCarousel";
+import { ArrowUpRight } from "lucide-react";
+import { useState } from "react";
+import ContactFormDialog from "../ui/ContactFormDialog";
 
 const items: {
   type: "image" | "video";
@@ -14,26 +17,68 @@ const items: {
 }[] = [
   {
     type: "image",
-    src: "https://images.unsplash.com/photo-1506744038136-46273834b3fb?w=800&q=80",
-    alt: "Card 1",
+    src: "/assets/social-media/posters/1.jpg",
+    alt: "Social Media Poster 1",
   },
   {
     type: "image",
-    src: "https://images.unsplash.com/photo-1469474968028-56623f02e42e?w=800&q=80",
-    alt: "Card 1",
+    src: "/assets/social-media/posters/2.jpg",
+    alt: "Social Media Poster 2",
   },
-  { type: "image", src: "/assets/social-media/posters/1.jpg", alt: "Card 1" },
-  { type: "image", src: "/assets/social-media/posters/2.jpg", alt: "Card 1" },
-  { type: "image", src: "/assets/social-media/posters/3.jpg", alt: "Card 1" },
-  { type: "image", src: "/assets/social-media/posters/4.jpg", alt: "Card 1" },
   {
-    type: "video",
-    src: "/assets/branding/11.mp4",
-    poster: "/assets/branding/11.png",
+    type: "image",
+    src: "/assets/social-media/posters/3.jpg",
+    alt: "Social Media Poster 3",
   },
+  {
+    type: "image",
+    src: "/assets/social-media/posters/4.jpg",
+    alt: "Social Media Poster 4",
+  },
+  {
+    type: "image",
+    src: "/assets/social-media/posters/5.jpg",
+    alt: "Social Media Poster 5",
+  },
+  {
+    type: "image",
+    src: "/assets/social-media/posters/6.jpg",
+    alt: "Social Media Poster 6",
+  },
+  {
+    type: "image",
+    src: "/assets/social-media/posters/7.jpg",
+    alt: "Social Media Poster 7",
+  },
+  // {
+  //   type: "image",
+  //   src: "/assets/social-media/posters/8.jpg",
+  //   alt: "Social Media Poster 8",
+  // },
+  // {
+  //   type: "image",
+  //   src: "/assets/social-media/posters/9.webp",
+  //   alt: "Social Media Poster 9",
+  // },
+  // {
+  //   type: "image",
+  //   src: "/assets/social-media/posters/10.webp",
+  //   alt: "Social Media Poster 10",
+  // },
+  // {
+  //   type: "image",
+  //   src: "/assets/social-media/posters/11.jpg",
+  //   alt: "Social Media Poster 11",
+  // },
+  // {
+  //   type: "image",
+  //   src: "/assets/social-media/posters/12.webp",
+  //   alt: "Social Media Poster 12",
+  // },
 ];
 
 export default function GraphicDesign() {
+  const [openContact, setOpenContact] = useState(false);
   const features = [
     "Social Media Creatives",
     "Banner Designs",
@@ -135,6 +180,18 @@ export default function GraphicDesign() {
                 </div>
               ))}
             </div>
+            <div className="mt-8">
+              <button
+                onClick={() => setOpenContact(true)}
+                className="group inline-flex items-center gap-3 text-sm font-semibold tracking-[0.2em] text-black uppercase transition-all duration-300"
+              >
+                <span>Request a Proposal</span>
+
+                <div className="flex h-9 w-9 items-center justify-center rounded-full border border-black/10 transition-all duration-300 group-hover:rotate-45 group-hover:border-black">
+                  <ArrowUpRight size={18} />
+                </div>
+              </button>
+            </div>
           </motion.div>
         </div>
 
@@ -142,6 +199,7 @@ export default function GraphicDesign() {
           <Orbit3DCarousel items={items} radius={500} />
         </div>
       </div>
+      <ContactFormDialog open={openContact} onOpenChange={setOpenContact} />
     </section>
   );
 }

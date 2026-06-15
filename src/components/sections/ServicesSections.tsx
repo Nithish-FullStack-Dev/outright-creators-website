@@ -1,17 +1,12 @@
 "use client";
 
-import {
-  AnimatePresence,
-  motion,
-  useScroll,
-  useTransform,
-} from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 import {
   useEffect,
   useRef,
   useState,
-  useCallback,
   useLayoutEffect,
+  useCallback,
 } from "react";
 import Image from "next/image";
 import {
@@ -42,81 +37,18 @@ const CARD_W = 380;
 const CARD_H = 480;
 const GAP = 20;
 
-function useCarousel(total: number) {
-  const [current, setCurrent] = useState(0);
-  const [dragging, setDragging] = useState(false);
-  const startXRef = useRef(0);
-  const startIdxRef = useRef(0);
-
-  const go = useCallback(
-    (dir: 1 | -1) => {
-      setCurrent((p) => Math.max(0, Math.min(total - 1, p + dir)));
-    },
-    [total],
-  );
-
-  const goTo = useCallback(
-    (i: number) => {
-      setCurrent(Math.max(0, Math.min(total - 1, i)));
-    },
-    [total],
-  );
-
-  const onPointerDown = useCallback(
-    (e: React.PointerEvent) => {
-      setDragging(true);
-      startXRef.current = e.clientX;
-      startIdxRef.current = current;
-      (e.target as HTMLElement).setPointerCapture(e.pointerId);
-    },
-    [current],
-  );
-
-  const onPointerMove = useCallback(
-    (e: React.PointerEvent) => {
-      if (!dragging) return;
-      const delta = e.clientX - startXRef.current;
-      const step = CARD_W + GAP;
-      const moved = Math.round(-delta / step);
-      const next = Math.max(
-        0,
-        Math.min(total - 1, startIdxRef.current + moved),
-      );
-      setCurrent(next);
-    },
-    [dragging, total],
-  );
-
-  const onPointerUp = useCallback(() => setDragging(false), []);
-
-  return {
-    current,
-    go,
-    goTo,
-    onPointerDown,
-    onPointerMove,
-    onPointerUp,
-    dragging,
-  };
-}
-
 function CarouselCard({
   asset,
   onClick,
-  isActive,
 }: {
   asset: ShowcaseItem;
   onClick: () => void;
-  isActive: boolean;
 }) {
   return (
-    <motion.button
+    <button
       type="button"
       onClick={onClick}
-      animate={{ scale: isActive ? 1 : 0.93, opacity: isActive ? 1 : 0.6 }}
-      transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
-      className="group/card relative shrink-0 overflow-hidden rounded-2xl border border-gray-100 bg-white text-left shadow-lg"
-      style={{ width: CARD_W, height: CARD_H }}
+      className="group/card relative h-full w-full overflow-hidden rounded-2xl border border-gray-100 bg-white text-left shadow-lg"
     >
       {asset.thumbnail && (
         <Image
@@ -154,235 +86,46 @@ function CarouselCard({
           </div>
         </div>
       )}
-    </motion.button>
-  );
-}
-
-function VideoDialog({
-  asset,
-  onClose,
-}: {
-  asset: ShowcaseItem;
-  onClose: () => void;
-}) {
-  const [isLoading, setIsLoading] = useState(true);
-
-  useEffect(() => {
-    const onKey = (e: KeyboardEvent) => {
-      if (e.key === "Escape") onClose();
-    };
-    document.addEventListener("keydown", onKey);
-    return () => document.removeEventListener("keydown", onKey);
-  }, [onClose]);
-
-  return (
-    <motion.div
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
-      transition={{ duration: 0.2 }}
-      className="fixed inset-0 z-[100] flex items-center justify-center bg-black/90 p-4 backdrop-blur-sm"
-      onClick={onClose}
-    >
-      <motion.div
-        initial={{ scale: 0.93, opacity: 0 }}
-        animate={{ scale: 1, opacity: 1 }}
-        exit={{ scale: 0.93, opacity: 0 }}
-        transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
-        onClick={(e) => e.stopPropagation()}
-        className="relative w-full max-w-5xl"
-      >
-        <button
-          type="button"
-          onClick={onClose}
-          className="absolute -top-12 right-0 z-50 flex h-9 w-9 items-center justify-center rounded-full bg-white/10 text-white transition-colors duration-200 hover:bg-white/20"
-        >
-          <X className="h-4 w-4" />
-        </button>
-
-        <div className="relative overflow-hidden rounded-2xl bg-black shadow-2xl">
-          {isLoading && (
-            <div className="absolute inset-0 z-20 flex flex-col items-center justify-center bg-black">
-              <div className="h-10 w-10 animate-spin rounded-full border-2 border-white/30 border-t-white" />
-              <p className="mt-4 text-sm font-medium text-white/80">
-                Loading video…
-              </p>
-            </div>
-          )}
-          <video
-            key={asset.videoSrc}
-            className={`aspect-video w-full object-contain transition-opacity duration-300 ${isLoading ? "opacity-0" : "opacity-100"}`}
-            src={asset.videoSrc}
-            autoPlay
-            loop
-            playsInline
-            controls
-            preload="auto"
-            poster={asset.thumbnail}
-            onLoadedData={() => setIsLoading(false)}
-          />
-        </div>
-      </motion.div>
-    </motion.div>
-  );
-}
-
-function ImageDialog({
-  asset,
-  onClose,
-}: {
-  asset: ShowcaseItem;
-  onClose: () => void;
-}) {
-  const [isLoading, setIsLoading] = useState(true);
-
-  useEffect(() => {
-    const onKey = (e: KeyboardEvent) => {
-      if (e.key === "Escape") onClose();
-    };
-    document.addEventListener("keydown", onKey);
-    return () => document.removeEventListener("keydown", onKey);
-  }, [onClose]);
-
-  return (
-    <motion.div
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
-      transition={{ duration: 0.2 }}
-      className="fixed inset-0 z-[100] flex items-center justify-center bg-black/80 p-4 backdrop-blur-md"
-      onClick={onClose}
-    >
-      <motion.div
-        initial={{ scale: 0.94, opacity: 0 }}
-        animate={{ scale: 1, opacity: 1 }}
-        exit={{ scale: 0.94, opacity: 0 }}
-        transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
-        onClick={(e) => e.stopPropagation()}
-        className="relative flex max-h-[90vh] max-w-[90vw] flex-col"
-      >
-        <button
-          type="button"
-          onClick={onClose}
-          className="absolute -top-12 right-0 z-50 flex h-9 w-9 items-center justify-center rounded-full bg-white/10 text-white transition-colors duration-200 hover:bg-white/20"
-        >
-          <X className="h-4 w-4" />
-        </button>
-
-        <div className="relative overflow-hidden rounded-2xl shadow-2xl ring-1 ring-white/10">
-          {isLoading && (
-            <div className="absolute inset-0 z-20 flex flex-col items-center justify-center bg-black">
-              <div className="h-10 w-10 animate-spin rounded-full border-2 border-white/30 border-t-white" />
-              <p className="mt-4 text-sm font-medium text-white/80">
-                Loading image…
-              </p>
-            </div>
-          )}
-          <Image
-            src={asset.thumbnail!}
-            alt="Showcase item"
-            width={1600}
-            height={1200}
-            priority
-            onLoad={() => setIsLoading(false)}
-            className={`block max-h-[80vh] w-auto max-w-[88vw] object-contain transition-opacity duration-300 ${isLoading ? "opacity-0" : "opacity-100"}`}
-          />
-        </div>
-      </motion.div>
-    </motion.div>
-  );
-}
-
-function FallbackDialog({
-  asset,
-  onClose,
-}: {
-  asset: ShowcaseItem;
-  onClose: () => void;
-}) {
-  useEffect(() => {
-    const onKey = (e: KeyboardEvent) => {
-      if (e.key === "Escape") onClose();
-    };
-    document.addEventListener("keydown", onKey);
-    return () => document.removeEventListener("keydown", onKey);
-  }, [onClose]);
-
-  return (
-    <motion.div
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
-      transition={{ duration: 0.2 }}
-      className="fixed inset-0 z-[100] flex items-center justify-center bg-black/60 p-4 backdrop-blur-md"
-      onClick={onClose}
-    >
-      <motion.div
-        initial={{ scale: 0.95, opacity: 0, y: 16 }}
-        animate={{ scale: 1, opacity: 1, y: 0 }}
-        exit={{ scale: 0.95, opacity: 0, y: 16 }}
-        transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
-        onClick={(e) => e.stopPropagation()}
-        className="relative w-full max-w-lg overflow-hidden rounded-3xl border border-gray-100 bg-white shadow-2xl"
-      >
-        <button
-          type="button"
-          onClick={onClose}
-          className="absolute top-4 right-4 z-50 flex h-9 w-9 items-center justify-center rounded-full border border-gray-100 bg-white text-gray-500 shadow-sm transition-all duration-200 hover:bg-gray-50 hover:text-gray-900"
-        >
-          <X className="h-4 w-4" />
-        </button>
-
-        <div className="p-8 pt-12">
-          {asset.thumbnail && (
-            <div className="mb-6 overflow-hidden rounded-xl">
-              <Image
-                src={asset.thumbnail}
-                alt="Showcase item"
-                width={600}
-                height={400}
-                className="w-full object-cover"
-              />
-            </div>
-          )}
-          <span
-            className={`inline-flex items-center rounded-full border px-2.5 py-0.5 text-[10px] font-semibold tracking-widest uppercase ${typeBadgeStyle[asset.type]}`}
-          >
-            {typeLabel[asset.type]}
-          </span>
-        </div>
-      </motion.div>
-    </motion.div>
+    </button>
   );
 }
 
 export default function PremiumServiceSections({
   section,
-  index,
 }: {
   section: ServiceSection;
   index: number;
 }) {
-  const [activeAsset, setActiveAsset] = useState<ShowcaseItem | null>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const trackRef = useRef<HTMLDivElement>(null);
+  const cardsRef = useRef<(HTMLDivElement | null)[]>([]);
+
   const [viewportW, setViewportW] = useState(0);
+  const [activeIndex, setActiveIndex] = useState(0);
+  const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
 
   const items = section.assets;
-  const {
-    current,
-    go,
-    goTo,
-    onPointerDown,
-    onPointerMove,
-    onPointerUp,
-    dragging,
-  } = useCarousel(items.length);
+  const total = items.length;
+  const step = CARD_W + GAP;
+
+  const trackX = useRef(0);
+  const targetX = useRef(0);
+  const virtualIndexRef = useRef(0);
+  const dragging = useRef(false);
+  const dragStart = useRef({ x: 0, trackX: 0 });
+
+  const getTrackXForIndex = useCallback(
+    (idx: number) => {
+      return viewportW / 2 - idx * step - CARD_W / 2;
+    },
+    [viewportW, step],
+  );
 
   useLayoutEffect(() => {
     const measure = () => {
       if (containerRef.current) {
-        setViewportW(containerRef.current.offsetWidth);
+        const w = containerRef.current.offsetWidth;
+        setViewportW(w);
       }
     };
     measure();
@@ -390,126 +133,336 @@ export default function PremiumServiceSections({
     return () => window.removeEventListener("resize", measure);
   }, []);
 
-  const step = CARD_W + GAP;
-  const offsetToCenter = viewportW / 2 - CARD_W / 2;
-  const trackX = offsetToCenter - current * step;
+  // Sync starting coordinates upon viewport calculation
+  useEffect(() => {
+    if (viewportW > 0) {
+      const initialX = getTrackXForIndex(0);
+      trackX.current = initialX;
+      targetX.current = initialX;
+      virtualIndexRef.current = 0;
+    }
+  }, [viewportW, getTrackXForIndex]);
 
-  const { scrollYProgress } = useScroll({
-    target: containerRef,
-    offset: ["start end", "end start"],
-  });
-  const bgY = useTransform(scrollYProgress, [0, 1], ["-4%", "4%"]);
+  // Infinite coordinate math processing frame loop
+  useEffect(() => {
+    let animFrameId: number;
 
-  const canPrev = current > 0;
-  const canNext = current < items.length - 1;
+    const loop = () => {
+      if (viewportW <= 0 || total === 0) {
+        animFrameId = requestAnimationFrame(loop);
+        return;
+      }
+
+      const center = viewportW / 2;
+      const maxTrackWidth = total * step;
+      const halfTrack = maxTrackWidth / 2;
+
+      // Smoothly slide track toward target calculations
+      if (!dragging.current) {
+        trackX.current += (targetX.current - trackX.current) * 0.12;
+      }
+
+      // Track down precise active central focus element mapping
+      const exactIndex = (center - trackX.current - CARD_W / 2) / step;
+      const roundedIndex = Math.round(exactIndex);
+      const computedActiveIdx = ((roundedIndex % total) + total) % total;
+
+      setActiveIndex(computedActiveIdx);
+
+      // Realtime seamless translation wrap mapping for absolute loop illusion
+      cardsRef.current.forEach((card, i) => {
+        if (!card) return;
+        const cardCenter = i * step + CARD_W / 2 + trackX.current;
+        let offset = cardCenter - center;
+
+        // Mathematical coordinate wrapping boundary formulas
+        const wrappedOffset =
+          ((((offset + halfTrack) % maxTrackWidth) + maxTrackWidth) %
+            maxTrackWidth) -
+          halfTrack;
+        const shift = wrappedOffset - offset;
+
+        // Visual depth calculations based on relative focal distance from layout viewport center
+        const normalizedDist = Math.abs(wrappedOffset / step);
+        const currentScale = Math.max(0.93, 1 - normalizedDist * 0.07);
+        const currentOpacity = Math.max(0.55, 1 - normalizedDist * 0.45);
+
+        card.style.transform = `translateX(${shift}px) scale(${currentScale})`;
+        card.style.opacity = String(currentOpacity);
+        card.style.zIndex = String(100 - Math.round(normalizedDist * 10));
+      });
+
+      if (trackRef.current) {
+        trackRef.current.style.transform = `translateX(${trackX.current}px)`;
+      }
+
+      animFrameId = requestAnimationFrame(loop);
+    };
+
+    animFrameId = requestAnimationFrame(loop);
+    return () => cancelAnimationFrame(animFrameId);
+  }, [viewportW, total, step]);
+
+  // Pointer interactions handling mechanics
+  const onPointerDown = (e: React.PointerEvent) => {
+    dragging.current = true;
+    dragStart.current = { x: e.clientX, trackX: trackX.current };
+    if (containerRef.current) containerRef.current.style.cursor = "grabbing";
+  };
+
+  const onPointerMove = (e: React.PointerEvent) => {
+    if (!dragging.current) return;
+    const deltaX = e.clientX - dragStart.current.x;
+    trackX.current = dragStart.current.trackX + deltaX;
+    targetX.current = trackX.current;
+  };
+
+  const onPointerUp = (e: React.PointerEvent) => {
+    if (!dragging.current) return;
+    dragging.current = false;
+    if (containerRef.current) containerRef.current.style.cursor = "grab";
+
+    const center = viewportW / 2;
+    const exactIndex = (center - trackX.current - CARD_W / 2) / step;
+    const roundedIndex = Math.round(exactIndex);
+
+    virtualIndexRef.current = roundedIndex;
+    targetX.current = getTrackXForIndex(roundedIndex);
+  };
+
+  const handlePrev = () => {
+    virtualIndexRef.current -= 1;
+    targetX.current = getTrackXForIndex(virtualIndexRef.current);
+  };
+
+  const handleNext = () => {
+    virtualIndexRef.current += 1;
+    targetX.current = getTrackXForIndex(virtualIndexRef.current);
+  };
+
+  const handleCardClick = (index: number) => {
+    if (index === activeIndex) {
+      setLightboxIndex(index);
+    } else {
+      // If an outer card is clicked, smoothly scroll to bring it into center focus
+      const diff = index - activeIndex;
+      // Handle closest loop path distance mapping adjustment
+      let adjustedDiff = diff;
+      if (diff > total / 2) adjustedDiff -= total;
+      if (diff < -total / 2) adjustedDiff += total;
+
+      virtualIndexRef.current += adjustedDiff;
+      targetX.current = getTrackXForIndex(virtualIndexRef.current);
+    }
+  };
 
   return (
-    <section ref={containerRef} className="relative overflow-hidden py-16">
-      <div className="relative z-10">
+    <section
+      ref={containerRef}
+      className="relative w-full touch-none overflow-hidden py-16 select-none"
+    >
+      {/* Outer Layout Frame Container wrapper workspace */}
+      <div className="relative z-10 flex w-full items-center justify-between">
+        {/* Main Left Arrow Button Outside the Track Layout */}
+        <button
+          type="button"
+          onClick={handlePrev}
+          className="absolute left-4 z-30 flex h-12 w-12 items-center justify-center rounded-full border border-gray-200 bg-white/80 shadow-md backdrop-blur-md transition-all hover:scale-105 hover:bg-white md:left-8"
+        >
+          <ChevronLeft className="h-6 w-6 text-gray-800" />
+        </button>
+
+        {/* Carousel Animation Window Track Area */}
         <div
-          className="relative overflow-hidden"
-          style={{
-            height: CARD_H + 60,
-            cursor: dragging ? "grabbing" : "grab",
-          }}
+          className="relative flex w-full items-center overflow-hidden"
+          style={{ height: CARD_H + 60, cursor: "grab" }}
           onPointerDown={onPointerDown}
           onPointerMove={onPointerMove}
           onPointerUp={onPointerUp}
           onPointerLeave={onPointerUp}
         >
-          <motion.div
+          <div
             ref={trackRef}
             className="absolute top-[30px] flex items-center will-change-transform"
-            animate={{ x: trackX }}
-            transition={{
-              type: "spring",
-              stiffness: 260,
-              damping: 36,
-              mass: 0.9,
-            }}
-            style={{ gap: GAP, userSelect: "none" }}
+            style={{ gap: GAP }}
           >
             {items.map((asset, i) => (
-              <CarouselCard
+              <div
                 key={asset.id}
-                asset={asset}
-                isActive={i === current}
-                onClick={() => {
-                  if (!dragging) setActiveAsset(asset);
+                ref={(el) => {
+                  cardsRef.current[i] = el;
                 }}
-              />
-            ))}
-          </motion.div>
-        </div>
-
-        <div className="mt-8 flex items-center justify-center gap-6">
-          <button
-            type="button"
-            onClick={() => go(-1)}
-            disabled={!canPrev}
-            className="flex h-11 w-11 items-center justify-center rounded-full border border-gray-200 bg-white shadow-sm transition-all duration-200 hover:border-gray-300 hover:shadow-md disabled:cursor-not-allowed disabled:opacity-30"
-          >
-            <ChevronLeft className="h-5 w-5 text-gray-700" />
-          </button>
-
-          <div className="flex items-center gap-2">
-            {items.map((_, i) => (
-              <button
-                key={i}
-                type="button"
-                onClick={() => goTo(i)}
-                className={`rounded-full transition-all duration-300 ${
-                  i === current
-                    ? "h-2 w-6 bg-gray-900"
-                    : "h-2 w-2 bg-gray-300 hover:bg-gray-400"
-                }`}
-              />
+                className="shrink-0 will-change-transform"
+                style={{ width: CARD_W, height: CARD_H }}
+              >
+                <CarouselCard
+                  asset={asset}
+                  onClick={() => handleCardClick(i)}
+                />
+              </div>
             ))}
           </div>
-
-          <button
-            type="button"
-            onClick={() => go(1)}
-            disabled={!canNext}
-            className="flex h-11 w-11 items-center justify-center rounded-full border border-gray-200 bg-white shadow-sm transition-all duration-200 hover:border-gray-300 hover:shadow-md disabled:cursor-not-allowed disabled:opacity-30"
-          >
-            <ChevronRight className="h-5 w-5 text-gray-700" />
-          </button>
         </div>
 
-        <div className="mt-5 text-center">
-          <span className="text-xs font-medium tracking-widest text-gray-400 uppercase tabular-nums">
-            {String(current + 1).padStart(2, "0")} /{" "}
-            {String(items.length).padStart(2, "0")}
-          </span>
-        </div>
+        {/* Main Right Arrow Button Outside the Track Layout */}
+        <button
+          type="button"
+          onClick={handleNext}
+          className="absolute right-4 z-30 flex h-12 w-12 items-center justify-center rounded-full border border-gray-200 bg-white/80 shadow-md backdrop-blur-md transition-all hover:scale-105 hover:bg-white md:right-8"
+        >
+          <ChevronRight className="h-6 w-6 text-gray-800" />
+        </button>
       </div>
 
+      {/* Unified Browser Lightbox View Overlay */}
       <AnimatePresence>
-        {activeAsset?.type === "video" && (
-          <VideoDialog
-            key="video-dialog"
-            asset={activeAsset}
-            onClose={() => setActiveAsset(null)}
+        {lightboxIndex !== null && (
+          <ShowcaseLightbox
+            items={items}
+            initialIndex={lightboxIndex}
+            onClose={() => setLightboxIndex(null)}
           />
         )}
-        {activeAsset?.type === "image" && (
-          <ImageDialog
-            key="image-dialog"
-            asset={activeAsset}
-            onClose={() => setActiveAsset(null)}
-          />
-        )}
-        {activeAsset &&
-          activeAsset.type !== "video" &&
-          activeAsset.type !== "image" && (
-            <FallbackDialog
-              key="fallback-dialog"
-              asset={activeAsset}
-              onClose={() => setActiveAsset(null)}
-            />
-          )}
       </AnimatePresence>
     </section>
+  );
+}
+
+interface LightboxProps {
+  items: ShowcaseItem[];
+  initialIndex: number;
+  onClose: () => void;
+}
+
+function ShowcaseLightbox({ items, initialIndex, onClose }: LightboxProps) {
+  const [currentIndex, setCurrentIndex] = useState(initialIndex);
+  const [isLoading, setIsLoading] = useState(true);
+  const asset = items[currentIndex];
+
+  useEffect(() => {
+    setIsLoading(true);
+  }, [currentIndex]);
+
+  const handlePrev = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    setCurrentIndex((prev) => (prev === 0 ? items.length - 1 : prev - 1));
+  };
+
+  const handleNext = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    setCurrentIndex((prev) => (prev === items.length - 1 ? 0 : prev + 1));
+  };
+
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") onClose();
+      if (e.key === "ArrowLeft")
+        setCurrentIndex((prev) => (prev === 0 ? items.length - 1 : prev - 1));
+      if (e.key === "ArrowRight")
+        setCurrentIndex((prev) => (prev === items.length - 1 ? 0 : prev + 1));
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [items.length, onClose]);
+
+  return (
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.2 }}
+      className="fixed inset-0 z-[100] flex items-center justify-between bg-black/95 p-4 backdrop-blur-md"
+      onClick={onClose}
+    >
+      {/* Lightbox internal browser previous control trigger */}
+      <button
+        type="button"
+        onClick={handlePrev}
+        className="z-50 ml-2 flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-white/10 text-white backdrop-blur-sm transition-colors hover:bg-white/20 sm:ml-6 md:h-14 md:w-14"
+      >
+        <ChevronLeft className="h-7 w-7" />
+      </button>
+
+      {/* Center Media Box Content Canvas wrapper display */}
+      <motion.div
+        initial={{ scale: 0.94, opacity: 0 }}
+        animate={{ scale: 1, opacity: 1 }}
+        exit={{ scale: 0.94, opacity: 0 }}
+        transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
+        onClick={(e) => e.stopPropagation()}
+        className="relative flex max-h-[85vh] max-w-[75vw] flex-col items-center justify-center overflow-hidden rounded-2xl"
+      >
+        <button
+          type="button"
+          onClick={onClose}
+          className="absolute -top-2 -right-2 z-50 flex h-10 w-10 items-center justify-center rounded-full bg-black/70 text-white transition-colors duration-200 hover:bg-black md:top-4 md:right-4"
+        >
+          <X className="h-5 w-5" />
+        </button>
+
+        <div className="relative flex max-h-[80vh] w-full items-center justify-center">
+          {isLoading && (
+            <div className="absolute inset-0 z-20 flex flex-col items-center justify-center bg-black/40">
+              <div className="h-10 w-10 animate-spin rounded-full border-2 border-white/30 border-t-white" />
+            </div>
+          )}
+
+          {asset.type === "video" ? (
+            <video
+              key={asset.videoSrc}
+              className="max-h-[80vh] w-auto max-w-full rounded-xl object-contain shadow-2xl"
+              src={asset.videoSrc}
+              autoPlay
+              loop
+              playsInline
+              controls
+              preload="auto"
+              poster={asset.thumbnail}
+              onLoadedData={() => setIsLoading(false)}
+            />
+          ) : asset.type === "image" ? (
+            <Image
+              key={asset.thumbnail}
+              src={asset.thumbnail!}
+              alt="Showcase item expanded"
+              width={1600}
+              height={1200}
+              priority
+              onLoad={() => setIsLoading(false)}
+              className="block max-h-[80vh] w-auto max-w-full rounded-xl object-contain shadow-2xl"
+            />
+          ) : (
+            <div className="relative w-[500px] max-w-full overflow-hidden rounded-3xl border border-gray-100 bg-white p-8 pt-12 text-center shadow-2xl">
+              {asset.thumbnail && (
+                <div className="mb-6 overflow-hidden rounded-xl">
+                  <Image
+                    src={asset.thumbnail}
+                    alt="Showcase default metadata"
+                    width={600}
+                    height={400}
+                    onLoad={() => setIsLoading(false)}
+                    className="w-full object-cover"
+                  />
+                </div>
+              )}
+              <span
+                className={`inline-flex items-center rounded-full border px-2.5 py-0.5 text-[10px] font-semibold tracking-widest uppercase ${typeBadgeStyle[asset.type]}`}
+              >
+                {typeLabel[asset.type]}
+              </span>
+            </div>
+          )}
+        </div>
+      </motion.div>
+
+      {/* Lightbox internal browser next control trigger */}
+      <button
+        type="button"
+        onClick={handleNext}
+        className="z-50 mr-2 flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-white/10 text-white backdrop-blur-sm transition-colors hover:bg-white/20 sm:mr-6 md:h-14 md:w-14"
+      >
+        <ChevronRight className="h-7 w-7" />
+      </button>
+    </motion.div>
   );
 }

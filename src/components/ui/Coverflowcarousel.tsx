@@ -35,38 +35,38 @@ interface CoverflowCarouselProps {
 const FALLBACK_ITEMS: MediaItem[] = [
   {
     type: "image",
-    src: "https://images.unsplash.com/photo-1506744038136-46273834b3fb?w=800&q=80",
+    src: "https://images.unsplash.com/photo-1506744038136-46273834b3fb?w=600&h=1066&fit=crop&q=80",
   },
   {
     type: "image",
-    src: "https://images.unsplash.com/photo-1469474968028-56623f02e42e?w=800&q=80",
+    src: "https://images.unsplash.com/photo-1469474968028-56623f02e42e?w=600&h=1066&fit=crop&q=80",
   },
   {
     type: "image",
-    src: "https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?w=800&q=80",
+    src: "https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?w=600&h=1066&fit=crop&q=80",
   },
   {
     type: "image",
-    src: "https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=800&q=80",
+    src: "https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=600&h=1066&fit=crop&q=80",
   },
   {
     type: "image",
-    src: "https://images.unsplash.com/photo-1501785888041-af3ef285b470?w=800&q=80",
+    src: "https://images.unsplash.com/photo-1501785888041-af3ef285b470?w=600&h=1066&fit=crop&q=80",
   },
 ];
 
 export default function CoverflowCarousel({
   items,
-  slideWidth = 320,
-  slideHeight = 400,
-  gap = 20,
-  borderRadius = 12,
-  perspective = 1000,
-  rotateY = 45,
+  slideWidth = 300,
+  slideHeight = 533,
+  gap = 24,
+  borderRadius = 16,
+  perspective = 1200,
+  rotateY = 35,
   depth = 150,
   activeScale = 1,
   inactiveScale = 0.85,
-  inactiveOpacity = 0.5,
+  inactiveOpacity = 0.4,
   snapDuration = 0.6,
   snapEase = "power3.out",
   showArrows = true,
@@ -92,19 +92,26 @@ export default function CoverflowCarousel({
   });
 
   const [activeIndex, setActiveIndex] = useState(0);
-  const [dialogItem, setDialogItem] = useState<MediaItem | null>(null);
+  const [dialogState, setDialogState] = useState<{
+    isOpen: boolean;
+    index: number;
+  }>({
+    isOpen: false,
+    index: 0,
+  });
+  const [dims, setDims] = useState({ w: slideWidth, h: slideHeight });
 
   const slides = items?.length > 0 ? items : FALLBACK_ITEMS;
   const count = slides.length;
-  const step = slideWidth + gap;
+  const step = dims.w + gap;
 
   const centerXFor = useCallback(
     (i: number) => {
       const el = containerRef.current;
-      if (!el) return -i * step;
-      return el.offsetWidth / 2 - i * step - slideWidth / 2;
+      if (!el) return 0;
+      return el.offsetWidth / 2 - i * step - dims.w / 2;
     },
-    [step, slideWidth],
+    [step, dims.w],
   );
 
   const render = useCallback(() => {
@@ -114,11 +121,22 @@ export default function CoverflowCarousel({
 
     track.style.transform = `translateX(${trackX.current}px)`;
     const center = el.offsetWidth / 2;
+    const max = count * step;
+    const half = max / 2;
 
     slidesRef.current.forEach((slide, i) => {
       if (!slide) return;
-      const slideCenter = i * step + slideWidth / 2 + trackX.current;
-      const norm = (slideCenter - center) / step;
+      const slideCenter = i * step + dims.w / 2 + trackX.current;
+      let offset = slideCenter - center;
+      let shift = 0;
+
+      if (loop) {
+        const wrappedOffset = ((((offset + half) % max) + max) % max) - half;
+        shift = wrappedOffset - offset;
+        offset = wrappedOffset;
+      }
+
+      const norm = offset / step;
       const abs = Math.abs(norm);
       const ry = norm * rotateY;
       const tz = -abs * depth;
@@ -128,13 +146,15 @@ export default function CoverflowCarousel({
       );
       const op = Math.max(inactiveOpacity, 1 - abs * (1 - inactiveOpacity));
 
-      slide.style.transform = `perspective(${perspective}px) rotateY(${ry}deg) translateZ(${tz}px) scale(${sc})`;
+      slide.style.transform = `translateX(${shift}px) perspective(${perspective}px) rotateY(${ry}deg) translateZ(${tz}px) scale(${sc})`;
       slide.style.opacity = `${op}`;
       slide.style.zIndex = `${100 - Math.round(abs * 10)}`;
     });
   }, [
     step,
-    slideWidth,
+    dims.w,
+    count,
+    loop,
     rotateY,
     depth,
     activeScale,
@@ -145,21 +165,21 @@ export default function CoverflowCarousel({
 
   const snapTo = useCallback(
     (i: number, instant = false) => {
-      const target = loop
-        ? ((i % count) + count) % count
-        : Math.max(0, Math.min(count - 1, i));
+      let target = i;
+      if (!loop) {
+        target = Math.max(0, Math.min(count - 1, i));
+      }
+
       const x = centerXFor(target);
+      indexRef.current = target;
+      setActiveIndex(((target % count) + count) % count);
 
       if (instant) {
         trackX.current = x;
         render();
-        indexRef.current = target;
-        setActiveIndex(target);
         return;
       }
 
-      indexRef.current = target;
-      setActiveIndex(target);
       gsap.killTweensOf(trackX);
       gsap.to(trackX, {
         current: x,
@@ -168,13 +188,29 @@ export default function CoverflowCarousel({
         onUpdate: render,
       });
     },
-    [centerXFor, count, loop, snapDuration, snapEase, render],
+    [loop, count, centerXFor, snapDuration, snapEase, render],
   );
+
+  useEffect(() => {
+    const updateDims = () => {
+      if (window.innerWidth < 768) {
+        const mobileWidth = window.innerWidth * 0.65;
+        setDims({ w: mobileWidth, h: mobileWidth * (16 / 9) });
+      } else {
+        setDims({ w: slideWidth, h: slideHeight });
+      }
+      setTimeout(() => snapTo(indexRef.current, true), 0);
+    };
+
+    updateDims();
+    window.addEventListener("resize", updateDims);
+    return () => window.removeEventListener("resize", updateDims);
+  }, [slideWidth, slideHeight, snapTo]);
 
   useEffect(() => {
     slidesRef.current = slidesRef.current.slice(0, count);
     snapTo(0, true);
-  }, [count, slideWidth, gap]);
+  }, [count]);
 
   useEffect(() => {
     const container = containerRef.current;
@@ -213,19 +249,8 @@ export default function CoverflowCarousel({
 
       const projected = trackX.current + drag.current.velocity * 0.12;
       const center = container.offsetWidth / 2;
-      let best = 0;
-      let bestDist = Infinity;
-
-      for (let i = 0; i < count; i++) {
-        const sc = i * step + slideWidth / 2 + projected;
-        const d = Math.abs(sc - center);
-        if (d < bestDist) {
-          bestDist = d;
-          best = i;
-        }
-      }
-
-      snapTo(best);
+      const exactIndex = (center - projected - dims.w / 2) / step;
+      snapTo(Math.round(exactIndex));
     };
 
     container.addEventListener("mousedown", onStart as EventListener);
@@ -247,7 +272,7 @@ export default function CoverflowCarousel({
       window.removeEventListener("touchmove", onMove as EventListener);
       window.removeEventListener("touchend", onEnd);
     };
-  }, [count, step, slideWidth, render, snapTo]);
+  }, [step, dims.w, render, snapTo]);
 
   useEffect(() => {
     if (!autoplay || count <= 1) return;
@@ -285,28 +310,29 @@ export default function CoverflowCarousel({
 
   useEffect(() => {
     render();
-  }, [
-    rotateY,
-    depth,
-    activeScale,
-    inactiveScale,
-    inactiveOpacity,
-    perspective,
-    borderRadius,
-  ]);
+  }, [render]);
 
   const handleSlideClick = useCallback(
-    (item: MediaItem, i: number) => {
-      if (i === indexRef.current) {
-        setDialogItem(item);
+    (i: number) => {
+      let dist = i - activeIndex;
+      if (loop) {
+        const half = count / 2;
+        if (dist > half) dist -= count;
+        else if (dist < -half) dist += count;
+      }
+      if (dist === 0) {
+        setDialogState({ isOpen: true, index: i });
       } else {
-        snapTo(i);
+        snapTo(indexRef.current + dist);
       }
     },
-    [snapTo],
+    [activeIndex, loop, count, snapTo],
   );
 
-  const closeDialog = useCallback(() => setDialogItem(null), []);
+  const closeDialog = useCallback(
+    () => setDialogState({ isOpen: false, index: 0 }),
+    [],
+  );
 
   return (
     <>
@@ -333,10 +359,10 @@ export default function CoverflowCarousel({
               ref={(el) => {
                 slidesRef.current[i] = el;
               }}
-              onClick={() => handleSlideClick(item, i)}
+              onClick={() => handleSlideClick(i)}
               style={{
-                width: slideWidth,
-                height: slideHeight,
+                width: dims.w,
+                height: dims.h,
                 borderRadius,
                 overflow: "hidden",
                 flexShrink: 0,
@@ -440,46 +466,32 @@ export default function CoverflowCarousel({
             </button>
           </>
         )}
-
-        {showDots && (
-          <div style={dotsRowStyle}>
-            {slides.map((_, i) => (
-              <button
-                key={i}
-                onClick={() => snapTo(i)}
-                aria-label={`Slide ${i + 1}`}
-                style={{
-                  width: 8,
-                  height: 8,
-                  borderRadius: "50%",
-                  border: "none",
-                  padding: 0,
-                  cursor: "pointer",
-                  background: "#333",
-                  opacity: i === activeIndex ? 1 : 0.3,
-                  transform: i === activeIndex ? "scale(1.4)" : "scale(1)",
-                  transition: "opacity 0.3s ease, transform 0.3s ease",
-                }}
-              />
-            ))}
-          </div>
-        )}
       </div>
 
-      {dialogItem && <MediaDialog item={dialogItem} onClose={closeDialog} />}
+      {dialogState.isOpen && (
+        <MediaDialog
+          items={slides}
+          initialIndex={dialogState.index}
+          onClose={closeDialog}
+        />
+      )}
     </>
   );
 }
 
 function MediaDialog({
-  item,
+  items,
+  initialIndex,
   onClose,
 }: {
-  item: MediaItem;
+  items: MediaItem[];
+  initialIndex: number;
   onClose: () => void;
 }) {
   const overlayRef = useRef<HTMLDivElement>(null);
   const panelRef = useRef<HTMLDivElement>(null);
+  const [currentIndex, setCurrentIndex] = useState(initialIndex);
+  const item = items[currentIndex];
 
   useEffect(() => {
     const ctx = gsap.context(() => {
@@ -497,7 +509,7 @@ function MediaDialog({
     return () => ctx.revert();
   }, []);
 
-  const handleClose = () => {
+  const handleClose = useCallback(() => {
     const tl = gsap.timeline({ onComplete: onClose });
     tl.to(panelRef.current, {
       opacity: 0,
@@ -511,15 +523,29 @@ function MediaDialog({
       { opacity: 0, duration: 0.2, ease: "power2.in" },
       "-=0.1",
     );
-  };
+  }, [onClose]);
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
       if (e.key === "Escape") handleClose();
+      if (e.key === "ArrowRight")
+        setCurrentIndex((prev) => (prev + 1) % items.length);
+      if (e.key === "ArrowLeft")
+        setCurrentIndex((prev) => (prev - 1 + items.length) % items.length);
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-  }, []);
+  }, [handleClose, items.length]);
+
+  const handleNext = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    setCurrentIndex((prev) => (prev + 1) % items.length);
+  };
+
+  const handlePrev = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    setCurrentIndex((prev) => (prev - 1 + items.length) % items.length);
+  };
 
   return (
     <div
@@ -528,27 +554,85 @@ function MediaDialog({
       style={{
         position: "fixed",
         inset: 0,
-        background: "rgba(0,0,0,0.82)",
-        backdropFilter: "blur(8px)",
-        WebkitBackdropFilter: "blur(8px)",
+        background: "rgba(0,0,0,0.88)",
+        backdropFilter: "blur(12px)",
+        WebkitBackdropFilter: "blur(12px)",
         zIndex: 9999,
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
-        padding: 24,
+        padding: "24px 80px",
       }}
     >
+      {items.length > 1 && (
+        <>
+          <button
+            onClick={handlePrev}
+            style={{
+              ...arrowBtnStyle(52, "left"),
+              left: 16,
+              background: "rgba(255,255,255,0.12)",
+              color: "#fff",
+              backdropFilter: "blur(8px)",
+              WebkitBackdropFilter: "blur(8px)",
+              border: "1px solid rgba(255,255,255,0.2)",
+            }}
+          >
+            <svg
+              width={24}
+              height={24}
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2.5"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <polyline points="15 18 9 12 15 6" />
+            </svg>
+          </button>
+          <button
+            onClick={handleNext}
+            style={{
+              ...arrowBtnStyle(52, "right"),
+              right: 16,
+              background: "rgba(255,255,255,0.12)",
+              color: "#fff",
+              backdropFilter: "blur(8px)",
+              WebkitBackdropFilter: "blur(8px)",
+              border: "1px solid rgba(255,255,255,0.2)",
+            }}
+          >
+            <svg
+              width={24}
+              height={24}
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2.5"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <polyline points="9 6 15 12 9 18" />
+            </svg>
+          </button>
+        </>
+      )}
+
       <div
         ref={panelRef}
         onClick={(e) => e.stopPropagation()}
         style={{
           position: "relative",
-          maxWidth: "90vw",
+          maxWidth: "calc(100vw - 160px)",
           maxHeight: "90vh",
           borderRadius: 16,
           overflow: "hidden",
           boxShadow: "0 32px 80px rgba(0,0,0,0.6)",
           background: "#000",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
         }}
       >
         <button
@@ -578,6 +662,7 @@ function MediaDialog({
 
         {item.type === "video" ? (
           <video
+            key={item.src}
             src={item.src}
             poster={item.poster}
             controls
@@ -585,7 +670,7 @@ function MediaDialog({
             playsInline
             style={{
               display: "block",
-              maxWidth: "85vw",
+              maxWidth: "100%",
               maxHeight: "85vh",
               width: "auto",
               height: "auto",
@@ -593,11 +678,12 @@ function MediaDialog({
           />
         ) : (
           <img
+            key={item.src}
             src={item.src}
             alt=""
             style={{
               display: "block",
-              maxWidth: "85vw",
+              maxWidth: "100%",
               maxHeight: "85vh",
               width: "auto",
               height: "auto",
@@ -633,13 +719,3 @@ const arrowBtnStyle = (
   justifyContent: "center",
   padding: 0,
 });
-
-const dotsRowStyle: React.CSSProperties = {
-  position: "absolute",
-  bottom: 16,
-  left: "50%",
-  transform: "translateX(-50%)",
-  display: "flex",
-  gap: 8,
-  zIndex: 200,
-};

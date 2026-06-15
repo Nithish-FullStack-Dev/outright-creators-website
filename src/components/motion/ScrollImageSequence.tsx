@@ -254,7 +254,7 @@ export default function ScrollImageSequence({
               Creative Agency
             </p>
 
-            <p className="mt-6 text-4xl text-[#4f033e]">
+            <p className="mt-6 text-3xl text-[#4f033e]">
               We build immersive digital experiences
             </p>
 

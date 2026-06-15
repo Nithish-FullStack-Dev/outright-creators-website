@@ -1,9 +1,11 @@
 "use client";
 
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import { motion } from "framer-motion";
 import { services } from "../data/service";
 import PremiumServiceSections from "./ServicesSections";
+import ContactFormDialog from "../ui/ContactFormDialog";
+import { ArrowUpRight } from "lucide-react";
 
 const ease = [0.16, 1, 0.3, 1] as const;
 
@@ -47,6 +49,7 @@ const features = [
 ];
 
 const SocialMedia = () => {
+  const [openContact, setOpenContact] = useState(false);
   const sectionRef = useRef<HTMLDivElement>(null);
 
   return (
@@ -123,6 +126,18 @@ const SocialMedia = () => {
                 </div>
               ))}
             </div>
+            <div className="mt-8">
+              <button
+                onClick={() => setOpenContact(true)}
+                className="group inline-flex items-center gap-3 text-sm font-semibold tracking-[0.2em] text-black uppercase transition-all duration-300"
+              >
+                <span>Talk to Our Team</span>
+
+                <div className="flex h-9 w-9 items-center justify-center rounded-full border border-black/10 transition-all duration-300 group-hover:rotate-45 group-hover:border-black">
+                  <ArrowUpRight size={18} />
+                </div>
+              </button>
+            </div>
           </SlideIn>
         </div>
 
@@ -134,6 +149,7 @@ const SocialMedia = () => {
           />
         </div>
       </div>
+      <ContactFormDialog open={openContact} onOpenChange={setOpenContact} />
     </section>
   );
 };
