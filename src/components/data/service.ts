@@ -168,6 +168,30 @@ export const services: ServiceSection[] = [
         thumbnail: "/videos/MOTION-GRAPHICS/18.png",
         videoSrc: "/videos/MOTION-GRAPHICS/mg18.mp4",
       },
+      {
+        id: 19,
+        type: "video",
+        thumbnail: "/videos/MOTION-GRAPHICS/19.png",
+        videoSrc: "/videos/MOTION-GRAPHICS/mg19.mp4",
+      },
+      {
+        id: 20,
+        type: "video",
+        thumbnail: "/videos/MOTION-GRAPHICS/20.png",
+        videoSrc: "/videos/MOTION-GRAPHICS/mg20.mp4",
+      },
+      {
+        id: 21,
+        type: "video",
+        thumbnail: "/videos/MOTION-GRAPHICS/21.png",
+        videoSrc: "/videos/MOTION-GRAPHICS/mg21.mp4",
+      },
+      {
+        id: 22,
+        type: "video",
+        thumbnail: "/videos/MOTION-GRAPHICS/22.png",
+        videoSrc: "/videos/MOTION-GRAPHICS/mg22.mp4",
+      },
     ],
   },
   {

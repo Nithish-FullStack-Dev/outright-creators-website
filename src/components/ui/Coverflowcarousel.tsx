@@ -647,7 +647,7 @@ function MediaDialog({
             height: 36,
             borderRadius: "50%",
             border: "none",
-            background: "rgba(255,255,255,0.15)",
+            background: "#000",
             backdropFilter: "blur(6px)",
             WebkitBackdropFilter: "blur(6px)",
             cursor: "pointer",

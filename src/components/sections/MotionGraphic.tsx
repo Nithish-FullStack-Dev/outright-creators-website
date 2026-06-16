@@ -98,6 +98,26 @@ const items: MediaItem[] = [
     src: "/videos/MOTION-GRAPHICS/mg18.mp4",
     poster: "/videos/MOTION-GRAPHICS/18.png",
   },
+  {
+    type: "video",
+    src: "/videos/MOTION-GRAPHICS/mg19.mp4",
+    poster: "/videos/MOTION-GRAPHICS/19.png",
+  },
+  {
+    type: "video",
+    src: "/videos/MOTION-GRAPHICS/mg20.mp4",
+    poster: "/videos/MOTION-GRAPHICS/20.png",
+  },
+  {
+    type: "video",
+    src: "/videos/MOTION-GRAPHICS/mg21.mp4",
+    poster: "/videos/MOTION-GRAPHICS/21.png",
+  },
+  {
+    type: "video",
+    src: "/videos/MOTION-GRAPHICS/mg22.mp4",
+    poster: "/videos/MOTION-GRAPHICS/22.png",
+  },
 ];
 
 export default function MotionGraphic() {
