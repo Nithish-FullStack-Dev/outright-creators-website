@@ -28,7 +28,7 @@ const IntroScreen = ({ onComplete }: { onComplete: () => void }) => {
           ease: [0.76, 0, 0.24, 1],
         },
       }}
-      className="fixed inset-0 z-[99999] overflow-hidden bg-[#14050f]"
+      className="fixed inset-0 z-99999 overflow-hidden bg-[#14050f]"
     >
       {/* BACKGROUND GLOW */}
       <div className="absolute inset-0">
@@ -42,7 +42,7 @@ const IntroScreen = ({ onComplete }: { onComplete: () => void }) => {
             repeat: Infinity,
             ease: "easeInOut",
           }}
-          className="absolute top-1/2 left-1/2 h-[600px] w-[600px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-yellow-400/20 blur-[140px]"
+          className="absolute top-1/2 left-1/2 h-150 w-150 -translate-x-1/2 -translate-y-1/2 rounded-full bg-yellow-400/20 blur-[140px]"
         />
 
         <motion.div
@@ -54,7 +54,7 @@ const IntroScreen = ({ onComplete }: { onComplete: () => void }) => {
             repeat: Infinity,
             ease: "linear",
           }}
-          className="absolute top-1/2 left-1/2 h-[780px] w-[780px] -translate-x-1/2 -translate-y-1/2 rounded-full border border-yellow-300/10"
+          className="absolute top-1/2 left-1/2 h-195 w-195 -translate-x-1/2 -translate-y-1/2 rounded-full border border-yellow-300/10"
         />
 
         <motion.div
@@ -66,7 +66,7 @@ const IntroScreen = ({ onComplete }: { onComplete: () => void }) => {
             repeat: Infinity,
             ease: "linear",
           }}
-          className="absolute top-1/2 left-1/2 h-[620px] w-[620px] -translate-x-1/2 -translate-y-1/2 rounded-full border border-yellow-200/10"
+          className="absolute top-1/2 left-1/2 h-155 w-155 -translate-x-1/2 -translate-y-1/2 rounded-full border border-yellow-200/10"
         />
       </div>
 
@@ -133,7 +133,7 @@ const IntroScreen = ({ onComplete }: { onComplete: () => void }) => {
                 repeat: Infinity,
                 ease: "linear",
               }}
-              className="absolute inset-[-20px] rounded-full border border-dashed border-yellow-300/20"
+              className="absolute -inset-5 rounded-full border border-dashed border-yellow-300/20"
             />
 
             {/* logo */}
@@ -154,9 +154,7 @@ const IntroScreen = ({ onComplete }: { onComplete: () => void }) => {
                 width={280}
                 height={180}
                 loading="eager"
-                className="h-auto w-[180px] drop-shadow-[0_0_45px_rgba(255,215,0,0.7)] sm:w-[240px] md:w-[320px]"
-                fill
-                sizes=""
+                className="h-auto w-45 drop-shadow-[0_0_45px_rgba(255,215,0,0.7)] sm:w-60 md:w-[320px]"
               />
             </motion.div>
           </motion.div>
@@ -170,7 +168,7 @@ const IntroScreen = ({ onComplete }: { onComplete: () => void }) => {
               delay: 0.3, // Sped up the delay slightly since the H1 is gone
               ease: [0.76, 0, 0.24, 1],
             }}
-            className="mt-12 h-px w-[220px] origin-center bg-gradient-to-r from-transparent via-yellow-300 to-transparent"
+            className="mt-12 h-px w-55 origin-center bg-linear-to-r from-transparent via-yellow-300 to-transparent"
           />
 
           {/* SUBTITLE */}
@@ -181,7 +179,7 @@ const IntroScreen = ({ onComplete }: { onComplete: () => void }) => {
               duration: 1,
               delay: 0.6, // Adjusted timing for better flow
             }}
-            className="mt-8 max-w-[700px] text-sm tracking-[0.35em] text-yellow-100/60 uppercase md:text-base"
+            className="mt-8 max-w-175 text-sm tracking-[0.35em] text-yellow-100/60 uppercase md:text-base"
           >
             Creative • Digital • Innovation
           </motion.p>
@@ -216,7 +214,7 @@ const IntroScreen = ({ onComplete }: { onComplete: () => void }) => {
                     delay: i * 0.4,
                     ease: "linear",
                   }}
-                  className="absolute inset-0 w-[40%] skew-x-12 bg-gradient-to-r from-transparent via-white/30 to-transparent"
+                  className="absolute inset-0 w-[40%] skew-x-12 bg-linear-to-r from-transparent via-white/30 to-transparent"
                 />
 
                 <span className="relative text-sm font-medium tracking-[0.15em] text-yellow-100 uppercase md:text-base">
@@ -227,7 +225,7 @@ const IntroScreen = ({ onComplete }: { onComplete: () => void }) => {
           </div>
 
           {/* LOADING BAR */}
-          <div className="mt-14 h-[4px] w-[260px] overflow-hidden rounded-full bg-white/10">
+          <div className="mt-14 h-1 w-65 overflow-hidden rounded-full bg-white/10">
             <motion.div
               initial={{ x: "-100%" }}
               animate={{ x: "100%" }}
@@ -236,7 +234,7 @@ const IntroScreen = ({ onComplete }: { onComplete: () => void }) => {
                 repeat: Infinity,
                 ease: "easeInOut",
               }}
-              className="h-full w-1/2 rounded-full bg-gradient-to-r from-yellow-200 via-yellow-400 to-yellow-200 shadow-[0_0_20px_rgba(255,215,0,0.9)]"
+              className="h-full w-1/2 rounded-full bg-linear-to-r from-yellow-200 via-yellow-400 to-yellow-200 shadow-[0_0_20px_rgba(255,215,0,0.9)]"
             />
           </div>
         </div>

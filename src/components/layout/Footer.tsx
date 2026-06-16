@@ -428,14 +428,14 @@ export default function Footer() {
           <div className="mx-auto grid max-w-400 gap-14 px-5 py-16 sm:px-8 lg:grid-cols-[1.2fr_0.7fr_0.7fr_1fr] lg:gap-20 lg:px-12">
             {/* BRAND */}
             <div>
-              <Link href="/" className="relative mb-8 block h-14.5 w-47.5">
+              <Link href="/" className="relative mb-8 block">
                 <Image
+                  height={58}
+                  width={150}
                   src="/logo.webp"
                   alt="Outright Creators"
-                  fill
                   className="object-contain"
                   loading="eager"
-                  sizes=""
                 />
               </Link>
 

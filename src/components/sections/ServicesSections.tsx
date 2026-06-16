@@ -61,7 +61,7 @@ function CarouselCard({
         />
       )}
 
-      <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/5 to-transparent" />
+      <div className="absolute inset-0 bg-linear-to-t from-black/60 via-black/5 to-transparent" />
 
       {asset.type === "video" && (
         <div className="absolute inset-0 flex items-center justify-center opacity-0 transition-opacity duration-300 group-hover/card:opacity-100">
@@ -283,7 +283,7 @@ export default function PremiumServiceSections({
         >
           <div
             ref={trackRef}
-            className="absolute top-[30px] flex items-center will-change-transform"
+            className="absolute top-7.5 flex items-center will-change-transform"
             style={{ gap: GAP }}
           >
             {items.map((asset, i) => (
@@ -371,7 +371,7 @@ function ShowcaseLightbox({ items, initialIndex, onClose }: LightboxProps) {
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
       transition={{ duration: 0.2 }}
-      className="fixed inset-0 z-[100] flex items-center justify-between bg-black/95 p-4 backdrop-blur-md"
+      className="fixed inset-0 z-100 flex items-center justify-between bg-black/95 p-4 backdrop-blur-md"
       onClick={onClose}
     >
       {/* Lightbox internal browser previous control trigger */}
@@ -432,7 +432,7 @@ function ShowcaseLightbox({ items, initialIndex, onClose }: LightboxProps) {
               className="block max-h-[80vh] w-auto max-w-full rounded-xl object-contain shadow-2xl"
             />
           ) : (
-            <div className="relative w-[500px] max-w-full overflow-hidden rounded-3xl border border-gray-100 bg-white p-8 pt-12 text-center shadow-2xl">
+            <div className="relative w-125 max-w-full overflow-hidden rounded-3xl border border-gray-100 bg-white p-8 pt-12 text-center shadow-2xl">
               {asset.thumbnail && (
                 <div className="mb-6 overflow-hidden rounded-xl">
                   <Image

@@ -157,10 +157,10 @@ export default function TestimonialsSection() {
         {/* SLIDER */}
         <div className="relative overflow-hidden">
           {/* LEFT FADE */}
-          <div className="pointer-events-none absolute top-0 left-0 z-20 h-full w-24 bg-gradient-to-r from-[#f8f6ef] to-transparent" />
+          <div className="pointer-events-none absolute top-0 left-0 z-20 h-full w-24 bg-linear-to-r from-[#f8f6ef] to-transparent" />
 
           {/* RIGHT FADE */}
-          <div className="pointer-events-none absolute top-0 right-0 z-20 h-full w-24 bg-gradient-to-l from-[#f8f6ef] to-transparent" />
+          <div className="pointer-events-none absolute top-0 right-0 z-20 h-full w-24 bg-linear-to-l from-[#f8f6ef] to-transparent" />
 
           {/* TRACK */}
           <div
@@ -173,7 +173,7 @@ export default function TestimonialsSection() {
                 onMouseEnter={() => setIsPaused(true)}
                 onMouseLeave={() => setIsPaused(false)}
                 whileHover={{}}
-                className="group relative flex h-[420px] w-[320px] flex-shrink-0 flex-col overflow-hidden rounded-[36px] border border-black/10 bg-white/70 p-6 backdrop-blur-2xl transition-all duration-500 md:w-[360px]"
+                className="group relative flex h-105 w-[320px] shrink-0 flex-col overflow-hidden rounded-[36px] border border-black/10 bg-white/70 p-6 backdrop-blur-2xl transition-all duration-500 md:w-90"
               >
                 {/* PREMIUM GLOW */}
 
@@ -181,7 +181,7 @@ export default function TestimonialsSection() {
                 <div className="relative z-10 flex items-start justify-between gap-4">
                   <div className="flex min-w-0 items-center gap-4">
                     {/* AVATAR */}
-                    <div className="relative flex h-16 w-16 flex-shrink-0 items-center justify-center overflow-hidden rounded-full border-2 border-yellow-400/20 bg-gradient-to-br from-yellow-400 via-yellow-500 to-orange-500 p-0.5">
+                    <div className="relative flex h-16 w-16 shrink-0 items-center justify-center overflow-hidden rounded-full border-2 border-yellow-400/20 bg-linear-to-br from-yellow-400 via-yellow-500 to-orange-500 p-0.5">
                       {item.image ? (
                         <Image
                           src={item.image}
@@ -208,7 +208,7 @@ export default function TestimonialsSection() {
                     </div>
                   </div>
 
-                  <Quote className="h-9 w-9 flex-shrink-0 text-yellow-500" />
+                  <Quote className="h-9 w-9 shrink-0 text-yellow-500" />
                 </div>
 
                 {/* STARS */}
