@@ -192,6 +192,23 @@ export default function CoverflowCarousel({
   );
 
   useEffect(() => {
+    const handlePopState = () => {
+      if (dialogState.isOpen) {
+        setDialogState({
+          isOpen: false,
+          index: 0,
+        });
+      }
+    };
+
+    window.addEventListener("popstate", handlePopState);
+
+    return () => {
+      window.removeEventListener("popstate", handlePopState);
+    };
+  }, [dialogState.isOpen]);
+
+  useEffect(() => {
     const updateDims = () => {
       if (window.innerWidth < 768) {
         const mobileWidth = window.innerWidth * 0.65;
@@ -315,13 +332,20 @@ export default function CoverflowCarousel({
   const handleSlideClick = useCallback(
     (i: number) => {
       let dist = i - activeIndex;
+
       if (loop) {
         const half = count / 2;
         if (dist > half) dist -= count;
         else if (dist < -half) dist += count;
       }
+
       if (dist === 0) {
-        setDialogState({ isOpen: true, index: i });
+        window.history.pushState({ mediaDialog: true, index: i }, "");
+
+        setDialogState({
+          isOpen: true,
+          index: i,
+        });
       } else {
         snapTo(indexRef.current + dist);
       }
@@ -493,6 +517,47 @@ function MediaDialog({
   const [currentIndex, setCurrentIndex] = useState(initialIndex);
   const item = items[currentIndex];
 
+  const handleClose = useCallback(() => {
+    const tl = gsap.timeline({
+      onComplete: () => {
+        onClose();
+      },
+    });
+
+    tl.to(panelRef.current, {
+      opacity: 0,
+      scale: 0.94,
+      y: 16,
+      duration: 0.25,
+      ease: "power2.in",
+    });
+
+    tl.to(
+      overlayRef.current,
+      {
+        opacity: 0,
+        duration: 0.2,
+        ease: "power2.in",
+      },
+      "-=0.1",
+    );
+  }, [onClose]);
+
+  useEffect(() => {
+    // Add a history entry when dialog opens
+    window.history.pushState({ mediaDialog: true }, "");
+
+    const handlePopState = () => {
+      handleClose();
+    };
+
+    window.addEventListener("popstate", handlePopState);
+
+    return () => {
+      window.removeEventListener("popstate", handlePopState);
+    };
+  }, [handleClose]);
+
   useEffect(() => {
     const ctx = gsap.context(() => {
       gsap.fromTo(
@@ -508,22 +573,6 @@ function MediaDialog({
     });
     return () => ctx.revert();
   }, []);
-
-  const handleClose = useCallback(() => {
-    const tl = gsap.timeline({ onComplete: onClose });
-    tl.to(panelRef.current, {
-      opacity: 0,
-      scale: 0.94,
-      y: 16,
-      duration: 0.25,
-      ease: "power2.in",
-    });
-    tl.to(
-      overlayRef.current,
-      { opacity: 0, duration: 0.2, ease: "power2.in" },
-      "-=0.1",
-    );
-  }, [onClose]);
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {

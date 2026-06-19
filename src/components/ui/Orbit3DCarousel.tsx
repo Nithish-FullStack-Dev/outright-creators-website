@@ -40,8 +40,24 @@ export default function Orbit3DCarousel({
   const videoRef = useRef<HTMLVideoElement>(null);
   const [mouseTilt, setMouseTilt] = useState({ x: 0, y: 0 });
   const [isMobile, setIsMobile] = useState(false);
+  const modalOpenRef = useRef(false);
 
   const total = items.length;
+
+  useEffect(() => {
+    const handlePopState = () => {
+      if (modalOpenRef.current) {
+        modalOpenRef.current = false;
+        setSelectedIndex(null);
+      }
+    };
+
+    window.addEventListener("popstate", handlePopState);
+
+    return () => {
+      window.removeEventListener("popstate", handlePopState);
+    };
+  }, []);
 
   useEffect(() => {
     const checkMobile = () => setIsMobile(window.innerWidth < 768);
@@ -98,6 +114,24 @@ export default function Orbit3DCarousel({
   }, [items, total]);
 
   const currentItem = selectedIndex !== null ? items[selectedIndex] : null;
+
+  const openModal = (index: number) => {
+    if (!modalOpenRef.current) {
+      window.history.pushState({ orbitCarouselModal: true }, "");
+    }
+
+    modalOpenRef.current = true;
+    setSelectedIndex(index);
+  };
+
+  const closeModal = () => {
+    if (modalOpenRef.current && window.history.state?.orbitCarouselModal) {
+      window.history.back();
+    } else {
+      modalOpenRef.current = false;
+      setSelectedIndex(null);
+    }
+  };
 
   return (
     <>
@@ -168,7 +202,7 @@ export default function Orbit3DCarousel({
               rotation={rotation}
               width={currentCardWidth}
               height={currentCardHeight}
-              onClick={() => setSelectedIndex(i)}
+              onClick={() => openModal(i)}
             />
           ))}
         </motion.div>
@@ -181,7 +215,7 @@ export default function Orbit3DCarousel({
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             className="fixed inset-0 z-99999 flex items-center justify-center bg-black/90 p-4 sm:p-8"
-            onClick={() => setSelectedIndex(null)}
+            onClick={closeModal}
           >
             <motion.div
               initial={{ scale: 0.8, opacity: 0 }}
@@ -225,7 +259,7 @@ export default function Orbit3DCarousel({
                 )}
 
                 <button
-                  onClick={() => setSelectedIndex(null)}
+                  onClick={closeModal}
                   className="absolute top-4 right-4 z-50 flex h-10 w-10 items-center justify-center rounded-full bg-black/80 text-white transition-colors hover:bg-black sm:-top-4 sm:-right-4"
                 >
                   <X size={18} />

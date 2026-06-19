@@ -103,6 +103,7 @@ export default function PremiumServiceSections({
   const [viewportW, setViewportW] = useState(0);
   const [activeIndex, setActiveIndex] = useState(0);
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
+  const lightboxOpenRef = useRef(false);
 
   const items = section.assets;
   const total = items.length;
@@ -120,6 +121,21 @@ export default function PremiumServiceSections({
     },
     [viewportW, step],
   );
+
+  useEffect(() => {
+    const handlePopState = () => {
+      if (lightboxOpenRef.current) {
+        lightboxOpenRef.current = false;
+        setLightboxIndex(null);
+      }
+    };
+
+    window.addEventListener("popstate", handlePopState);
+
+    return () => {
+      window.removeEventListener("popstate", handlePopState);
+    };
+  }, []);
 
   useLayoutEffect(() => {
     const measure = () => {
@@ -242,7 +258,7 @@ export default function PremiumServiceSections({
 
   const handleCardClick = (index: number) => {
     if (index === activeIndex) {
-      setLightboxIndex(index);
+      openLightbox(index);
     } else {
       // If an outer card is clicked, smoothly scroll to bring it into center focus
       const diff = index - activeIndex;
@@ -253,6 +269,29 @@ export default function PremiumServiceSections({
 
       virtualIndexRef.current += adjustedDiff;
       targetX.current = getTrackXForIndex(virtualIndexRef.current);
+    }
+  };
+
+  const openLightbox = (index: number) => {
+    if (!lightboxOpenRef.current) {
+      window.history.pushState(
+        {
+          showcaseLightbox: true,
+        },
+        "",
+      );
+    }
+
+    lightboxOpenRef.current = true;
+    setLightboxIndex(index);
+  };
+
+  const closeLightbox = () => {
+    if (lightboxOpenRef.current && window.history.state?.showcaseLightbox) {
+      window.history.back();
+    } else {
+      lightboxOpenRef.current = false;
+      setLightboxIndex(null);
     }
   };
 
@@ -320,7 +359,7 @@ export default function PremiumServiceSections({
           <ShowcaseLightbox
             items={items}
             initialIndex={lightboxIndex}
-            onClose={() => setLightboxIndex(null)}
+            onClose={closeLightbox}
           />
         )}
       </AnimatePresence>
