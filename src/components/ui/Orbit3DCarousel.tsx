@@ -41,6 +41,8 @@ export default function Orbit3DCarousel({
   const [mouseTilt, setMouseTilt] = useState({ x: 0, y: 0 });
   const [isMobile, setIsMobile] = useState(false);
   const modalOpenRef = useRef(false);
+  const touchStartX = useRef(0);
+  const touchStartY = useRef(0);
 
   const total = items.length;
 
@@ -137,11 +139,11 @@ export default function Orbit3DCarousel({
     <>
       <div
         ref={containerRef}
-        className="relative h-[70dvh] w-full overflow-hidden md:h-screen"
+        className="relative h-[50dvh] w-full overflow-hidden md:h-screen"
         style={{
           perspective: isMobile ? "800px" : "1800px",
-          cursor: dragging.current ? "grabbing" : "grab",
-          touchAction: "none",
+          cursor: isMobile ? "default" : dragging.current ? "grabbing" : "grab",
+          touchAction: "auto",
         }}
         onMouseMove={(e) => {
           if (isMobile) return;
@@ -168,31 +170,8 @@ export default function Orbit3DCarousel({
         onMouseLeave={() => {
           dragging.current = false;
         }}
-        onTouchStart={(e) => {
-          dragging.current = true;
-          lastX.current = e.touches[0].clientX;
-        }}
-        onTouchMove={(e) => {
-          if (!dragging.current) return;
-
-          const delta = e.touches[0].clientX - lastX.current;
-          lastX.current = e.touches[0].clientX;
-
-          rotation.set(rotation.get() + delta * 0.45);
-          velocity.current = delta * 0.2;
-        }}
-        onTouchEnd={() => {
-          dragging.current = false;
-        }}
       >
-        <motion.div
-          className="absolute inset-0 flex items-center justify-center"
-          style={{
-            transformStyle: "preserve-3d",
-            rotateX: isMobile ? -5 : -10 - mouseTilt.y,
-            rotateY: isMobile ? 0 : mouseTilt.x,
-          }}
-        >
+        <motion.div className="absolute inset-0 flex items-center justify-center">
           {cards.map((card, i) => (
             <OrbitCard
               key={i}
@@ -203,6 +182,22 @@ export default function Orbit3DCarousel({
               width={currentCardWidth}
               height={currentCardHeight}
               onClick={() => openModal(i)}
+              onDragStart={(x: number) => {
+                dragging.current = true;
+                lastX.current = x;
+              }}
+              onDragMove={(x: number) => {
+                if (!dragging.current) return;
+
+                const delta = x - lastX.current;
+                lastX.current = x;
+
+                rotation.set(rotation.get() + delta * 0.45);
+                velocity.current = delta * 0.2;
+              }}
+              onDragEnd={() => {
+                dragging.current = false;
+              }}
             />
           ))}
         </motion.div>
@@ -293,6 +288,9 @@ function OrbitCard({
   width,
   height,
   onClick,
+  onDragStart,
+  onDragMove,
+  onDragEnd,
 }: any) {
   const ref = useRef<HTMLDivElement>(null);
 
@@ -315,8 +313,14 @@ function OrbitCard({
       ref={ref}
       onClick={onClick}
       className="absolute cursor-pointer"
-      style={{
-        transformStyle: "preserve-3d",
+      onTouchStart={(e) => {
+        onDragStart(e.touches[0].clientX);
+      }}
+      onTouchMove={(e) => {
+        onDragMove(e.touches[0].clientX);
+      }}
+      onTouchEnd={() => {
+        onDragEnd();
       }}
     >
       {card.type === "image" ? (

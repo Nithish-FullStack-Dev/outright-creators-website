@@ -100,6 +100,8 @@ export default function CoverflowCarousel({
     index: 0,
   });
   const [dims, setDims] = useState({ w: slideWidth, h: slideHeight });
+  const [isMobile, setIsMobile] = useState(false);
+  const dialogOpenRef = useRef(false);
 
   const slides = items?.length > 0 ? items : FALLBACK_ITEMS;
   const count = slides.length;
@@ -192,8 +194,24 @@ export default function CoverflowCarousel({
   );
 
   useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+
+    checkMobile();
+
+    window.addEventListener("resize", checkMobile);
+
+    return () => {
+      window.removeEventListener("resize", checkMobile);
+    };
+  }, []);
+
+  useEffect(() => {
     const handlePopState = () => {
-      if (dialogState.isOpen) {
+      if (dialogOpenRef.current) {
+        dialogOpenRef.current = false;
+
         setDialogState({
           isOpen: false,
           index: 0,
@@ -206,7 +224,7 @@ export default function CoverflowCarousel({
     return () => {
       window.removeEventListener("popstate", handlePopState);
     };
-  }, [dialogState.isOpen]);
+  }, []);
 
   useEffect(() => {
     const updateDims = () => {
@@ -273,23 +291,31 @@ export default function CoverflowCarousel({
     container.addEventListener("mousedown", onStart as EventListener);
     window.addEventListener("mousemove", onMove as EventListener);
     window.addEventListener("mouseup", onEnd);
-    container.addEventListener("touchstart", onStart as EventListener, {
-      passive: true,
-    });
-    window.addEventListener("touchmove", onMove as EventListener, {
-      passive: false,
-    });
-    window.addEventListener("touchend", onEnd);
+    if (!isMobile) {
+      container.addEventListener("touchstart", onStart as EventListener, {
+        passive: true,
+      });
+
+      window.addEventListener("touchmove", onMove as EventListener, {
+        passive: false,
+      });
+
+      window.addEventListener("touchend", onEnd);
+    }
 
     return () => {
       container.removeEventListener("mousedown", onStart as EventListener);
       window.removeEventListener("mousemove", onMove as EventListener);
       window.removeEventListener("mouseup", onEnd);
-      container.removeEventListener("touchstart", onStart as EventListener);
-      window.removeEventListener("touchmove", onMove as EventListener);
-      window.removeEventListener("touchend", onEnd);
+      if (!isMobile) {
+        container.removeEventListener("touchstart", onStart as EventListener);
+
+        window.removeEventListener("touchmove", onMove as EventListener);
+
+        window.removeEventListener("touchend", onEnd);
+      }
     };
-  }, [step, dims.w, render, snapTo]);
+  }, [step, dims.w, render, snapTo, isMobile]);
 
   useEffect(() => {
     if (!autoplay || count <= 1) return;
@@ -340,7 +366,16 @@ export default function CoverflowCarousel({
       }
 
       if (dist === 0) {
-        window.history.pushState({ mediaDialog: true, index: i }, "");
+        if (!dialogOpenRef.current) {
+          window.history.pushState(
+            {
+              mediaDialog: true,
+            },
+            "",
+          );
+        }
+
+        dialogOpenRef.current = true;
 
         setDialogState({
           isOpen: true,
@@ -353,10 +388,18 @@ export default function CoverflowCarousel({
     [activeIndex, loop, count, snapTo],
   );
 
-  const closeDialog = useCallback(
-    () => setDialogState({ isOpen: false, index: 0 }),
-    [],
-  );
+  const closeDialog = useCallback(() => {
+    if (dialogOpenRef.current && window.history.state?.mediaDialog) {
+      window.history.back();
+    } else {
+      dialogOpenRef.current = false;
+
+      setDialogState({
+        isOpen: false,
+        index: 0,
+      });
+    }
+  }, []);
 
   return (
     <>
@@ -542,21 +585,6 @@ function MediaDialog({
       "-=0.1",
     );
   }, [onClose]);
-
-  useEffect(() => {
-    // Add a history entry when dialog opens
-    window.history.pushState({ mediaDialog: true }, "");
-
-    const handlePopState = () => {
-      handleClose();
-    };
-
-    window.addEventListener("popstate", handlePopState);
-
-    return () => {
-      window.removeEventListener("popstate", handlePopState);
-    };
-  }, [handleClose]);
 
   useEffect(() => {
     const ctx = gsap.context(() => {
